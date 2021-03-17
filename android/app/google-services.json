@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "928747968050",
+    "project_id": "easydigitalize",
+    "storage_bucket": "easydigitalize.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928747968050:android:5ec717923fdccbde0a0e2b",
+        "android_client_info": {
+          "package_name": "com.jui.easydigitalize"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928747968050-f4sb6lpel5ff0ihe3pl22c33khdfmdko.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jui.easydigitalize",
+            "certificate_hash": "e22aa27d06acc21230701d592f64f82dd4b282d7"
+          }
+        },
+        {
+          "client_id": "928747968050-3ji6g09stm9ju49j0jn576o3c6roovpd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3XPBuy18nfHvds4Em5_mO3yLV8Wkdh4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928747968050-3ji6g09stm9ju49j0jn576o3c6roovpd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
