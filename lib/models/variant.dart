@@ -2,8 +2,8 @@ class Variant{
 
   String name;
  
-  int quantity;
-  double price;
+  String quantity;
+  String price;
   String imageUrlfromStorage;
 
   Variant({

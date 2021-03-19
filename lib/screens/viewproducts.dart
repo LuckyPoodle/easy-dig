@@ -57,7 +57,7 @@ class ViewProducts extends StatelessWidget {
     print(docs);
     List<List<dynamic>> rows=List<List<dynamic>>();
     rows.add(["Type","SKU","Name","Brand",
-    "Published","images",
+    "Published","images","Price",
     "Attribute 1 name","Attribute 1 value(s)","Attribute 2 name","Attribute 2 value(s)",
     "Attribute 3 name","Attribute 3 value(s)","Attribute 4 name","Attribute 4 value(s)","Attribute 5 name","Attribute 5 value(s)","Parent"]);
     for (var doc in docs){
@@ -66,10 +66,11 @@ class ViewProducts extends StatelessWidget {
       row.add(doc.data()['sku']);
       row.add(doc.data()['name']);
       row.add(doc.data()['brand']);
-      row.add('-1');
+      row.add('1');
       
       String images=doc.data()['mainProductImages'].join(',');
       row.add(images);
+      row.add(doc.data()['price']);
       row.add(doc.data()['option1name']);
       row.add(doc.data()['option1s']);
       row.add(doc.data()['option2name']);
@@ -89,147 +90,230 @@ class ViewProducts extends StatelessWidget {
         print('()()()()()()()()()');
         print(doc.data()['variants']);
 
+/////////looping through variants
         ////nested loop to present each option
         for (var variant in doc.data()['variants']){
-          
-          
-       //means no options
-          if(doc.data()['variationputunderwhichattribute']==1){
-            List<dynamic> vrow=List<dynamic>();
-          vrow.add('variation');
-          vrow.add('');//sku
-          vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
-          vrow.add(doc.data()['brand']);
-          vrow.add('-1');
-          vrow.add(variant['imageUrlfromStorage']);
-            print('*************************');
-            print('attribute 1');
-            print(doc.data()['variationlabel']);
-            print(variant['variantname']);
-            vrow.add(doc.data()['variationlabel']);
-            vrow.add(variant['variantname']);
-            vrow.add('');
-            vrow.add('');
-            vrow.add('');
-            vrow.add('');
-            vrow.add('');
-            vrow.add('');
-            vrow.add('');
-            vrow.add('');
-            //parent
-          vrow.add(doc.data()['sku']);
-          rows.add(vrow);
-          }
+            if (variant['variantname']==' '){
+              break;
+            }
+
+            print('VARIANT =================>');
+            print(variant);
+            if (variant!=null && variant.toString().isNotEmpty){
+
+                  
+          //means no options
+              if(doc.data()['variationputunderwhichattribute']==1){
+                List<dynamic> vrow=List<dynamic>();
+                vrow.add('variation');
+                vrow.add('');//sku
+                vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
+                vrow.add(doc.data()['brand']);
+                vrow.add('1');
+                vrow.add(variant['imageUrlfromStorage']);
+                vrow.add(variant['variantprice']);
+                print('*************************');
+                print('attribute 1');
+                print(doc.data()['variationlabel']);
+                print(variant['variantname']);
+                vrow.add(doc.data()['variationlabel']);
+                vrow.add(variant['variantname']);
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                //parent
+              vrow.add(doc.data()['sku']);
+              rows.add(vrow);
+
+              
+              }
           
           ///HAVE OPTIONS so we loop through the options 
            if(doc.data()['variationputunderwhichattribute']==2){
+             //variation is put under option2name and option2s
              List<String>optionslist=doc.data()['option1s'].split(","); 
             for (var option in optionslist){
-               List<dynamic> vrow=List<dynamic>();
-              vrow.add('variation');
-              vrow.add('');//sku
-              vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
-              vrow.add(doc.data()['brand']);
-              vrow.add('-1');
-              vrow.add(variant['imageUrlfromStorage']);
-              print('*************************');
-              print('attribute 2');
-              print(doc.data()['variationlabel']);
-              print(variant['variantname']);
-              vrow.add(doc.data()['option1name']);
-              vrow.add(option);
-              vrow.add(doc.data()['variationlabel']);
-              vrow.add(variant['variantname']);
-              vrow.add('');
-              vrow.add('');
-              vrow.add('');
-              vrow.add('');
-              vrow.add('');
-              vrow.add('');
-              //parent
-              vrow.add(doc.data()['sku']);
-              rows.add(vrow);
+                List<dynamic> vrow=List<dynamic>();
+                vrow.add('variation');
+                vrow.add('');//sku
+                vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
+                vrow.add(doc.data()['brand']);
+                vrow.add('1');
+                vrow.add(variant['imageUrlfromStorage']);
+                vrow.add(variant['variantprice']);
+                print('*************************');
+                print('attribute 2');
+                print(doc.data()['variationlabel']);
+                print(variant['variantname']);
+                vrow.add(doc.data()['option1name']);
+                vrow.add(option);
+                vrow.add(doc.data()['variationlabel']);
+                vrow.add(variant['variantname']);
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                //parent
+                vrow.add(doc.data()['sku']);
+                rows.add(vrow);
             }
             
           }else if(doc.data()['variationputunderwhichattribute']==3){
-            List<dynamic> vrow=List<dynamic>();
-          vrow.add('variation');
-          vrow.add('');//sku
-          vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
-          vrow.add(doc.data()['brand']);
-          vrow.add('-1');
-          vrow.add(variant['imageUrlfromStorage']);
-               print('*************************');
-            print('attribute 3');
-            print(doc.data()['variationlabel']);
-            print(variant['variantname']);
-          vrow.add(doc.data()['option1name']);
-          vrow.add(doc.data()['option1s']);
-          
-          vrow.add(doc.data()['option2name']);
-          vrow.add(doc.data()['option2s']);
-          vrow.add(doc.data()['variationlabel']);
-          vrow.add(variant['variantname']);
-          vrow.add('');
-          vrow.add('');
-          vrow.add('');
-          vrow.add('');
-          //parent
-          vrow.add(doc.data()['sku']);
-          rows.add(vrow);
-          }else if(doc.data()['variationputunderwhichattribute']==4){
-            List<dynamic> vrow=List<dynamic>();
-          vrow.add('variation');
-          vrow.add('');//sku
-          vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
-          vrow.add(doc.data()['brand']);
-          vrow.add('-1');
-          vrow.add(variant['imageUrlfromStorage']);
-               print('*************************');
-            print('attribute 4');
-            print(doc.data()['variationlabel']);
-            print(variant['variantname']);
-          vrow.add(doc.data()['option1name']);
-          vrow.add(doc.data()['option1s']);
-          
-          vrow.add(doc.data()['option2name']);
-          vrow.add(doc.data()['option2s']);
-         
-          vrow.add(doc.data()['option3name']);
-          vrow.add(doc.data()['option3s']);
-           vrow.add(doc.data()['variationlabel']);
-          vrow.add(variant['variantname']);
-          vrow.add('');
-          vrow.add('');
-          //parent
-          vrow.add(doc.data()['sku']);
-          rows.add(vrow);
-          }else if(doc.data()['variationputunderwhichattribute']==5){
-            List<dynamic> vrow=List<dynamic>();
-          vrow.add('variation');
-          vrow.add('');//sku
-          vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
-          vrow.add(doc.data()['brand']);
-          vrow.add('-1');
-          vrow.add(variant['imageUrlfromStorage']);
-          vrow.add(doc.data()['option1name']);
-          vrow.add(doc.data()['option1s']);
-          
-          vrow.add(doc.data()['option2name']);
-          vrow.add(doc.data()['option2s']);
-         
-         vrow.add(doc.data()['option3name']);
-          vrow.add(doc.data()['option3s']);
-        
-          vrow.add(doc.data()['option4name']);
-          vrow.add(doc.data()['option4s']);
 
-          vrow.add(doc.data()['variationlabel']);
-          vrow.add(variant['variantname']);
-          //parent
-          vrow.add(doc.data()['sku']);
-          rows.add(vrow);
+              //variation is put under option3name and option3s
+            List<String>optionslistofoption1=doc.data()['option1s'].split(","); 
+            List<String>optionslistofoption2=doc.data()['option2s'].split(","); 
+            for (var option in optionslistofoption1){
+                  
+              for (var option2 in optionslistofoption2){
+
+                List<dynamic> vrow=List<dynamic>();
+                vrow.add('variation');
+                vrow.add('');//sku
+                vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
+                vrow.add(doc.data()['brand']);
+                vrow.add('1');
+                vrow.add(variant['imageUrlfromStorage']);
+                vrow.add(variant['variantprice']);
+             
+                vrow.add(doc.data()['option1name']);
+                vrow.add(option);
+                
+                vrow.add(doc.data()['option2name']);
+                vrow.add(option2);
+
+                vrow.add(doc.data()['variationlabel']);
+                vrow.add(variant['variantname']);
+                vrow.add(' ');
+                vrow.add(' ');
+                vrow.add('');
+                vrow.add('');
+                //parent
+                vrow.add(doc.data()['sku']);
+                rows.add(vrow);
+
+              }
+            }
+          
+          
+          
+          }else if(doc.data()['variationputunderwhichattribute']==4){
+
+            //variation is put under option4name and option3s
+            List<String>optionslistofoption1=doc.data()['option1s'].split(","); 
+            List<String>optionslistofoption2=doc.data()['option2s'].split(",");
+            List<String>optionslistofoption3=doc.data()['option3s'].split(",");  
+
+
+             for (var option in optionslistofoption1){
+                  
+              for (var option2 in optionslistofoption2){
+
+                for (var option3 in optionslistofoption3){
+
+                List<dynamic> vrow=List<dynamic>();
+                vrow.add('variation');
+                vrow.add('');//sku
+                vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
+                vrow.add(doc.data()['brand']);
+                vrow.add('1');
+                vrow.add(variant['imageUrlfromStorage']);
+                vrow.add(variant['variantprice']);
+             
+                vrow.add(doc.data()['option1name']);
+                vrow.add(option);
+                
+                vrow.add(doc.data()['option2name']);
+                vrow.add(option2);
+
+             
+                vrow.add(doc.data()['option3name']);
+                vrow.add(option3);
+                vrow.add(doc.data()['variationlabel']);
+                vrow.add(variant['variantname']);
+                vrow.add('');
+                vrow.add('');
+                //parent
+                vrow.add(doc.data()['sku']);
+                rows.add(vrow);
+
+
+                }
+              }
+             }
+
+
+
+          }else if(doc.data()['variationputunderwhichattribute']==5){
+
+           //variation is put under option5name and option3s
+            List<String>optionslistofoption1=doc.data()['option1s'].split(","); 
+            List<String>optionslistofoption2=doc.data()['option2s'].split(",");
+            List<String>optionslistofoption3=doc.data()['option3s'].split(",");  
+            List<String>optionslistofoption4=doc.data()['option4s'].split(","); 
+
+             for (var option in optionslistofoption1){
+                  
+              for (var option2 in optionslistofoption2){
+
+                for (var option3 in optionslistofoption3){
+
+                  for (var option4 in optionslistofoption4){
+
+                    
+                        List<dynamic> vrow=List<dynamic>();
+                        vrow.add('variation');
+                        vrow.add('');//sku
+                        vrow.add(doc.data()['name'].toString()+' - '+variant['variantname'].toString());
+                        vrow.add(doc.data()['brand']);
+                        vrow.add('1');
+                        vrow.add(variant['imageUrlfromStorage']);
+                        vrow.add(variant['price']);
+                        vrow.add(doc.data()['option1name']);
+                        vrow.add(option);
+                        
+                        vrow.add(doc.data()['option2name']);
+                        vrow.add(option2);
+                      
+                      vrow.add(doc.data()['option3name']);
+                        vrow.add(option3);
+                      
+                        vrow.add(doc.data()['option4name']);
+                        vrow.add(option4);
+
+
+
+                        //option 5
+                        vrow.add(doc.data()['variationlabel']);
+                        vrow.add(variant['variantname']);
+
+
+
+
+                        //parent
+                        vrow.add(doc.data()['sku']);
+                        rows.add(vrow);
+
+
+
+                  }}}}
+
+
+
+
+
+
+
           }
+
+            }
           
 
 

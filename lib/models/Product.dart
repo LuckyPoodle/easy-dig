@@ -5,8 +5,8 @@ class Product{
 
   String name;
   String description;
-  int quantity;
-  double price;
+  String quantity;
+  String price;
   String brand;
   String variationlabel;
   bool hasVariation;
