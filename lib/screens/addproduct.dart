@@ -27,15 +27,16 @@ class _AddProductState extends State<AddProduct> {
   var numofvariants = 0;
   final _formKey = GlobalKey<FormState>();
 
-  List<Asset> images = List<Asset>();
+  List<Asset> images = [];
   List<Asset> variantsImages = [];
   List<String> variantsNames = [];
   List<String> imageUrls = <String>[];
   List<String> prdtoptions = [];
   int numberofoptionsForProducts = 0;
   String _error;
-  String variantname = '';
+  //String variantname = '';
   bool hasVariantName = false;
+  bool pickedMainImages=false;
 
   bool entermorethan5options = false;
   bool addVariant1 = false;
@@ -95,25 +96,25 @@ class _AddProductState extends State<AddProduct> {
   bool stillshowloadinginsubmitbutton = false;
 
   var theproductwearemaking = Product(
-      name: '',
+      name: ' ',
       mainProductImages: [],
       description: '',
-      price: '',
-      brand: '',
-      type: '',
+      price: '0',
+      brand: ' ',
+      type: ' ',
       hasVariation: false,
-      variationlabel: '',
-      quantity: '',
-      option1name: '',
-      option1s: '',
-      option2name: '',
-      option2s: '',
-      option3name: '',
-      option3s: '',
-      option4name: '',
-      option4s: '',
-      option5name: '',
-      option5s: '',
+      variationlabel: ' ',
+      quantity: ' ',
+      option1name: ' ',
+      option1s: ' ',
+      option2name: ' ',
+      option2s: ' ',
+      option3name: ' ',
+      option3s: ' ',
+      option4name: ' ',
+      option4s: ' ',
+      option5name: ' ',
+      option5s: ' ',
       options: [],
       variants: []);
 
@@ -121,25 +122,25 @@ class _AddProductState extends State<AddProduct> {
   void initState() {
     super.initState();
     theproductwearemaking = Product(
-        name: '',
+        name: ' ',
         mainProductImages: [],
-        description: '',
-        price: '',
-        brand: '',
-        type: '',
+        description: ' ',
+        price: ' ',
+        brand: ' ',
+        type: ' ',
         hasVariation: false,
-        variationlabel: '',
-        quantity: '',
-        option1name: '',
-        option1s: '',
-        option2name: '',
-        option2s: '',
-        option3name: '',
-        option3s: '',
-        option4name: '',
-        option4s: '',
-        option5name: '',
-        option5s: '',
+        variationlabel: ' ',
+        quantity: ' ',
+        option1name: ' ',
+        option1s: ' ',
+        option2name: ' ',
+        option2s: ' ',
+        option3name: ' ',
+        option3s: ' ',
+        option4name: ' ',
+        option4s: ' ',
+        option5name: ' ',
+        option5s: ' ',
         options: [],
         variants: []);
 
@@ -160,7 +161,7 @@ class _AddProductState extends State<AddProduct> {
     print('in SAVE FORM..');
     print(theproductwearemaking);
     //save the variant names into a string in the first empty Attribute column
-    if (theproductwearemaking.option1s.isEmpty) {
+    if (theproductwearemaking.option1s.trim().isEmpty) {
       print(
           '---------------------------------------------------------------------');
       print('option1s.isEmpty');
@@ -178,7 +179,7 @@ class _AddProductState extends State<AddProduct> {
       theproductwearemaking.option1s = variantsNames.join(',');
       theproductwearemaking.option1name = theproductwearemaking.variationlabel;
       theproductwearemaking.variationputunderwhichattribute = 1;
-    } else if (theproductwearemaking.option2s.isEmpty) {
+    } else if (theproductwearemaking.option2s.trim().isEmpty) {
       print(
           '---------------------------------------------------------------------');
       print('option2s.isEmpty');
@@ -194,7 +195,7 @@ class _AddProductState extends State<AddProduct> {
       theproductwearemaking.option2s = variantsNames.join(',');
       theproductwearemaking.option2name = theproductwearemaking.variationlabel;
       theproductwearemaking.variationputunderwhichattribute = 2;
-    } else if (theproductwearemaking.option3s.isEmpty) {
+    } else if (theproductwearemaking.option3s.trim().isEmpty) {
       print(
           '---------------------------------------------------------------------');
       print('option3s.isEmpty');
@@ -210,7 +211,7 @@ class _AddProductState extends State<AddProduct> {
       theproductwearemaking.option3s = variantsNames.join(',');
       theproductwearemaking.option3name = theproductwearemaking.variationlabel;
       theproductwearemaking.variationputunderwhichattribute = 3;
-    } else if (theproductwearemaking.option4s.isEmpty) {
+    } else if (theproductwearemaking.option4s.trim().isEmpty) {
       print(
           '---------------------------------------------------------------------');
       print('option4s.isEmpty');
@@ -226,7 +227,7 @@ class _AddProductState extends State<AddProduct> {
       theproductwearemaking.option4s = variantsNames.join(',');
       theproductwearemaking.option4name = theproductwearemaking.variationlabel;
       theproductwearemaking.variationputunderwhichattribute = 4;
-    } else if (theproductwearemaking.option5s.isEmpty) {
+    } else if (theproductwearemaking.option5s.trim().isEmpty) {
       print(
           '---------------------------------------------------------------------');
       print('option5s.isEmpty');
@@ -289,14 +290,32 @@ class _AddProductState extends State<AddProduct> {
       final response = await FlutterPublitio.uploadFile(path, uploadOptions);
       print('--------------RESPONSE---------------------');
       print(response);
+      print(response['success']);
+      if (response['success']=='false'){
+        //try with firestore
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        final reference = FirebaseStorage.instance.ref().child(fileName);
+        UploadTask uploadTask = reference
+           .putData((await images[i].getByteData()).buffer.asUint8List());
+       String url = 'testt';
+          uploadTask.whenComplete(() async {
+        url = await reference.getDownloadURL();
+        print('IN UPLOAD IMAGES');
+        print(url);
+         url=url+".jpg";
+        theproductwearemaking.mainProductImages.add(url);
+        print('theproductwearemaking........');
+        print(theproductwearemaking.mainProductImages);
+      });
+      }
       theproductwearemaking.mainProductImages.add(response["url_preview"]);
     }
 
     setState(() {
       stillshowloadinginsubmitbutton = false;
+      pickedMainImages=false;
     });
-
-    // for (var imageFile in images) {
+     // for (var imageFile in images) {
     //   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     //   final reference = FirebaseStorage.instance.ref().child(fileName);
     //   UploadTask uploadTask = reference
@@ -314,6 +333,8 @@ class _AddProductState extends State<AddProduct> {
     //   });
 
     // }
+
+   
   }
 
   Future<String> uploadVariantGetImageUrl(int index) async {
@@ -356,17 +377,58 @@ class _AddProductState extends State<AddProduct> {
 
     print('--------------RESPONSE---------------------');
     print(response);
+       if (response['success']=='false'){
+        //try with firestore
+            String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    final reference = FirebaseStorage.instance.ref().child(fileName);
+    UploadTask uploadTask =
+        reference.putData((await asset.getByteData()).buffer.asUint8List());
+    String url = '';
 
-    // String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    // final reference = FirebaseStorage.instance.ref().child(fileName);
-    // UploadTask uploadTask =
-    //     reference.putData((await asset.getByteData()).buffer.asUint8List());
-    // String url = '';
+    uploadTask.whenComplete(() async {
+      url = await reference.getDownloadURL();
+      url=url+".jpg";
+      if (index == 1) {
+      variant1.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+      setState(() {
+        variant1imageuploaded = true;
+      });
+    } else if (index == 2) {
+      variant2.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+      setState(() {
+        variant2imageuploaded = true;
+      });
+    } else if (index == 3) {
+      variant3.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+    } else if (index == 4) {
+      variant4.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+    } else if (index == 5) {
+      variant5.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+    } else if (index == 6) {
+      variant6.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+    } else if (index == 7) {
+      variant7.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+    } else if (index == 8) {
+      variant8.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+    } else if (index == 9) {
+      variant9.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+    } else if (index == 10) {
+      variant10.imageUrlfromStorage = url;
+      theproductwearemaking.mainProductImages.add(url);
+    }
 
-    // uploadTask.whenComplete(() async {
-    //   url = await reference.getDownloadURL();
-    // url=url+".jpg";
-    if (index == 1) {
+      });
+      }else{
+        if (index == 1) {
       variant1.imageUrlfromStorage = response["url_preview"];
       theproductwearemaking.mainProductImages.add(response["url_preview"]);
       setState(() {
@@ -403,6 +465,18 @@ class _AddProductState extends State<AddProduct> {
       variant10.imageUrlfromStorage = response["url_preview"];
       theproductwearemaking.mainProductImages.add(response["url_preview"]);
     }
+      }
+
+    // String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    // final reference = FirebaseStorage.instance.ref().child(fileName);
+    // UploadTask uploadTask =
+    //     reference.putData((await asset.getByteData()).buffer.asUint8List());
+    // String url = '';
+
+    // uploadTask.whenComplete(() async {
+    //   url = await reference.getDownloadURL();
+    // url=url+".jpg";
+    
 
     setState(() {
       stillshowloadinginsubmitbutton = false;
@@ -416,7 +490,6 @@ class _AddProductState extends State<AddProduct> {
     print('position is==');
     print(position);
     List<Asset> resultList;
-
     String error;
     try {
       resultList = await MultiImagePicker.pickImages(
@@ -437,10 +510,13 @@ class _AddProductState extends State<AddProduct> {
       Provider.of<GeneralProvider>(context, listen: false)
           .setMainImagesOfProducts(resultList);
       setState(() {
+        pickedMainImages=true;
         images = resultList;
 
         if (error == null) _error = 'No Error Dectected';
       });
+      print('in set assetss........');
+      print(images);
     } else if (n == 1) {
       //Provider.of<GeneralProvider>(context,listen: false).listofcurrentPdtVariantsImages.insert(position,resultList[0]);
       if (position == 1) {
@@ -514,8 +590,13 @@ class _AddProductState extends State<AddProduct> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        appBar: AppBar(automaticallyImplyLeading: true),
-        body: SingleChildScrollView(
+        appBar: AppBar(automaticallyImplyLeading: true, title: Text('Add Product to '+generalprovider.currentCollection),),
+        body: Padding(
+
+          padding: EdgeInsets.only(left:20,right:20),
+
+          child: SingleChildScrollView(
+          
           child: Form(
             key: _formKey,
             child: Padding(
@@ -526,15 +607,20 @@ class _AddProductState extends State<AddProduct> {
                     children: <Widget>[
                       /* TITLE OF PRODUCT */
 
-                      Text('Title of the product',
+                      Container(
+                        padding: EdgeInsets.all(3),
+                        
+                        child: Text('Title of the product',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
+                      ),
                       Container(
+                        padding: EdgeInsets.all(3),
                         width: width * 0.7,
                         child: TextFormField(
                           initialValue: '',
                           decoration:
-                              InputDecoration(hintText: 'Title of the product'),
+                              InputDecoration(hintText: 'E.g A Bar of Soap'),
                           onSaved: (value) {
                             theproductwearemaking.name = value;
                           },
@@ -549,11 +635,21 @@ class _AddProductState extends State<AddProduct> {
                         ),
                       ),
 
+                      SizedBox(height: 3,),
+
                       //* SKU *//
-                      Text(
-                          'Product SKU (Optional if product has no product variations)',
+                              Container(
+                        padding: EdgeInsets.all(3),
+                        
+                        child: Text('Product SKU (Optional if product has no product variations)',
                           style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold)),
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      ),
+                       Text('Specify a SKU for your product if it has product variants',
+                          style: TextStyle(
+                              fontSize: 16, )),
+                     
+                    
                       Container(
                         width: width * 0.7,
                         child: TextFormField(
@@ -564,14 +660,46 @@ class _AddProductState extends State<AddProduct> {
                           },
                         ),
                       ),
+                       SizedBox(height: 3,),
+                       /* ID */
+
+                       Container(
+                        padding: EdgeInsets.all(3),
+                        
+                        child: Text('Product ID (Optional) ',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      ),
+                      Text('Specify an ID for your product if you intend to update product via CSV in the future',
+                          style: TextStyle(
+                              fontSize: 16, )),
+
+                        Container(
+                        width: width * 0.7,
+                        child: TextFormField(
+                          initialValue: '',
+                          decoration: InputDecoration(hintText: 'id'),
+                          onSaved: (value) {
+                            theproductwearemaking.sku = value;
+                          },
+                        ),
+                      ),
+                       SizedBox(height: 3,),
 
                       /* MAIN IMAGES OF PRODUCT */
-
-                      Text(
-                        'Select up to 3 main product images',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                       Container(
+                        padding: EdgeInsets.all(3),
+                        
+                        child: Text('Product Main Images',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       ),
+                       Text('Select up to 3 MAIN product images. Do not upload Product Variants images here, later you will get to upload variant images',
+                          style: TextStyle(
+                              fontSize: 16, )),
+
+                        
+                    
                       images.length > 0
                           ? SizedBox(
                               height: 150,
@@ -593,15 +721,23 @@ class _AddProductState extends State<AddProduct> {
                                   }),
                             )
                           : Container(
-                              child: Text('NO IMAGES YET'),
+                            alignment: Alignment.center,
+                              child: Container(padding:EdgeInsets.all(50),child:Icon(Icons.photo)),
                             ),
-                      RaisedButton(
+                            Text(pickedMainImages?'Please upload image':''),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[   RaisedButton(
                         child: Text("Pick images"),
                         onPressed: () => loadAssets(3, 0),
                       ),
                       RaisedButton(
+                        
                         child: Text("Upload images"),
-                        onPressed: () => uploadImages(),
+                        onPressed: images.isNotEmpty?(){ 
+                          uploadImages();
+                          }:null,
+                      ),],
                       ),
                       /* DESCRIPTION OF PRODUCT */
                       Text('Description of the product',
@@ -631,7 +767,7 @@ class _AddProductState extends State<AddProduct> {
                       ),
 
                       /* BRAND */
-                      Text('Brand of the product',
+                      Text('Brand of the product (Optional)',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                       Container(
@@ -644,7 +780,48 @@ class _AddProductState extends State<AddProduct> {
                                 theproductwearemaking.brand = value;
                               },
                               validator: (value) {})),
+
+                      /* BRAND */
+                      Text('Category of the product (Optional)',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      Text(
+                          'if product category is under a parent category, please enter with this format parentcategory>nameofcategory',
+                          style: TextStyle(fontSize: 16)),
+                      Container(
+                          width: width * 0.7,
+                          child: TextFormField(
+                              initialValue: ' ',
+                              decoration:
+                                  InputDecoration(hintText: 'Clothing>Tshirt'),
+                              onSaved: (value) {
+                                theproductwearemaking.category = value;
+                              },
+                              validator: (value) {})),
                       //null is returned
+
+                      /* STOCK */
+                      Text('Total Available Stock (OPTIONAL)',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+
+                      TextFormField(
+                        initialValue: ' ',
+                        onSaved: (value) {
+                          theproductwearemaking.quantity = value;
+                        },
+                        validator: (value) {
+                          //null is returned when input is correct, return a text when its wrong
+                          if (value != ' ') {
+                            if (num.tryParse(value) == null) {
+                              return 'Please enter a numerical value only';
+                            }
+                          }
+
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                      ),
 
                       /* PRICE */
                       Text('Price of Product',
@@ -824,6 +1001,7 @@ class _AddProductState extends State<AddProduct> {
                                   ),
                           )),
                       /* VARIANT 1 */
+
                       if (addVariant1 == true)
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -891,6 +1069,28 @@ class _AddProductState extends State<AddProduct> {
                                     return null;
                                   },
                                 ),
+
+                                /* STOCK */
+                                Text('Variant Available Stock (OPTIONAL)',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                TextFormField(
+                                    initialValue: ' ',
+                                    onSaved: (value) {
+                                      variant1.quantity = value;
+                                    },
+                                    validator: (value) {
+                                      //null is returned when input is correct, return a text when its wrong
+                                      if (value.isEmpty) {
+                                        return 'Please provide a value';
+                                      }
+                                      if (value != ' ') {
+                                        if (num.tryParse(value) == null) {
+                                          return 'Please enter a numerical value only';
+                                        }
+                                      }
+                                    }),
                                 Text('Select up to 1 variant image'),
                                 variant1asset != null
                                     ? Container(
@@ -904,9 +1104,9 @@ class _AddProductState extends State<AddProduct> {
                                     : Text('No Image Selected'),
                                 RaisedButton(
                                   child: Text("Pick image"),
-                                  onPressed: hasVariantName
-                                      ? () => loadAssets(1, 1)
-                                      : null,
+                                  onPressed: 
+                                     () => loadAssets(1, 1)
+                                      ,
                                 ),
                                 RaisedButton(
                                   child: Text("Upload image"),
@@ -938,7 +1138,6 @@ class _AddProductState extends State<AddProduct> {
                             ),
                           ],
                         ),
-
 
                       /* VARIANT 2 */
                       if (addVariant2 == true)
@@ -981,6 +1180,28 @@ class _AddProductState extends State<AddProduct> {
                                       return null;
                                     },
                                   ),
+
+/* STOCK */
+                                  Text('Variant Available Stock (OPTIONAL)',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  TextFormField(
+                                      initialValue: ' ',
+                                      onSaved: (value) {
+                                        variant2.quantity = value;
+                                      },
+                                      validator: (value) {
+                                        //null is returned when input is correct, return a text when its wrong
+                                        if (value.isEmpty) {
+                                          return 'Please provide a value';
+                                        }
+                                        if (value != ' ') {
+                                          if (num.tryParse(value) == null) {
+                                            return 'Please enter a numerical value only';
+                                          }
+                                        }
+                                      }),
                                   Text('Variant Price',
                                       style: TextStyle(
                                           fontSize: 20,
@@ -1060,7 +1281,6 @@ class _AddProductState extends State<AddProduct> {
                               ),
                             ]),
 
-                   
                       /* VARIANT 3 */
                       if (addVariant3 == true)
                         Column(
@@ -1101,6 +1321,28 @@ class _AddProductState extends State<AddProduct> {
                                     return null;
                                   },
                                 ),
+
+                                /* STOCK */
+                                Text('Variant Available Stock (OPTIONAL)',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                TextFormField(
+                                    initialValue: ' ',
+                                    onSaved: (value) {
+                                      variant3.quantity = value;
+                                    },
+                                    validator: (value) {
+                                      //null is returned when input is correct, return a text when its wrong
+                                      if (value.isEmpty) {
+                                        return 'Please provide a value';
+                                      }
+                                      if (value != ' ') {
+                                        if (num.tryParse(value) == null) {
+                                          return 'Please enter a numerical value only';
+                                        }
+                                      }
+                                    }),
                                 Text('Variant Price',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -1217,6 +1459,43 @@ class _AddProductState extends State<AddProduct> {
                                       return null;
                                     },
                                   ),
+
+                                      Text('Variant Available Stock (OPTIONAL)',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                  TextFormField(
+                                      initialValue: ' ',
+                                      onSaved: (value) {
+                                        variant4.quantity = value;
+                                      },
+                                      validator: (value) {
+                                        //null is returned when input is correct, return a text when its wrong
+                                        if (value.isEmpty) {
+                                          return 'Please provide a value';
+                                        }
+                                        if (value != ' ') {
+                                          if (num.tryParse(value) == null) {
+                                            return 'Please enter a numerical value only';
+                                          }
+                                        }
+                                      }),
+                                  TextFormField(
+                                      initialValue: ' ',
+                                      onSaved: (value) {
+                                        variant4.quantity = value;
+                                      },
+                                      validator: (value) {
+                                        //null is returned when input is correct, return a text when its wrong
+                                        if (value.isEmpty) {
+                                          return 'Please provide a value';
+                                        }
+                                        if (value != ' ') {
+                                          if (num.tryParse(value) == null) {
+                                            return 'Please enter a numerical value only';
+                                          }
+                                        }
+                                      }),
                                   Text('Variant Price',
                                       style: TextStyle(
                                           fontSize: 20,
@@ -1331,6 +1610,27 @@ class _AddProductState extends State<AddProduct> {
                                             return null;
                                           },
                                         ),
+                                            Text('Variant Available Stock (OPTIONAL)',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                        TextFormField(
+                                            initialValue: ' ',
+                                            onSaved: (value) {
+                                              variant5.quantity = value;
+                                            },
+                                            validator: (value) {
+                                              //null is returned when input is correct, return a text when its wrong
+                                              if (value.isEmpty) {
+                                                return 'Please provide a value';
+                                              }
+                                              if (value != ' ') {
+                                                if (num.tryParse(value) ==
+                                                    null) {
+                                                  return 'Please enter a numerical value only';
+                                                }
+                                              }
+                                            }),
                                         Text('Variant Price',
                                             style: TextStyle(
                                                 fontSize: 20,
@@ -1448,6 +1748,27 @@ class _AddProductState extends State<AddProduct> {
                                             return null;
                                           },
                                         ),
+                                             Text('Variant Available Stock (OPTIONAL)',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                        TextFormField(
+                                            initialValue: ' ',
+                                            onSaved: (value) {
+                                              variant6.quantity = value;
+                                            },
+                                            validator: (value) {
+                                              //null is returned when input is correct, return a text when its wrong
+                                              if (value.isEmpty) {
+                                                return 'Please provide a value';
+                                              }
+                                              if (value != ' ') {
+                                                if (num.tryParse(value) ==
+                                                    null) {
+                                                  return 'Please enter a numerical value only';
+                                                }
+                                              }
+                                            }),
                                         Text('Variant Price',
                                             style: TextStyle(
                                                 fontSize: 20,
@@ -1565,6 +1886,27 @@ class _AddProductState extends State<AddProduct> {
                                             return null;
                                           },
                                         ),
+                                             Text('Variant Available Stock (OPTIONAL)',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                        TextFormField(
+                                            initialValue: ' ',
+                                            onSaved: (value) {
+                                              variant7.quantity = value;
+                                            },
+                                            validator: (value) {
+                                              //null is returned when input is correct, return a text when its wrong
+                                              if (value.isEmpty) {
+                                                return 'Please provide a value';
+                                              }
+                                              if (value != ' ') {
+                                                if (num.tryParse(value) ==
+                                                    null) {
+                                                  return 'Please enter a numerical value only';
+                                                }
+                                              }
+                                            }),
                                         Text('Variant Price',
                                             style: TextStyle(
                                                 fontSize: 20,
@@ -1682,6 +2024,27 @@ class _AddProductState extends State<AddProduct> {
                                             return null;
                                           },
                                         ),
+                                             Text('Variant Available Stock (OPTIONAL)',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                        TextFormField(
+                                            initialValue: ' ',
+                                            onSaved: (value) {
+                                              variant8.quantity = value;
+                                            },
+                                            validator: (value) {
+                                              //null is returned when input is correct, return a text when its wrong
+                                              if (value.isEmpty) {
+                                                return 'Please provide a value';
+                                              }
+                                              if (value != ' ') {
+                                                if (num.tryParse(value) ==
+                                                    null) {
+                                                  return 'Please enter a numerical value only';
+                                                }
+                                              }
+                                            }),
                                         Text('Variant Price',
                                             style: TextStyle(
                                                 fontSize: 20,
@@ -1799,6 +2162,27 @@ class _AddProductState extends State<AddProduct> {
                                             return null;
                                           },
                                         ),
+                                             Text('Variant Available Stock (OPTIONAL)',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                        TextFormField(
+                                            initialValue: ' ',
+                                            onSaved: (value) {
+                                              variant9.quantity = value;
+                                            },
+                                            validator: (value) {
+                                              //null is returned when input is correct, return a text when its wrong
+                                              if (value.isEmpty) {
+                                                return 'Please provide a value';
+                                              }
+                                              if (value != ' ') {
+                                                if (num.tryParse(value) ==
+                                                    null) {
+                                                  return 'Please enter a numerical value only';
+                                                }
+                                              }
+                                            }),
                                         Text('Variant Price',
                                             style: TextStyle(
                                                 fontSize: 20,
@@ -1916,6 +2300,27 @@ class _AddProductState extends State<AddProduct> {
                                             return null;
                                           },
                                         ),
+                                             Text('Variant Available Stock (OPTIONAL)',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                        TextFormField(
+                                            initialValue: ' ',
+                                            onSaved: (value) {
+                                              variant10.quantity = value;
+                                            },
+                                            validator: (value) {
+                                              //null is returned when input is correct, return a text when its wrong
+                                              if (value.isEmpty) {
+                                                return 'Please provide a value';
+                                              }
+                                              if (value != ' ') {
+                                                if (num.tryParse(value) ==
+                                                    null) {
+                                                  return 'Please enter a numerical value only';
+                                                }
+                                              }
+                                            }),
                                         Text('Variant Price',
                                             style: TextStyle(
                                                 fontSize: 20,
@@ -1988,6 +2393,10 @@ class _AddProductState extends State<AddProduct> {
                               onPressed: () => _saveForm()),
                     ])),
           ),
-        ));
+        ),
+        )
+        
+        
+        );
   }
 }

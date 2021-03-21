@@ -4,10 +4,12 @@ import 'variant.dart';
 class Product{
 
   String name;
+  String id;
   String description;
   String quantity;
   String price;
   String brand;
+  String category;
   String variationlabel;
   bool hasVariation;
   int variationputunderwhichattribute;
@@ -31,7 +33,7 @@ class Product{
   List<String> options;
   List<Variant> variants;
 
-  Product({this.name,this.variationlabel,this.variationputunderwhichattribute,this.option1name,this.option1s,this.option2name,this.option2s,this.option3name,this.option3s,this.option4name,this.option4s,this.option5name,this.option5s,this.type,this.sku,this.description,this.quantity,this.price,this.brand,this.hasVariation,this.mainProductImages,this.options,this.variants});
+  Product({this.id,this.name,this.variationlabel,this.category,this.variationputunderwhichattribute,this.option1name,this.option1s,this.option2name,this.option2s,this.option3name,this.option3s,this.option4name,this.option4s,this.option5name,this.option5s,this.type,this.sku,this.description,this.quantity,this.price,this.brand,this.hasVariation,this.mainProductImages,this.options,this.variants});
 
    static List<Map> ConvertCustomStepsToMap(List<Variant> customSteps) {
     List<Map> steps = [];
@@ -58,6 +60,7 @@ class Product{
   Map<String, dynamic> toMap() {
     return {
       'name': name,
+      'id':id,
       'description': description,
       'price':price,
       'brand':brand,
@@ -65,6 +68,7 @@ class Product{
       'hasVariation':hasVariation,
       'sku':sku,
       'type':type,
+      'category':category,
       'option1name':option1name,
       'option1s':option1s,
       'option2name':option2name,

@@ -67,7 +67,7 @@ class ViewCollections extends StatelessWidget {
                                               authprovider.deleteCollection(
                                                 
                                                   chatDocs[index].data()[
-                                                      'collectionname']+user.uid);
+                                                      'collectionname'],user.uid);
                                             } catch (error) {
                               
                                             }

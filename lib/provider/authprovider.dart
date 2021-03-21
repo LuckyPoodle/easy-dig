@@ -73,11 +73,14 @@ Future<bool> addCollection(Collection collection) async{
   }
 
 
- Future<void> deleteCollection(String name) async{
-    await FirebaseFirestore.instance.collection(name).snapshots().forEach((element) {
-      for (QueryDocumentSnapshot snapshot in element.docs){
-        snapshot.reference.delete();
-      }
+ Future<void> deleteCollection(String name,String userid) async{
+   print('in delete collection');
+   print(name);
+   print(userid);
+    await FirebaseFirestore.instance.collection('collections').doc(userid).collection('usercollections').doc(name).snapshots().forEach((element) {
+     
+        element.reference.delete();
+      
     }); 
   }
 

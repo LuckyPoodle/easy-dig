@@ -59,9 +59,14 @@ class _AddCollectionState extends State<AddCollection> {
         Provider.of<AuthProvider>(context);
     GeneralProvider generalProvider=Provider.of<GeneralProvider>(context);
     return Scaffold(
-      appBar: AppBar(title: Text('Add/Select a collection'),),
-      body: Column(children: <Widget>[
-        Text('Select an existing shop to add products to OR create a new shop'),
+      appBar: AppBar(title: Text('Add/Select your shop'),),
+      body: SingleChildScrollView(
+        child: Column(children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: Text('Select an existing shop to add products to',style: TextStyle(fontSize: 20),)),
+
+        
         Container(
           child:  StreamBuilder(
                       stream: authprovider.getUserCollections(user.uid),
@@ -105,10 +110,7 @@ class _AddCollectionState extends State<AddCollection> {
                                             try {
                                               print('to delete.....');
                                               print(chatDocs[index].id);
-                                              authprovider.deleteCollection(
-                                                
-                                                  chatDocs[index].data()[
-                                                      'collectionname']+user.uid);
+                                              authprovider.deleteCollection(chatDocs[index].data()['collectionname'],user.uid);
                                             } catch (error) {
                               
                                             }
@@ -121,7 +123,12 @@ class _AddCollectionState extends State<AddCollection> {
                                 )));
                       },
                     ),), 
+
+                    Padding(
+          padding: EdgeInsets.all(10),
+          child: Text('OR create a new shop',style: TextStyle(fontSize: 20),)),
                    Container(
+                     padding: EdgeInsets.all(30),
                      child:  Form(
                       key: _formKey,
                       child:Column(children: <Widget>[
@@ -150,7 +157,7 @@ class _AddCollectionState extends State<AddCollection> {
         
 
 
-      ],),
+      ],),)
       
       
     );
