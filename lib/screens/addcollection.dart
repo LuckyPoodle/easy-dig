@@ -4,7 +4,7 @@ import 'package:easydigitalize/screens/addproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:easydigitalize/authservice.dart';
+import '../helper/authservice.dart';
 import '../provider/authprovider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 class AddCollection extends StatefulWidget {

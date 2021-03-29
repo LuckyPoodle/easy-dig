@@ -1,4 +1,4 @@
-import 'package:easydigitalize/authservice.dart';
+import '../helper/authservice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/collection.dart';
@@ -26,7 +26,7 @@ Stream<QuerySnapshot> getCollectionProducts(String collectionname,String userid)
   return collectionReference.doc(userid).collection('usercollections').doc(collectionname).collection('products').snapshots();
 }
 
-Future<void> addProductToCollection(Product product,String collectionName,String userid) async{
+Future<bool> addProductToCollection(Product product,String collectionName,String userid) async{
 
   print('in Add Product To Collection '+collectionName);
 
@@ -34,7 +34,27 @@ Future<void> addProductToCollection(Product product,String collectionName,String
   CollectionReference collectionReference=_db.collection('collections');
   DocumentReference addcollectiontobucket=collectionReference.doc(userid).collection('usercollections').doc(collectionName);
 
-  addcollectiontobucket.collection('products').add(product.toMap());
+  addcollectiontobucket.collection('products').add(product.toMap()).whenComplete(() {
+    return true;}
+    ).catchError((e){
+      return false;
+    });
+}
+
+Future<void> updateProductInCollection(Product product,String collectionName,String userid) async{
+
+  print('in Updating Product');
+  print('=============');
+   CollectionReference collectionReference=_db.collection('collections');
+  DocumentReference addcollectiontobucket=collectionReference.doc(userid).collection('usercollections').doc(collectionName);
+
+  addcollectiontobucket.collection('products').doc(product.id).set(product.toMap()).whenComplete(() {
+    return true;}
+    ).catchError((e){
+      return false;
+    });
+
+
 
 
 
@@ -82,6 +102,34 @@ Future<bool> addCollection(Collection collection) async{
         element.reference.delete();
       
     }); 
+  }
+
+  Future<void> deleteProduct(String name,String userid,String collectionname,var mainimagesids,var variants) async{
+    print ('in delete product');
+    print(variants);
+    print(mainimagesids);
+    List<String> listofIdsofImagesToDelete=[];
+    for (var v in variants){
+      print('VARIANT V');
+      print(v['imageUrlId']);
+      if (v["imageUrlId"]!=null ){
+        listofIdsofImagesToDelete.add(v["imageUrlId"]);
+      }
+      
+    }
+
+    for (var id in mainimagesids){
+      listofIdsofImagesToDelete.add(id);
+
+    
+    }
+    print('image ids....');
+    print(listofIdsofImagesToDelete);
+    for (var idtodelete in listofIdsofImagesToDelete){
+      authService.deleteImagePublito(idtodelete);
+    }
+
+    await FirebaseFirestore.instance.collection('collections').doc(userid).collection('usercollections').doc(collectionname).collection('products').doc(name).delete();
   }
 
 

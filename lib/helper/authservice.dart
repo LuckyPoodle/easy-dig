@@ -5,8 +5,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:firebase_storage/firebase_storage.dart';
-import './models/user.dart';
-
+import 'package:http/http.dart';
+import '../models/user.dart';
+import 'package:crypto/crypto.dart';
+import 'package:convert/convert.dart';
+import 'dart:convert';
 
 class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -65,7 +68,16 @@ Stream<User> get user => FirebaseAuth.instance.authStateChanges();
 
   
 
+Future<bool> deleteUser(){
 
+  _auth.currentUser.delete().then((_) {
+    print('deleted user');
+  }).catchError((error){
+    print(error);
+  });
+  
+
+}
 
 
 
@@ -77,6 +89,10 @@ Stream<User> get user => FirebaseAuth.instance.authStateChanges();
             .collection('users')
             .doc(user.user.uid)
             .set({
+
+              'emailaddress':user.user.email,
+              'accountType':'free',
+              
         
 
         });
@@ -86,6 +102,27 @@ Stream<User> get user => FirebaseAuth.instance.authStateChanges();
   // Sign out
   Future<void> signOut() {
     return _auth.signOut();
+  }
+
+   Future deleteImagePublito(String id) async {
+     String timestamp=DateTime.now().millisecondsSinceEpoch.toString();
+     String nonce='12345678';
+     var bytes = utf8.encode(timestamp+nonce+'DzltjTnWVLGsASzladHtf5B0nAuSXJDh');
+     Digest sha1Result = sha1.convert(bytes);
+     String url='https://api.publit.io/v1/files/delete/'+id+'?&api_signature='+sha1Result.toString()+'&api_key=guxRioSMAnGhw4WaBh4o&api_nonce=12345678&api_timestamp='+timestamp;
+     Uri uri=Uri.parse(url);
+    Response response = await delete(uri);
+    if (response.statusCode == 200) {
+      String data = response.body;
+      print('deleted successfully');
+      print(data);
+      
+
+    } else {
+      print('not deleted successfully');
+      print(response.statusCode);
+      
+    }
   }
 
   

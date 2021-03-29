@@ -12,6 +12,7 @@ class Product{
   String category;
   String variationlabel;
   bool hasVariation;
+  String imagesStoreLocation;
   int variationputunderwhichattribute;
   String sku;
   String type;
@@ -29,11 +30,13 @@ class Product{
 
 
   List<String> mainProductImages;
+  List<String>mainproductimagesIds;
+
 
   List<String> options;
   List<Variant> variants;
 
-  Product({this.id,this.name,this.variationlabel,this.category,this.variationputunderwhichattribute,this.option1name,this.option1s,this.option2name,this.option2s,this.option3name,this.option3s,this.option4name,this.option4s,this.option5name,this.option5s,this.type,this.sku,this.description,this.quantity,this.price,this.brand,this.hasVariation,this.mainProductImages,this.options,this.variants});
+  Product({this.id,this.name,this.variationlabel,this.imagesStoreLocation,this.category,this.variationputunderwhichattribute,this.option1name,this.option1s,this.option2name,this.option2s,this.option3name,this.option3s,this.option4name,this.option4s,this.option5name,this.option5s,this.type,this.sku,this.description,this.quantity,this.price,this.brand,this.hasVariation,this.mainProductImages,this.mainproductimagesIds,this.variants});
 
    static List<Map> ConvertCustomStepsToMap(List<Variant> customSteps) {
     List<Map> steps = [];
@@ -64,7 +67,7 @@ class Product{
       'description': description,
       'price':price,
       'brand':brand,
-      'options':options,
+      
       'hasVariation':hasVariation,
       'sku':sku,
       'type':type,
@@ -84,6 +87,7 @@ class Product{
       
       'quantity':quantity,
       'mainProductImages':mainProductImages,
+      'mainproductimagesIds':mainproductimagesIds,
      
       'variants':ConvertCustomStepsToMap(variants),
      

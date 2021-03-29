@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import './screens/home.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import './authservice.dart';
+import './helper/authservice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './screens/login.dart';
 
@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
+      
       providers: [
         ChangeNotifierProvider(
               create:(ctx)=>GeneralProvider()

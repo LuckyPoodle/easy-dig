@@ -6,7 +6,7 @@ import 'package:easydigitalize/screens/addproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:easydigitalize/authservice.dart';
+import '../helper/authservice.dart';
 import '../provider/authprovider.dart';
 class ViewCollections extends StatelessWidget {
   static const routeName = '/viewcollections';

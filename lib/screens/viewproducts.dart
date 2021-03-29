@@ -5,8 +5,9 @@ import 'package:easydigitalize/provider/provider.dart';
 import 'package:easydigitalize/screens/addproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import 'package:easydigitalize/authservice.dart';
+import '../helper/authservice.dart';
 import '../provider/authprovider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -49,10 +50,12 @@ class ViewProducts extends StatelessWidget {
     print(docs);
     List<List<dynamic>> rows = List<List<dynamic>>();
     rows.add([
+      "ID",
       "Type",
       "SKU",
       "Name",
       "Brand",
+      "Description",
       "Published",
       "images",
       "Price",
@@ -73,10 +76,12 @@ class ViewProducts extends StatelessWidget {
     ]);
     for (var doc in docs) {
       List<dynamic> row = List<dynamic>();
+      row.add(doc.data()['id'] == '' ? '' : doc.data()['id']);
       row.add(doc.data()['type']);
       row.add(doc.data()['sku']);
       row.add(doc.data()['name']);
       row.add(doc.data()['brand']);
+      row.add(doc.data()['description']);
       row.add('1');
 
       String images = doc.data()['mainProductImages'].join(',');
@@ -103,17 +108,18 @@ class ViewProducts extends StatelessWidget {
         //iterate through product's variants, make a new row for each
         print('()()()()()()()()()');
         print(doc.data()['variants']);
+        int count = 0;
 
 /////////looping through variants
         ////nested loop to present each option
         for (var variant in doc.data()['variants']) {
+          count += 1;
 
-          if (variant['variantname'].toString().trim().isEmpty){
+          if (variant['variantname'].toString().trim().isEmpty) {
             print("NO MORE VARIANT");
             print("____________________");
             break;
           }
-
 
           print('VARIANT =================>');
           print('LOPPING THROU VARIANT');
@@ -123,12 +129,18 @@ class ViewProducts extends StatelessWidget {
             if (doc.data()['variationputunderwhichattribute'] == 1) {
               print('variation under 1');
               List<dynamic> vrow = List<dynamic>();
+              if (doc.data()['id'].toString().isNotEmpty) {
+                vrow.add(doc.data()['id'] + count.toString());
+              } else {
+                vrow.add('');
+              }
               vrow.add('variation');
               vrow.add(''); //sku
               vrow.add(doc.data()['name'].toString() +
                   ' - ' +
                   variant['variantname'].toString());
               vrow.add(doc.data()['brand']);
+              vrow.add(doc.data()['description']);
               vrow.add('1');
               vrow.add(variant['imageUrlfromStorage']);
               vrow.add(variant['variantprice']);
@@ -160,13 +172,20 @@ class ViewProducts extends StatelessWidget {
               //variation is put under option2name and option2s
               List<String> optionslist = doc.data()['option1s'].split(",");
               for (var option in optionslist) {
+                count += 1;
                 List<dynamic> vrow = List<dynamic>();
+                if (doc.data()['id'].toString().isNotEmpty) {
+                  vrow.add(doc.data()['id'] + count.toString());
+                } else {
+                  vrow.add('');
+                }
                 vrow.add('variation');
                 vrow.add(''); //sku
                 vrow.add(doc.data()['name'].toString() +
                     ' - ' +
                     variant['variantname'].toString());
                 vrow.add(doc.data()['brand']);
+                vrow.add(doc.data()['description']);
                 vrow.add('1');
                 vrow.add(variant['imageUrlfromStorage']);
                 vrow.add(variant['variantprice']);
@@ -199,14 +218,22 @@ class ViewProducts extends StatelessWidget {
               List<String> optionslistofoption2 =
                   doc.data()['option2s'].split(",");
               for (var option in optionslistofoption1) {
+                count += 1;
                 for (var option2 in optionslistofoption2) {
+                  count += 1;
                   List<dynamic> vrow = List<dynamic>();
+                  if (doc.data()['id'].toString().isNotEmpty) {
+                    vrow.add(doc.data()['id'] + count.toString());
+                  } else {
+                    vrow.add('');
+                  }
                   vrow.add('variation');
                   vrow.add(''); //sku
                   vrow.add(doc.data()['name'].toString() +
                       ' - ' +
                       variant['variantname'].toString());
                   vrow.add(doc.data()['brand']);
+                  vrow.add(doc.data()['description']);
                   vrow.add('1');
                   vrow.add(variant['imageUrlfromStorage']);
                   vrow.add(variant['variantprice']);
@@ -242,15 +269,24 @@ class ViewProducts extends StatelessWidget {
                   doc.data()['option3s'].split(",");
 
               for (var option in optionslistofoption1) {
+                count += 1;
                 for (var option2 in optionslistofoption2) {
+                  count += 1;
                   for (var option3 in optionslistofoption3) {
+                    count += 1;
                     List<dynamic> vrow = List<dynamic>();
+                    if (doc.data()['id'].toString().isNotEmpty) {
+                      vrow.add(doc.data()['id'] + count.toString());
+                    } else {
+                      vrow.add('');
+                    }
                     vrow.add('variation');
                     vrow.add(''); //sku
                     vrow.add(doc.data()['name'].toString() +
                         ' - ' +
                         variant['variantname'].toString());
                     vrow.add(doc.data()['brand']);
+                    vrow.add(doc.data()['description']);
                     vrow.add('1');
                     vrow.add(variant['imageUrlfromStorage']);
                     vrow.add(variant['variantprice']);
@@ -270,8 +306,8 @@ class ViewProducts extends StatelessWidget {
                     //parent
                     vrow.add(doc.data()['sku']);
                     vrow.add(variant['quantity']);
-                  vrow.add('1');
-                  vrow.add('');
+                    vrow.add('1');
+                    vrow.add('');
                     rows.add(vrow);
                   }
                 }
@@ -289,16 +325,26 @@ class ViewProducts extends StatelessWidget {
                   doc.data()['option4s'].split(",");
 
               for (var option in optionslistofoption1) {
+                count += 1;
                 for (var option2 in optionslistofoption2) {
+                  count += 1;
                   for (var option3 in optionslistofoption3) {
+                    count += 1;
                     for (var option4 in optionslistofoption4) {
+                      count += 1;
                       List<dynamic> vrow = List<dynamic>();
+                      if (doc.data()['id'].toString().isNotEmpty) {
+                        vrow.add(doc.data()['id'] + count.toString());
+                      } else {
+                        vrow.add('');
+                      }
                       vrow.add('variation');
                       vrow.add(''); //sku
                       vrow.add(doc.data()['name'].toString() +
                           ' - ' +
                           variant['variantname'].toString());
                       vrow.add(doc.data()['brand']);
+                      vrow.add(doc.data()['description']);
                       vrow.add('1');
                       vrow.add(variant['imageUrlfromStorage']);
                       vrow.add(variant['price']);
@@ -321,8 +367,8 @@ class ViewProducts extends StatelessWidget {
                       //parent
                       vrow.add(doc.data()['sku']);
                       vrow.add(variant['quantity']);
-                  vrow.add('1');
-                  vrow.add('');
+                      vrow.add('1');
+                      vrow.add('');
                       rows.add(vrow);
                     }
                   }
@@ -352,8 +398,9 @@ class ViewProducts extends StatelessWidget {
     GeneralProvider generalProvider = Provider.of<GeneralProvider>(context);
     return Scaffold(
       appBar: AppBar(title: Text('Products in Collection')),
-      body: Container(
-        child: StreamBuilder(
+      body: SingleChildScrollView(
+        
+        child:  StreamBuilder(
           stream: authprovider.getCollectionProducts(
               generalProvider.currentCollection, user.uid),
           builder: (ctx, chatSnapshot) {
@@ -366,42 +413,116 @@ class ViewProducts extends StatelessWidget {
             }
             final chatDocs = chatSnapshot.data.docs;
 
-            return Column(
-              children: <Widget>[
-                ListView.builder(
+            return  SingleChildScrollView(
+              physics: ScrollPhysics(),
+             
+              child: Column(
+                children: <Widget>[
+                
+
+                      SingleChildScrollView(
+
+                        child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: chatDocs.length,
+                    physics: NeverScrollableScrollPhysics(),
+                   
                     itemBuilder: (ctx, index) => Card(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero),
                         elevation: 4,
                         margin: EdgeInsets.all(4),
-                        child: ListTile(
-                          onTap: () {},
-                          title: Text(chatDocs[index].data()['name']),
-                          trailing: Container(
-                            width: 100,
-                            child: Row(
+                        child: Card(
+                          child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                  
+                            children: <Widget>[
+
+                            Row(
+                               mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                              
                               children: <Widget>[
-                                IconButton(
+                              Text(chatDocs[index].data()['name'],style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+                               IconButton(
                                   icon: Icon(Icons.delete),
-                                  onPressed: () {},
+                                  onPressed: () async{
+                                    print(chatDocs[index].id);
+                                    await authprovider.deleteProduct(chatDocs[index].id, user.uid, generalProvider.currentCollection,chatDocs[index].data()['mainproductimagesIds'],chatDocs[index].data()['variants']);
+
+                                  },
                                   color: Theme.of(context).errorColor,
                                 ),
-                              ],
-                            ),
-                          ),
-                        ))),
-                IconButton(
-                    icon: Icon(Icons.save),
-                    onPressed: () {
-                      generateCSV(chatDocs);
-                    })
+                                IconButton(
+                                          icon: Icon(
+                                            Icons.edit,
+                                            color: Colors.black,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pushNamed(
+                                                AddProduct.routeName,
+                                                arguments: chatDocs[index]);
+                                          },
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+
+                            ],),
+                             Text(chatDocs[index].data()['description'],style: TextStyle(fontSize: 20),),
+                              Text("Price/Base Price",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
+                              Text(chatDocs[index].data()['price']),
+                             Text("Category",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
+                             if (chatDocs[index].data()['category'].isEmpty)Text('No Applicable'),
+                             if (chatDocs[index].data()['category'].isNotEmpty)Text(chatDocs[index].data()['category']),
+                             Text("Options",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
+                             if (chatDocs[index].data()['option1name']=='')Text('no options',style: TextStyle(fontStyle: FontStyle.italic),),
+                             Row(children: <Widget>[
+                               if (chatDocs[index].data()['option1name']!=null)Text(chatDocs[index].data()['option1name']+' '),
+                               
+                             if (chatDocs[index].data()['option2name']!=null)Text(chatDocs[index].data()['option2name']+' '),
+                             if (chatDocs[index].data()['option3name']!=null)Text(chatDocs[index].data()['option3name']+' '),
+                             if (chatDocs[index].data()['option4name']!=null)Text(chatDocs[index].data()['option4name']+' '),
+                             if (chatDocs[index].data()['option5name']!=null)Text(chatDocs[index].data()['option5name']+' '),
+                             ]),
+
+                             Text("Variants' names",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
+                             if (chatDocs[index].data()['variants'].length==0)Text('no variants',style: TextStyle(fontStyle: FontStyle.italic),),
+                            
+
+                             Row(children: <Widget>[
+                               
+                               for (var v in chatDocs[index].data()['variants'])Text(v['variantname']+' ')],),
+
+                               
+
+
+
+
+                          ],),
+                        )
+                        
+                       )),),
+
+                       TextButton(
+                         child: Text('Generate CSV file for Woocommerce'),
+                         style: TextButton.styleFrom(
+                           primary:Colors.white,
+                           backgroundColor:Colors.teal,
+                           onSurface:Colors.grey
+                         ),
+                         onPressed: (){
+                           generateCSV(chatDocs);
+                         },),
+
+                         SizedBox(height: 100,)
+              
               ],
+              )
+            
             );
           },
         ),
-      ),
-    );
+      ),);
+    
   }
 }

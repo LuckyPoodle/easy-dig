@@ -4,12 +4,14 @@ class Variant{
  
   String quantity;
   String price;
+  String imageUrlId;
   String imageUrlfromStorage;
 
   Variant({
     this.name,
     this.price,
     this.quantity,
+    this.imageUrlId,
     this.imageUrlfromStorage
   });
 
@@ -18,6 +20,7 @@ class Variant{
         name: data['variantname'] ?? '',
       price:data['variantprice'] ?? '',
       quantity: data['quantity'] ?? '',
+      imageUrlId:data['imageUrlId']??'',
       imageUrlfromStorage: data['imageUrlfromStorage'] ?? '',
     );
   }
@@ -27,6 +30,7 @@ class Variant{
       'variantname': name,
       'variantprice': price,
       'quantity': quantity,
+      'imageUrlId':imageUrlId,
       'imageUrlfromStorage':imageUrlfromStorage
     };
   }
