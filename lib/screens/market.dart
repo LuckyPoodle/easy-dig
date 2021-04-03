@@ -25,7 +25,7 @@ class MarketScreenState extends State<MarketScreen> {
   List<PurchaseDetails> _purchases = [];
 
   /// Updates to purchases
-  StreamSubscription _subscription;
+  StreamSubscription<List<PurchaseDetails>> _subscription;
 
   /// Consumable credits the user can buy
   int credits = 0;
@@ -103,7 +103,12 @@ class MarketScreenState extends State<MarketScreen> {
   /// Get all products available for sale
   Future<void> _getProducts() async {
     Set<String> ids = Set.from([testID]);
+    print('in get Products...');
     ProductDetailsResponse response = await _iap.queryProductDetails(ids);
+
+
+
+    print('in get Products response is ...'+response.productDetails.toString());
 
     setState(() { 
       _products = response.productDetails;
@@ -112,8 +117,10 @@ class MarketScreenState extends State<MarketScreen> {
 
   /// Gets past purchases
   Future<void> _getPastPurchases() async {
+    print('in get Past purchased Products...');
     QueryPurchaseDetailsResponse response =
         await _iap.queryPastPurchases();
+        print('in get Past purchased Products response is ...'+response.pastPurchases.toString());
 //this does not return consumed pdt so u should save state of consumed pdt in ur database
     for (PurchaseDetails purchase in response.pastPurchases) {
       if (Platform.isIOS){

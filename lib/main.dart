@@ -11,10 +11,12 @@ import 'package:firebase_core/firebase_core.dart';
 import './helper/authservice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './screens/login.dart';
-
+import './screens/market.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  InAppPurchaseConnection.enablePendingPurchases();
   runApp(MyApp());
  
 }
@@ -47,7 +49,8 @@ class MyApp extends StatelessWidget {
           AddProduct.routeName:(ctx)=>AddProduct(),
           AddCollection.routeName:(ctx)=>AddCollection(),
           ViewCollections.routeName:(ctx)=>ViewCollections(),
-          ViewProducts.routeName:(ctx)=>ViewProducts()
+          ViewProducts.routeName:(ctx)=>ViewProducts(),
+          MarketScreen.routeName:(ctx)=>MarketScreen()
       
         }
       ),

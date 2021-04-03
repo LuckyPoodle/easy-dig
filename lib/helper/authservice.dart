@@ -99,6 +99,43 @@ Future<bool> deleteUser(){
 
   }
 
+  void addCreditsToAccount(UserCredential user) async {
+    await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.user.uid)
+          .set({
+            'credits':100
+
+          },SetOptions(merge: true));
+  }
+
+
+
+Future<AppUser> getUserData(String id) async{
+
+  var snapshot=await _db.collection('users').doc(id).get();
+
+  var data=snapshot.data();
+       
+       String accountType=data['accountType'];
+       String numberOfProductsUploaded=data['numberOfProductsUploaded'];
+       String maxNumberOfProductsUserCanCreate=data['maxNumberOfProductsUserCanCreate'];
+ 
+    
+       AppUser thisuser=AppUser(
+           accountType: accountType,
+           maxNumberOfProductsUserCanCreate: maxNumberOfProductsUserCanCreate,
+           numberOfProductsUploaded:numberOfProductsUploaded
+
+
+       );
+      
+       return thisuser;
+
+
+}
+  
+
   // Sign out
   Future<void> signOut() {
     return _auth.signOut();

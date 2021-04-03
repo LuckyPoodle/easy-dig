@@ -33,6 +33,8 @@ class GeneralProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  
+
   void setCurrentProductHowManyVariants(int n){
     currentProductHowManyVariants=n;
     notifyListeners();

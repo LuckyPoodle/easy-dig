@@ -1,10 +1,13 @@
+import 'package:easydigitalize/helper/authservice.dart';
 import 'package:easydigitalize/screens/addcollection.dart';
 import 'package:easydigitalize/screens/viewcollections.dart';
 import 'package:flutter/material.dart';
 import '../helper/components.dart';
-
+import './market.dart';
+import 'package:easydigitalize/provider/provider.dart';
+import 'package:provider/provider.dart';
 import './upgrade.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter/services.dart';
 
@@ -49,6 +52,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    User user = Provider.of<User>(context);
+    AuthService authservice=AuthService();
     return Scaffold(
       appBar: AppBar(
           flexibleSpace: Container(
@@ -68,6 +73,20 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            FutureBuilder(
+              future: authservice.getUserData(user.uid),
+      builder: (context, thisappuser) {
+        if (!thisappuser.hasData) {
+
+
+
+        }else{
+          Text(" Your credits "+thisappuser.data.maxNumberOfProductsUserCanCreate);
+        }
+      })
+            
+        ,
+            
             Container(
               width: width * 0.5,
               decoration: BoxDecoration(
@@ -111,16 +130,14 @@ class _HomeState extends State<Home> {
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
-                      'Purchase a subscription',
+                      'Purchase a package',
                       style: kSendButtonTextStyle,
                     ),
                   ),
                   onPressed: () {
-                    if (appData.isPro) {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => UpgradeScreen(), settings: RouteSettings(name: 'Upgrade screen')));
-                    }else{
-
-                    }
+                   
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MarketScreen()));
+                    
                   }),
             ),
           ],
