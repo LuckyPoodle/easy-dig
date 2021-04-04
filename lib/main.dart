@@ -1,4 +1,4 @@
-import 'package:easydigitalize/provider/provider.dart';
+import 'package:easydigitalize/provider/generalprovider.dart';
 import 'package:easydigitalize/screens/viewcollections.dart';
 import 'package:easydigitalize/screens/viewproducts.dart';
 import './provider/authprovider.dart';

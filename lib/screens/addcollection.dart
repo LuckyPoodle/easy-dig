@@ -1,5 +1,5 @@
 import 'package:easydigitalize/models/collection.dart';
-import 'package:easydigitalize/provider/provider.dart';
+import 'package:easydigitalize/provider/generalprovider.dart';
 import 'package:easydigitalize/screens/addproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -99,27 +99,27 @@ class _AddCollectionState extends State<AddCollection> {
                                   title:
                                       Text(chatDocs[index].data()['collectionname']),
                                 
-                                  trailing: Container(
-                                    width: 100,
-                                    child: Row(
-                                      children: <Widget>[
+                                  // trailing: Container(
+                                  //   width: 100,
+                                  //   child: Row(
+                                  //     children: <Widget>[
                                
-                                        IconButton(
-                                          icon: Icon(Icons.delete),
-                                          onPressed: () async {
-                                            try {
-                                              print('to delete.....');
-                                              print(chatDocs[index].id);
-                                              authprovider.deleteCollection(chatDocs[index].data()['collectionname'],user.uid);
-                                            } catch (error) {
+                                  //       IconButton(
+                                  //         icon: Icon(Icons.delete),
+                                  //         onPressed: () async {
+                                  //           try {
+                                  //             print('to delete.....');
+                                  //             print(chatDocs[index].id);
+                                  //             authprovider.deleteCollection(chatDocs[index].data()['collectionname'],user.uid);
+                                  //           } catch (error) {
                               
-                                            }
-                                          },
-                                          color: Theme.of(context).errorColor,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  //           }
+                                  //         },
+                                  //         color: Theme.of(context).errorColor,
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 )));
                       },
                     ),), 

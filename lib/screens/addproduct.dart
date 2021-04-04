@@ -1,5 +1,5 @@
 import 'package:easydigitalize/provider/authprovider.dart';
-import 'package:easydigitalize/provider/provider.dart';
+import 'package:easydigitalize/provider/generalprovider.dart';
 import 'package:easydigitalize/screens/viewproducts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:material_design_icons_flutter/icon_map.dart';
@@ -515,7 +515,8 @@ class _AddProductState extends State<AddProduct> {
       Provider.of<AuthProvider>(context, listen: false).addProductToCollection(
         theproductwearemaking,
         Provider.of<GeneralProvider>(context, listen: false).currentCollection,
-        user.uid).then((_){
+        user.uid,(Provider.of<GeneralProvider>(context, listen: false).localcountnumberOfProductsUploaded+1).toString()).then((_){
+          Provider.of<GeneralProvider>(context, listen: false).addoneproduct();
           Navigator.pushNamed(context, ViewProducts.routeName);
 
         }).catchError((e){

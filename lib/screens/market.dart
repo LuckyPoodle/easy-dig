@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:easydigitalize/helper/authservice.dart';
 import 'package:flutter/material.dart';
+import '../provider/generalprovider.dart';
+import 'package:provider/provider.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 final String testID = 'pro_coupon';
 
 class MarketScreen extends StatefulWidget {
@@ -29,6 +32,8 @@ class MarketScreenState extends State<MarketScreen> {
 
   /// Consumable credits the user can buy
   int credits = 0;
+
+  AuthService authservice;
 
   @override
   void initState() {
@@ -76,6 +81,17 @@ class MarketScreenState extends State<MarketScreen> {
     
     /// Decrement credits
     setState(() { credits--; });
+
+     
+      Provider.of<GeneralProvider>(context,listen:false).setNumberOfProductsUploaded(int.parse(credits.toString()));
+      
+      int creditcountnow=Provider.of<GeneralProvider>(context,listen:false).localcountmaxnumberofProductsUploaded-1;
+
+      
+
+      String newcount=creditcountnow.toString();
+      
+      authservice.updateCreditsInAccount(Provider.of<User>(context,listen:false).uid,newcount);
 
     /// TODO update the state of the consumable to a backend database
 
@@ -145,7 +161,12 @@ class MarketScreenState extends State<MarketScreen> {
     // TODO serverside verification & record consumable in the database
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-      credits = 10;
+      credits = 100;
+    
+      
+      Provider.of<GeneralProvider>(context,listen:false).setlocalcountmaxnumberofProductsUploaded(int.parse(credits.toString()));
+      
+      authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid);
     }
   }
   

@@ -14,6 +14,35 @@ class GeneralProvider with ChangeNotifier{
   List<Asset> listofcurrentPdtVariantsImages=[];
   int currentProductHowManyVariants=0;
 
+  int localcountnumberOfProductsUploaded=0;
+  int localcountmaxnumberofProductsUploaded=0;
+  
+
+  void setNumberOfProductsUploaded(int number){
+    localcountnumberOfProductsUploaded=number;
+    print('localcountnumberOfProductsUploaded = '+number.toString());
+
+    notifyListeners();
+
+  }
+
+   void setlocalcountmaxnumberofProductsUploaded(int number){
+    localcountmaxnumberofProductsUploaded=number;
+    print('localcountmaxnumberofProductsUploaded = '+number.toString());
+    notifyListeners();
+  }
+
+
+
+
+  void addoneproduct(){
+    localcountnumberOfProductsUploaded+=1;
+  }
+
+  void removeoneproduct(){
+    localcountnumberOfProductsUploaded-=1;
+  }
+
 
   void setCurrentCollection(String name){
     currentCollection=name;

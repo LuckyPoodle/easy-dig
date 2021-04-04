@@ -92,6 +92,8 @@ Future<bool> deleteUser(){
 
               'emailaddress':user.user.email,
               'accountType':'free',
+              'numberOfProductsUploaded':'0',
+              'maxNumberOfProductsUserCanCreate':'1'
               
         
 
@@ -99,23 +101,39 @@ Future<bool> deleteUser(){
 
   }
 
-  void addCreditsToAccount(UserCredential user) async {
+  void addCreditsToAccount(String uid) async {
     await FirebaseFirestore.instance
           .collection('users')
-          .doc(user.user.uid)
+          .doc(uid)
           .set({
-            'credits':100
+            'maxNumberOfProductsUserCanCreate':100,
+            'accountType':'paid',
+
+          },SetOptions(merge: true));
+  }
+
+  void updateCreditsInAccount(String uid,String newvalue) async {
+    await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .set({
+            'maxNumberOfProductsUserCanCreate':newvalue,
+            'accountType':'paid',
 
           },SetOptions(merge: true));
   }
 
 
-
 Future<AppUser> getUserData(String id) async{
+
+  print('in get user data!!!!!!!!!!');
 
   var snapshot=await _db.collection('users').doc(id).get();
 
   var data=snapshot.data();
+
+  print('====================');
+  print(data);
        
        String accountType=data['accountType'];
        String numberOfProductsUploaded=data['numberOfProductsUploaded'];
@@ -126,10 +144,8 @@ Future<AppUser> getUserData(String id) async{
            accountType: accountType,
            maxNumberOfProductsUserCanCreate: maxNumberOfProductsUserCanCreate,
            numberOfProductsUploaded:numberOfProductsUploaded
-
-
        );
-      
+    
        return thisuser;
 
 

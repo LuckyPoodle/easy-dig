@@ -1,7 +1,7 @@
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:easydigitalize/models/collection.dart';
-import 'package:easydigitalize/provider/provider.dart';
+import 'package:easydigitalize/provider/generalprovider.dart';
 import 'package:easydigitalize/screens/addproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';

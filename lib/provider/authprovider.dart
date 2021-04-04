@@ -27,20 +27,6 @@ Stream<QuerySnapshot> getCollectionProducts(String collectionname,String userid)
   return collectionReference.doc(userid).collection('usercollections').doc(collectionname).collection('products').snapshots();
 }
 
-Future<bool> addProductToCollection(Product product,String collectionName,String userid) async{
-
-  print('in Add Product To Collection '+collectionName);
-
-  //pinpoint the collection of the user
-  CollectionReference collectionReference=_db.collection('collections');
-  DocumentReference addcollectiontobucket=collectionReference.doc(userid).collection('usercollections').doc(collectionName);
-
-  addcollectiontobucket.collection('products').add(product.toMap()).whenComplete(() {
-    return true;}
-    ).catchError((e){
-      return false;
-    });
-}
 
 Future<void> updateProductInCollection(Product product,String collectionName,String userid) async{
 
@@ -54,56 +40,61 @@ Future<void> updateProductInCollection(Product product,String collectionName,Str
     ).catchError((e){
       return false;
     });
-
-
-
-
-
 }
 
 
 
 
-Future<bool> addCollection(Collection collection) async{
-  print('in addcollection');
+Future<void> addCollection(Collection collection) async{
   CollectionReference collectionReference=_db.collection('collections');
   DocumentReference addcollectiontobucket=collectionReference.doc(collection.userId).collection('usercollections').doc(collection.collectionname);
   CollectionReference userReference=_db.collection('users');
   DocumentReference updateusertoincludecollectionname=userReference.doc(collection.userId);
-
-
   WriteBatch writeBatch=_db.batch();
   writeBatch.set(addcollectiontobucket, {
-
       'createdAt': Timestamp.now(),
       'userId': collection.userId,
       'collectionname':collection.collectionname,
-    
     });
-
     //to add to User document's collectionnames
   writeBatch.update(updateusertoincludecollectionname,{
     'collectionnames':FieldValue.arrayUnion([collection.collectionname+collection.userId])
   });
-
   writeBatch.commit();
-  
-  
-      
-    
   }
 
+Future<bool> addProductToCollection(Product product,String collectionName,String userid,String newcreditscount) async{
 
- Future<void> deleteCollection(String name,String userid) async{
+  CollectionReference collectionReference=_db.collection('collections');
+  DocumentReference addcollectiontobucket=collectionReference.doc(userid).collection('usercollections').doc(collectionName);
+  CollectionReference userReference=_db.collection('users');
+  DocumentReference updateuserproductsCount=userReference.doc(userid);
+  // addcollectiontobucket.collection('products').add(product.toMap()).whenComplete(() {
+  //   return true;}
+  //   ).catchError((e){
+  //     return false;
+  //   });
+
+
+  WriteBatch writeBatch=_db.batch();
+  writeBatch.set(addcollectiontobucket.collection('products').doc(product.name), product.toMap());
+
+  writeBatch.update(updateuserproductsCount,{
+    'numberOfProductsUploaded':newcreditscount
+  });
+
+  writeBatch.commit();
+
+}
+
+/*  Future<void> deleteCollection(String name,String userid) async{
    print('in delete collection');
    print(name);
    print(userid);
     await FirebaseFirestore.instance.collection('collections').doc(userid).collection('usercollections').doc(name).snapshots().forEach((element) {
-     
         element.reference.delete();
-      
     }); 
-  }
+  } */
 
   Future<void> deleteProduct(String name,String userid,String collectionname,var mainimagesids,var variants) async{
     print ('in delete product');
