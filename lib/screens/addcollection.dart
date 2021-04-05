@@ -24,17 +24,49 @@ class _AddCollectionState extends State<AddCollection> {
   final _formKey = GlobalKey<FormState>();
   Collection newcollection=Collection();
 
+  bool canAdd=true;
+  int numofproductsuploadedsofar=0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+     if (Provider.of<GeneralProvider>(context,listen: false).localcountnumberOfProductsUploaded>=Provider.of<GeneralProvider>(context,listen: false).localcountmaxnumberofProductsUploaded){
+      setState(() {
+        canAdd=false;
+        
+      });
+    }
+
+    setState(() {
+      numofproductsuploadedsofar=Provider.of<GeneralProvider>(context,listen: false).localcountnumberOfProductsUploaded;
+    });
+
   }
+
+  @override
+  void didChangeDependencies() {
+
+    if (Provider.of<GeneralProvider>(context,listen: false).localcountnumberOfProductsUploaded>=Provider.of<GeneralProvider>(context,listen: false).localcountmaxnumberofProductsUploaded){
+      setState(() {
+        canAdd=false;
+      });
+    }
+
+       setState(() {
+      numofproductsuploadedsofar=Provider.of<GeneralProvider>(context,listen: false).localcountnumberOfProductsUploaded;
+    });
+
+
+  }
+
+
 
     Future<void> _saveForm() async {
 
     final isValid = _formKey.currentState.validate();
-    if (!isValid) {
+    if (!isValid || !canAdd) {
       return;
     }
     _formKey.currentState.save();
@@ -65,6 +97,16 @@ class _AddCollectionState extends State<AddCollection> {
         Padding(
           padding: EdgeInsets.all(10),
           child: Text('Select an existing shop to add products to',style: TextStyle(fontSize: 20),)),
+          
+               Container(
+              child: Text("by provider, You have "+generalProvider.localcountmaxnumberofProductsUploaded.toString()+" available"),
+            ),
+
+               Container(
+              child: Text("by provider, You have uploaded "+generalProvider.localcountnumberOfProductsUploaded.toString()),
+            ),
+ canAdd==false?
+            Text('You have reached your product count limit'):Text(' '),
 
         
         Container(
@@ -91,7 +133,9 @@ class _AddCollectionState extends State<AddCollection> {
                                 elevation: 4,
                                 margin: EdgeInsets.all(4),
                                 child: ListTile(
-                                  onTap: (){
+                                  
+                                  onTap: canAdd==false?null:(){
+
                                     generalProvider.setCurrentCollection(chatDocs[index].data()['collectionname']);
                                     Navigator.pushNamed(context, AddProduct.routeName);
 
@@ -153,7 +197,8 @@ class _AddCollectionState extends State<AddCollection> {
                       ],) ,),),
                       IconButton(
             icon: Icon(Icons.save),
-            onPressed: _saveForm,)
+            onPressed: _saveForm,),
+
         
 
 

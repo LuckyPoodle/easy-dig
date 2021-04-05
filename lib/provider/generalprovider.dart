@@ -37,10 +37,15 @@ class GeneralProvider with ChangeNotifier{
 
   void addoneproduct(){
     localcountnumberOfProductsUploaded+=1;
+    
+
+    notifyListeners();
   }
 
   void removeoneproduct(){
     localcountnumberOfProductsUploaded-=1;
+
+    notifyListeners();
   }
 
 

@@ -6,13 +6,22 @@ import '../helper/components.dart';
 import './market.dart';
 import 'package:easydigitalize/provider/generalprovider.dart';
 import 'package:provider/provider.dart';
-import './upgrade.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter/services.dart';
 import '../models/user.dart';
 
+import 'dart:async';
+
+import '../provider/generalprovider.dart';
+
+import 'package:in_app_purchase/in_app_purchase.dart';
+
+
+
 class Home extends StatefulWidget {
+  static const routeName = '/home';
   @override
   _HomeState createState() => _HomeState();
 }
@@ -24,8 +33,25 @@ class _HomeState extends State<Home> {
 
   String credits='0';
 
+   /// Is the API available on the device
+  bool available = true;
+
+  /// The In App Purchase plugin
+  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+
+  /// Products for sale
+  List<ProductDetails> _products = [];
+
+  /// Past purchases
+  List<PurchaseDetails> _purchases = [];
+
+  /// Updates to purchases
+  StreamSubscription<List<PurchaseDetails>> _subscription;
+
   @override
   void initState() {
+
+
     // TODO: implement initState
     super.initState();
     //initPlatformState();
@@ -48,6 +74,88 @@ class _HomeState extends State<Home> {
     
 
   }
+
+    void _initialize() async {
+
+    // Check availability of In App Purchases
+    available = await _iap.isAvailable();
+
+    if (available) {
+//retrieve
+      await _getProducts();
+      await _getPastPurchases();
+
+//we can use future.wait if u want
+
+      // Verify and deliver a purchase with your own business logic
+      //_verifyPurchase();
+
+      
+      // Listen to new purchases
+      _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
+        print('NEW PURCHASE');
+        _purchases.addAll(data);
+        //_verifyPurchase();
+      }));
+
+    }
+  }
+
+
+
+  /// Get all products available for sale
+  Future<void> _getProducts() async {
+    Set<String> ids = Set.from([testID]);
+    print('in get Products...');
+    ProductDetailsResponse response = await _iap.queryProductDetails(ids);
+
+
+
+    print('in get Products response is ...'+response.productDetails.toString());
+
+    setState(() { 
+      _products = response.productDetails;
+    });
+  }
+
+  /// Gets past purchases
+  Future<void> _getPastPurchases() async {
+    print('in get Past purchased Products...');
+    QueryPurchaseDetailsResponse response =
+        await _iap.queryPastPurchases();
+        print('in get Past purchased Products response is ...'+response.pastPurchases.toString());
+//this does not return consumed pdt so u should save state of consumed pdt in ur database
+    for (PurchaseDetails purchase in response.pastPurchases) {
+      // if (Platform.isIOS){
+      //   _iap.completePurchase(purchase);
+      // }
+    }
+
+    setState(() {
+      _purchases = response.pastPurchases;
+    });
+  }
+
+  /// Returns purchase of specific product ID
+  PurchaseDetails _hasPurchased(String productID) {
+    return _purchases.firstWhere( (purchase) => purchase.productID == productID, orElse: () => null);
+  }
+
+  /// Your own business logic to setup a consumable
+  void _verifyPurchase() {
+    PurchaseDetails purchase = _hasPurchased(testID);
+
+    // TODO serverside verification & record consumable in the database
+
+    if (purchase != null && purchase.status == PurchaseStatus.purchased) {
+      // credits += 5;
+      // Provider.of<GeneralProvider>(context,listen:false).setlocalcountmaxnumberofProductsUploaded(int.parse(credits.toString()));
+      // authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, credits.toString());
+    }
+  }
+  
+
+
 
   Future<void> initPlatformState() async {
   appData.isPro = false;
@@ -81,6 +189,7 @@ class _HomeState extends State<Home> {
     AuthService authservice=AuthService();
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
           flexibleSpace: Container(
         alignment: Alignment.center,
         color: Colors.black,
@@ -95,41 +204,64 @@ class _HomeState extends State<Home> {
       )),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            SizedBox(height: 80,),
 
-            Container(
-              child: Text("You have "+credits+" available"),
-            ),
+            Text(_products.toString()),
+            Text(_purchases.toString()),
 
 
-   Container(
-              child: Text("by provider, You have "+generalProvider.localcountmaxnumberofProductsUploaded.toString()+" available"),
-            ),
+            Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                    Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
 
-               Container(
-              child: Text("by provider, You have uploaded "+generalProvider.localcountnumberOfProductsUploaded.toString()),
-            ),
+              Text('Credits',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
+              Text(generalProvider.localcountmaxnumberofProductsUploaded.toString(),style: TextStyle(fontSize: 30))
 
-            
+            ],),
 
+                Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+
+              Text('Upload Count',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
+              Text(generalProvider.localcountnumberOfProductsUploaded.toString(),style: TextStyle(fontSize: 30))
+
+            ],),
+            ]),
+
+            SizedBox(height: 20,),
+
+      
             Container(
               width: width * 0.5,
               decoration: BoxDecoration(
-                color: Colors.black,
+                color:generalProvider.localcountnumberOfProductsUploaded>=generalProvider.localcountmaxnumberofProductsUploaded? Colors.red:Colors.black,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(width: 0),
               ),
               padding: EdgeInsets.all(10),
-              child: FlatButton(
+              
+              child: TextButton(
+                
+
                 child:
                     Text('Add Product', style: TextStyle(color: Colors.white)),
-                onPressed: () {
+                onPressed: generalProvider.localcountnumberOfProductsUploaded<=generalProvider.localcountmaxnumberofProductsUploaded?null:() {
                   Navigator.pushNamed(context, AddCollection.routeName);
                 },
               ),
             ),
+            generalProvider.localcountnumberOfProductsUploaded>=generalProvider.localcountmaxnumberofProductsUploaded?
+            Text('You have reached your product count limit, purchase another package to upload more ', textAlign: TextAlign.center, style:TextStyle(color: Colors.redAccent,fontSize: 20, fontStyle: FontStyle.italic),):Text(' '),
             SizedBox(
               height: 5,
             ),

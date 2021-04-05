@@ -50,7 +50,8 @@ class MyApp extends StatelessWidget {
           AddCollection.routeName:(ctx)=>AddCollection(),
           ViewCollections.routeName:(ctx)=>ViewCollections(),
           ViewProducts.routeName:(ctx)=>ViewProducts(),
-          MarketScreen.routeName:(ctx)=>MarketScreen()
+          MarketScreen.routeName:(ctx)=>MarketScreen(),
+          Home.routeName:(ctx)=>Home(),
       
         }
       ),

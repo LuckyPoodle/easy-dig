@@ -20,7 +20,7 @@ class ViewCollections extends StatelessWidget {
         Provider.of<AuthProvider>(context);
     GeneralProvider generalProvider=Provider.of<GeneralProvider>(context);
     return Scaffold(
-      appBar:AppBar(title:Text('Your Collectiions')),
+      appBar:AppBar(title:Text('Your Collections')),
       body:Container(
           child:  StreamBuilder(
                       stream: authprovider.getUserCollections(user.uid),

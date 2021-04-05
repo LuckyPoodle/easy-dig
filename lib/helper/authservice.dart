@@ -101,12 +101,12 @@ Future<bool> deleteUser(){
 
   }
 
-  void addCreditsToAccount(String uid) async {
+  void addCreditsToAccount(String uid, String newcredit) async {
     await FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
           .set({
-            'maxNumberOfProductsUserCanCreate':100,
+            'maxNumberOfProductsUserCanCreate':newcredit,
             'accountType':'paid',
 
           },SetOptions(merge: true));

@@ -6,7 +6,8 @@ import '../provider/generalprovider.dart';
 import 'package:provider/provider.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-final String testID = 'pro_coupon';
+
+final String testID = 'a_hundred_products';
 
 class MarketScreen extends StatefulWidget {
   static const routeName = '/market';
@@ -17,6 +18,8 @@ class MarketScreenState extends State<MarketScreen> {
 
   /// Is the API available on the device
   bool available = true;
+
+  String mywords='going to buy!!!!!!!!!!!!!1';
 
   /// The In App Purchase plugin
   InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
@@ -33,13 +36,17 @@ class MarketScreenState extends State<MarketScreen> {
   /// Consumable credits the user can buy
   int credits = 0;
 
-  AuthService authservice;
+  AuthService authservice=AuthService();
 
   @override
   void initState() {
     //fetch prdts and purchases
     _initialize();
+    // AuthService authservice=AuthService();
+
+    // authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, '10000');
     super.initState();
+    credits=Provider.of<GeneralProvider>(context,listen:false).localcountmaxnumberofProductsUploaded;
   }
 
   @override
@@ -63,7 +70,7 @@ class MarketScreenState extends State<MarketScreen> {
 //we can use future.wait if u want
 
       // Verify and deliver a purchase with your own business logic
-      _verifyPurchase();
+      //_verifyPurchase();
 
       
       // Listen to new purchases
@@ -77,41 +84,51 @@ class MarketScreenState extends State<MarketScreen> {
   }
 
   /// Spend credits and consume purchase when they run pit
-  void _spendCredits(PurchaseDetails purchase) async {
+  // void _spendCredits(PurchaseDetails purchase) async {
     
-    /// Decrement credits
-    setState(() { credits--; });
+  //   /// Decrement credits
+  //   setState(() { credits--; });
 
      
-      Provider.of<GeneralProvider>(context,listen:false).setNumberOfProductsUploaded(int.parse(credits.toString()));
+  //     Provider.of<GeneralProvider>(context,listen:false).setNumberOfProductsUploaded(int.parse(credits.toString()));
       
-      int creditcountnow=Provider.of<GeneralProvider>(context,listen:false).localcountmaxnumberofProductsUploaded-1;
+  //     int creditcountnow=Provider.of<GeneralProvider>(context,listen:false).localcountmaxnumberofProductsUploaded-1;
 
       
 
-      String newcount=creditcountnow.toString();
+  //     String newcount=creditcountnow.toString();
       
-      authservice.updateCreditsInAccount(Provider.of<User>(context,listen:false).uid,newcount);
+  //     authservice.updateCreditsInAccount(Provider.of<User>(context,listen:false).uid,newcount);
 
-    /// TODO update the state of the consumable to a backend database
+  //   /// TODO update the state of the consumable to a backend database
 
-    // Mark consumed when credits run out
-    if (credits == 0) {
-      //tell playstore the purchase is consumed
-      var res = await _iap.consumePurchase(purchase);
-      await _getPastPurchases();
-    }
+  //   // Mark consumed when credits run out
+  //   if (credits == 0) {
+  //     //tell playstore the purchase is consumed
+  //     var res = await _iap.consumePurchase(purchase);
+  //     await _getPastPurchases();
+  //   }
 
-  }
+  // }
 
 
    /// Purchase a product
   void _buyProduct(ProductDetails prod) {
     final PurchaseParam purchaseParam = PurchaseParam(productDetails: prod);
     //for one time purchase is nonconsumable
-    // _iap.buyNonConsumable(purchaseParam: purchaseParam);
+     //_iap.buyNonConsumable(purchaseParam: purchaseParam);
     //autoconsume is false means user can't purchase again until they have consumed
-    _iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: false);
+    _iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: true);
+    
+      setState(() {
+        mywords='yes just finishing buyProduct, now gg to verifypurchase!!!';
+      });
+    
+    _verifyPurchase();
+
+
+
+
   }
 
 
@@ -159,15 +176,27 @@ class MarketScreenState extends State<MarketScreen> {
     PurchaseDetails purchase = _hasPurchased(testID);
 
     // TODO serverside verification & record consumable in the database
+    // 
+      setState(() {
+        mywords='gg to check if it is purchased!!! '+purchase.toString()+purchase.status.toString();
+      });
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-      credits = 100;
+
+      setState(() {
+        mywords='yes verified purchase!!!';
+      });
+
+      _iap.completePurchase(purchase);
+      credits += 5;
     
       
       Provider.of<GeneralProvider>(context,listen:false).setlocalcountmaxnumberofProductsUploaded(int.parse(credits.toString()));
       
-      authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid);
+      authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, credits.toString());
     }
+
+
   }
   
 
@@ -184,21 +213,14 @@ class MarketScreenState extends State<MarketScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
+              Text(mywords),
+              Text(Provider.of<User>(context,listen:false).uid),
+
+
             for (var prod in _products)
 
-              // UI if already purchased
-              if (_hasPurchased(prod.id) != null)
-                ...[
-                  Text('💎 $credits', style: TextStyle(fontSize: 60)),
-                  FlatButton(
-                    child: Text('Consume'),
-                    color: Colors.green,
-                    onPressed: () => _spendCredits(_hasPurchased(prod.id)),
-                  )
-                ]
-              
-              // UI if NOT purchased
-              else ...[
+              ...[
                 Text(prod.title, style: Theme.of(context).textTheme.headline),
                 Text(prod.description),
                 Text(prod.price,
@@ -216,7 +238,5 @@ class MarketScreenState extends State<MarketScreen> {
   }
 
 
-  // Private methods go here
-  
 
 }

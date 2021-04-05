@@ -45,6 +45,8 @@ class _AddProductState extends State<AddProduct> {
   bool pickedMainImages = false;
   bool uploadedMainImagesSuccessfully = false;
 
+  
+
   bool entermorethan5options = false;
   bool addVariant1 = false;
   bool addVariant2 = false;
@@ -517,7 +519,7 @@ class _AddProductState extends State<AddProduct> {
         Provider.of<GeneralProvider>(context, listen: false).currentCollection,
         user.uid,(Provider.of<GeneralProvider>(context, listen: false).localcountnumberOfProductsUploaded+1).toString()).then((_){
           Provider.of<GeneralProvider>(context, listen: false).addoneproduct();
-          Navigator.pushNamed(context, ViewProducts.routeName);
+          Navigator.pushReplacementNamed(context, ViewProducts.routeName);
 
         }).catchError((e){
           print('ERROR');
@@ -529,7 +531,7 @@ class _AddProductState extends State<AddProduct> {
 
       Provider.of<AuthProvider>(context,listen: false).updateProductInCollection(theproductwearemaking, Provider.of<GeneralProvider>(context, listen: false).currentCollection,
         user.uid).then((_){
-          Navigator.pushNamed(context, ViewProducts.routeName);
+          Navigator.pushReplacementNamed(context, ViewProducts.routeName);
 
 
         }).catchError((e){
@@ -856,7 +858,9 @@ class _AddProductState extends State<AddProduct> {
           .setMainImagesOfProducts(resultList);
       setState(() {
         pickedMainImages = true;
-        images = resultList;
+        if(resultList!=null){
+          images = resultList;
+        }
 
         if (error == null) _error = 'No Error Dectected';
       });

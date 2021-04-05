@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import '../helper/authservice.dart';
+import '../screens/home.dart';
 import '../provider/authprovider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -397,7 +398,19 @@ class ViewProducts extends StatelessWidget {
     AuthProvider authprovider = Provider.of<AuthProvider>(context);
     GeneralProvider generalProvider = Provider.of<GeneralProvider>(context);
     return Scaffold(
-      appBar: AppBar(title: Text('Products in Collection')),
+      appBar: AppBar(
+        actions: [IconButton(icon: Icon(
+          Icons.home,
+          color:Colors.white,
+          
+        ),onPressed:(){
+          Navigator.pushNamed(context, Home.routeName);
+        } ,),],
+        title: Text('Products in Collection'),
+        automaticallyImplyLeading: true,),
+      
+        
+      
       body: SingleChildScrollView(
         
         child:  StreamBuilder(
