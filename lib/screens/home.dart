@@ -33,20 +33,20 @@ class _HomeState extends State<Home> {
 
   String credits='0';
 
-   /// Is the API available on the device
-  bool available = true;
+  //  /// Is the API available on the device
+  // bool available = true;
 
-  /// The In App Purchase plugin
-  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+  // /// The In App Purchase plugin
+  // InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
 
-  /// Products for sale
-  List<ProductDetails> _products = [];
+  // /// Products for sale
+  // List<ProductDetails> _products = [];
 
-  /// Past purchases
-  List<PurchaseDetails> _purchases = [];
+  // /// Past purchases
+  // List<PurchaseDetails> _purchases = [];
 
-  /// Updates to purchases
-  StreamSubscription<List<PurchaseDetails>> _subscription;
+  // /// Updates to purchases
+  // StreamSubscription<List<PurchaseDetails>> _subscription;
 
   @override
   void initState() {
@@ -70,89 +70,93 @@ class _HomeState extends State<Home> {
       );
     });
 
+  
+
     //save the user's numberofprdtsuploaded and maxuploadcount to provider
     
 
   }
 
-    void _initialize() async {
+//     void _initialize() async {
 
-    // Check availability of In App Purchases
-    available = await _iap.isAvailable();
+//     // Check availability of In App Purchases
+//     available = await _iap.isAvailable();
 
-    if (available) {
-//retrieve
-      await _getProducts();
-      await _getPastPurchases();
+//     if (available) {
+// //retrieve
+//       await _getProducts();
+//       await _getPastPurchases();
 
-//we can use future.wait if u want
+// //we can use future.wait if u want
 
-      // Verify and deliver a purchase with your own business logic
-      //_verifyPurchase();
+//       // Verify and deliver a purchase with your own business logic
+//       //_verifyPurchase();
 
       
-      // Listen to new purchases
-      _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
-        print('NEW PURCHASE');
-        _purchases.addAll(data);
-        //_verifyPurchase();
-      }));
+//       // Listen to new purchases
+//       _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
+//         print('NEW PURCHASE');
+//         _purchases.addAll(data);
+//         print('_purchases...');
+//         print(_purchases);
+//         //_verifyPurchase();
+//       }));
 
-    }
-  }
-
-
-
-  /// Get all products available for sale
-  Future<void> _getProducts() async {
-    Set<String> ids = Set.from([testID]);
-    print('in get Products...');
-    ProductDetailsResponse response = await _iap.queryProductDetails(ids);
+//     }
+//   }
 
 
 
-    print('in get Products response is ...'+response.productDetails.toString());
+  // /// Get all products available for sale
+  // Future<void> _getProducts() async {
+  //   Set<String> ids = Set.from([testID]);
+  //   print('in get Products...');
+  //   ProductDetailsResponse response = await _iap.queryProductDetails(ids);
 
-    setState(() { 
-      _products = response.productDetails;
-    });
-  }
 
-  /// Gets past purchases
-  Future<void> _getPastPurchases() async {
-    print('in get Past purchased Products...');
-    QueryPurchaseDetailsResponse response =
-        await _iap.queryPastPurchases();
-        print('in get Past purchased Products response is ...'+response.pastPurchases.toString());
-//this does not return consumed pdt so u should save state of consumed pdt in ur database
-    for (PurchaseDetails purchase in response.pastPurchases) {
-      // if (Platform.isIOS){
-      //   _iap.completePurchase(purchase);
-      // }
-    }
 
-    setState(() {
-      _purchases = response.pastPurchases;
-    });
-  }
+  //   print('in get Products response is ...'+response.productDetails.toString());
 
-  /// Returns purchase of specific product ID
-  PurchaseDetails _hasPurchased(String productID) {
-    return _purchases.firstWhere( (purchase) => purchase.productID == productID, orElse: () => null);
-  }
+  //   setState(() { 
+  //     _products = response.productDetails;
+  //   });
+  // }
 
-  /// Your own business logic to setup a consumable
-  void _verifyPurchase() {
-    PurchaseDetails purchase = _hasPurchased(testID);
+//   /// Gets past purchases
+//   Future<void> _getPastPurchases() async {
+//     print('in get Past purchased Products...');
+//     QueryPurchaseDetailsResponse response =
+//         await _iap.queryPastPurchases();
+//         print('in get Past purchased Products response is ...'+response.pastPurchases.toString());
+// //this does not return consumed pdt so u should save state of consumed pdt in ur database
+//     for (PurchaseDetails purchase in response.pastPurchases) {
+//       // if (Platform.isIOS){
+//       //   _iap.completePurchase(purchase);
+//       // }
+//     }
 
-    // TODO serverside verification & record consumable in the database
+//     setState(() {
+//       _purchases = response.pastPurchases;
+//     });
+//   }
 
-    if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-      // credits += 5;
-      // Provider.of<GeneralProvider>(context,listen:false).setlocalcountmaxnumberofProductsUploaded(int.parse(credits.toString()));
-      // authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, credits.toString());
-    }
-  }
+  // /// Returns purchase of specific product ID
+  // PurchaseDetails _hasPurchased(String productID) {
+  //   return _purchases.firstWhere( (purchase) => purchase.productID == productID, orElse: () => null);
+  // }
+
+  // /// Your own business logic to setup a consumable
+  // void _verifyPurchase() {
+  //   PurchaseDetails purchase = _hasPurchased(testID);
+
+  //   // TODO serverside verification & record consumable in the database
+
+  //   if (purchase != null && purchase.status == PurchaseStatus.purchased) {
+  //     // credits += 5;
+  //     // Provider.of<GeneralProvider>(context,listen:false).setlocalcountmaxnumberofProductsUploaded(int.parse(credits.toString()));
+  //     // authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, credits.toString());
+  //   }
+  // }
   
 
 
@@ -209,10 +213,6 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             SizedBox(height: 80,),
 
-            Text(_products.toString()),
-            Text(_purchases.toString()),
-
-
             Row(
                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -255,7 +255,7 @@ class _HomeState extends State<Home> {
 
                 child:
                     Text('Add Product', style: TextStyle(color: Colors.white)),
-                onPressed: generalProvider.localcountnumberOfProductsUploaded<=generalProvider.localcountmaxnumberofProductsUploaded?null:() {
+                onPressed: generalProvider.localcountnumberOfProductsUploaded>=generalProvider.localcountmaxnumberofProductsUploaded?null:() {
                   Navigator.pushNamed(context, AddCollection.routeName);
                 },
               ),
@@ -263,7 +263,7 @@ class _HomeState extends State<Home> {
             generalProvider.localcountnumberOfProductsUploaded>=generalProvider.localcountmaxnumberofProductsUploaded?
             Text('You have reached your product count limit, purchase another package to upload more ', textAlign: TextAlign.center, style:TextStyle(color: Colors.redAccent,fontSize: 20, fontStyle: FontStyle.italic),):Text(' '),
             SizedBox(
-              height: 5,
+              height: 20,
             ),
             Container(
               width: width * 0.5,
@@ -274,51 +274,57 @@ class _HomeState extends State<Home> {
                 border: Border.all(width: 0),
               ),
               child: FlatButton(
-                child: Text('View Your Products',
+                child: Text('Export Your Products',
                     style: TextStyle(color: Colors.white)),
                 onPressed: () {
                   Navigator.pushNamed(context, ViewCollections.routeName);
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: RaisedButton(
-                  color: kColorAccent,
-                  textColor: kColorText,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Text(
-                      'Purchase a package',
-                      style: kSendButtonTextStyle,
-                    ),
-                  ),
-                  onPressed: () {
-                   
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MarketScreen()));
-                    
-                  }),
 
-                  
+             SizedBox(
+              height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: RaisedButton(
-                  color: kColorAccent,
-                  textColor: kColorText,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Text(
-                      'Sign Out',
-                      style: kSendButtonTextStyle,
-                    ),
-                  ),
-                  onPressed: () {
-                   
-                      authservice.signOut();
-                    
-                  }),
+
+             Container(
+              width: width * 0.5,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 0),
+              ),
+              padding: EdgeInsets.all(10),
+              
+              child: TextButton(
+                child: Text('Purchase Package!', style: TextStyle(color: Colors.white,fontSize: 20), textAlign: TextAlign.center,),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MarketScreen()));
+                },
+              ),
             ),
+
+            SizedBox(height: 20,),
+
+             Container(
+              width: width * 0.5,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 0),
+              ),
+              padding: EdgeInsets.all(10),
+              
+              child: TextButton(
+                child: Text('Sign Out', style: TextStyle(color: Colors.white,fontSize: 20), textAlign: TextAlign.center,),
+                onPressed: () {
+                  authservice.signOut();
+                },
+              ),
+            ),
+
+
+
+           
           ],
         ),
       ),

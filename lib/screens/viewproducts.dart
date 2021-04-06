@@ -25,9 +25,7 @@ Future<File> get _localFile async {
   print('in get localfile');
 
   filePath = '$path/data.csv';
-  print('----');
-  print(filePath);
-  print(path);
+
   return File('$path/data.csv').create();
 }
 
@@ -35,7 +33,7 @@ sendMailAndAttachment() async {
   final Email email = Email(
     body: 'Hey, the CSV made it!',
     subject: 'Datum Entry for ${DateTime.now().toString()}',
-    recipients: ['ruiquek11@gmail.com'],
+    recipients: [''],
     isHTML: true,
     attachmentPaths: [filePath],
   );
@@ -382,8 +380,8 @@ class ViewProducts extends StatelessWidget {
     }
 
     File f = await _localFile;
-    print('in generate CSV');
-    print(f);
+
+ 
     String csv = const ListToCsvConverter().convert(rows);
     print(csv);
     f.writeAsString(csv);
@@ -399,13 +397,19 @@ class ViewProducts extends StatelessWidget {
     GeneralProvider generalProvider = Provider.of<GeneralProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        actions: [IconButton(icon: Icon(
+        actions: [
+          
+          IconButton(icon: Icon(
           Icons.home,
           color:Colors.white,
           
         ),onPressed:(){
           Navigator.pushNamed(context, Home.routeName);
-        } ,),],
+        } ,),
+
+
+        
+        ],
         title: Text('Products in Collection'),
         automaticallyImplyLeading: true,),
       
@@ -431,6 +435,17 @@ class ViewProducts extends StatelessWidget {
              
               child: Column(
                 children: <Widget>[
+
+                           TextButton(
+                         child: Text('Generate CSV file for Woocommerce'),
+                         style: TextButton.styleFrom(
+                           primary:Colors.white,
+                           backgroundColor:Colors.teal,
+                           onSurface:Colors.grey
+                         ),
+                         onPressed: (){
+                           generateCSV(chatDocs);
+                         },),
                 
 
                       SingleChildScrollView(
@@ -451,6 +466,8 @@ class ViewProducts extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                   
                             children: <Widget>[
+
+                              
 
                             Row(
                                mainAxisAlignment: MainAxisAlignment.center,
@@ -515,17 +532,6 @@ class ViewProducts extends StatelessWidget {
                         )
                         
                        )),),
-
-                       TextButton(
-                         child: Text('Generate CSV file for Woocommerce'),
-                         style: TextButton.styleFrom(
-                           primary:Colors.white,
-                           backgroundColor:Colors.teal,
-                           onSurface:Colors.grey
-                         ),
-                         onPressed: (){
-                           generateCSV(chatDocs);
-                         },),
 
                          SizedBox(height: 100,)
               

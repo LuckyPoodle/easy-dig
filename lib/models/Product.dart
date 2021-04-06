@@ -4,6 +4,7 @@ import 'variant.dart';
 class Product{
 
   String name;
+  String handle;
   String id;
   String description;
   String quantity;
@@ -16,6 +17,7 @@ class Product{
   int variationputunderwhichattribute;
   String sku;
   String type;
+  String tags;
   String option1name='';
   String option1s='';
   String option2name='';
@@ -36,7 +38,7 @@ class Product{
   List<String> options;
   List<Variant> variants;
 
-  Product({this.id,this.name,this.variationlabel,this.imagesStoreLocation,this.category,this.variationputunderwhichattribute,this.option1name,this.option1s,this.option2name,this.option2s,this.option3name,this.option3s,this.option4name,this.option4s,this.option5name,this.option5s,this.type,this.sku,this.description,this.quantity,this.price,this.brand,this.hasVariation,this.mainProductImages,this.mainproductimagesIds,this.variants});
+  Product({this.id,this.name,this.handle,this.tags,this.variationlabel,this.imagesStoreLocation,this.category,this.variationputunderwhichattribute,this.option1name,this.option1s,this.option2name,this.option2s,this.option3name,this.option3s,this.option4name,this.option4s,this.option5name,this.option5s,this.type,this.sku,this.description,this.quantity,this.price,this.brand,this.hasVariation,this.mainProductImages,this.mainproductimagesIds,this.variants});
 
    static List<Map> ConvertCustomStepsToMap(List<Variant> customSteps) {
     List<Map> steps = [];
@@ -67,6 +69,8 @@ class Product{
       'description': description,
       'price':price,
       'brand':brand,
+      'handle':handle,
+      'tags':tags,
       
       'hasVariation':hasVariation,
       'sku':sku,

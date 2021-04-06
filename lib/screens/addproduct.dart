@@ -126,6 +126,7 @@ class _AddProductState extends State<AddProduct> {
         description: ' ',
         price: ' ',
         brand: ' ',
+        handle:' ',
         type: ' ',
         hasVariation: false,
         variationlabel: ' ',
@@ -245,6 +246,7 @@ class _AddProductState extends State<AddProduct> {
         description:chatDocsIndex.data()['description'],
         price:chatDocsIndex.data()['price'],
         brand: chatDocsIndex.data()['brand'],
+        handle:chatDocsIndex.data()['handle'],
         type: chatDocsIndex.data()['type'],
         hasVariation: chatDocsIndex.data()['hasVariation'],
         variationlabel: chatDocsIndex.data()['variationlabel'],
@@ -1043,7 +1045,7 @@ class _AddProductState extends State<AddProduct> {
                         Container(
                           padding: EdgeInsets.all(3),
                           child: Text(
-                              'Product SKU (Optional if product has no product variations)',
+                              'Product SKU (Woocommerce)',
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold)),
                         ),
@@ -1072,7 +1074,43 @@ class _AddProductState extends State<AddProduct> {
                         SizedBox(
                           height: 8,
                         ),
+
+
+
+                        //* HANDLE (SHOPIFY) *//
+                        Container(
+                          padding: EdgeInsets.all(3),
+                          child: Text(
+                              'Product Handle (Shopify)',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                        ),
+                        Container(
+                          color: Colors.black,
+                          height: 5,
+                        ),
+                        SizedBox(height:4),
+                        Text(
+                          
+                            'Serves as a product slug for Shopify',
+                            style: TextStyle(
+                              fontSize: 16,
+                            )),
+
+                        Container(
+                          width: width * 0.7,
+                          child: TextFormField(
+                            initialValue: theproductwearemaking.handle,
+                            decoration: InputDecoration(hintText: 'handle - for Shopify'),
+                            onSaved: (value) {
+                              theproductwearemaking.handle = value;
+                            },
+                          ),
+                        ),
                       
+                          SizedBox(
+                          height: 8,
+                        ),
 
               
                         /* MAIN IMAGES OF PRODUCT */
@@ -1231,7 +1269,7 @@ class _AddProductState extends State<AddProduct> {
                         ),
 
                         /* BRAND */
-                        Text('Brand of the product (Optional)',
+                        Text('Vendor of the product (Optional) (Shopify)',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                                      Container(
@@ -1244,7 +1282,7 @@ class _AddProductState extends State<AddProduct> {
                             child: TextFormField(
                                 initialValue: theproductwearemaking.brand,
                                 decoration: InputDecoration(
-                                    hintText: 'Brand of the product'),
+                                    hintText: 'Product Brand'),
                                 onSaved: (value) {
                                   theproductwearemaking.brand = value;
                                 },
@@ -1254,7 +1292,7 @@ class _AddProductState extends State<AddProduct> {
                           height: 8,
                         ),
 
-                        /* BRAND */
+                        /* Category */
                         Text('Category of the product (Optional)',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
@@ -1272,9 +1310,27 @@ class _AddProductState extends State<AddProduct> {
                             children: <TextSpan>[
                               new TextSpan(
                                   text:
-                                      'if product category is under a parent category, please enter with this format '),
+                                      '( Woocommerce) if product category is under a parent category, please enter with this format '),
                               new TextSpan(
-                                  text: 'parentcategory>nameofcategory',
+                                  text: 'parentcategory>categoryname',
+                                  style: new TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue)),
+                            ],
+                          ),
+                        ),
+                         RichText(
+                          text: new TextSpan(
+                            // Note: Styles for TextSpans must be explicitly defined.
+                            // Child text spans will inherit styles from parent
+                            style: new TextStyle(
+                                fontSize: 16.0, color: Colors.black87),
+                            children: <TextSpan>[
+                              new TextSpan(
+                                  text:
+                                      '( Shopify) Please only enter 1 category name '),
+                              new TextSpan(
+                                  text: 'categoryname',
                                   style: new TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.blue)),
@@ -1286,10 +1342,53 @@ class _AddProductState extends State<AddProduct> {
                             width: width * 0.7,
                             child: TextFormField(
                                 initialValue: theproductwearemaking.category,
-                                decoration: InputDecoration(
-                                    hintText: 'Clothing>Tshirt'),
+                          
                                 onSaved: (value) {
                                   theproductwearemaking.category = value;
+                                },
+                                validator: (value) {})),
+                        //null is returned
+
+                        SizedBox(
+                          height: 8,
+                        ),
+
+                          /* Tags */
+                        Text('Tags of the product (Optional)',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                                     Container(
+                          color: Colors.black,
+                          height: 5,
+                        ),
+                        SizedBox(height:4),
+                        RichText(
+                          text: new TextSpan(
+                            // Note: Styles for TextSpans must be explicitly defined.
+                            // Child text spans will inherit styles from parent
+                            style: new TextStyle(
+                                fontSize: 16.0, color: Colors.black87),
+                            children: <TextSpan>[
+                              new TextSpan(
+                                  text:
+                                      'For multiple tags, please enter comma-separated values '),
+                              new TextSpan(
+                                  text: 'tag 1, tag 2',
+                                  style: new TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue)),
+                            ],
+                          ),
+                        ),
+                         
+
+                        Container(
+                            width: width * 0.7,
+                            child: TextFormField(
+                                initialValue: theproductwearemaking.tags,
+                          
+                                onSaved: (value) {
+                                  theproductwearemaking.tags = value;
                                 },
                                 validator: (value) {})),
                         //null is returned

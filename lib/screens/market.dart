@@ -65,7 +65,7 @@ class MarketScreenState extends State<MarketScreen> {
     if (available) {
 //retrieve
       await _getProducts();
-      await _getPastPurchases();
+     // await _getPastPurchases();
 
 //we can use future.wait if u want
 
@@ -73,11 +73,12 @@ class MarketScreenState extends State<MarketScreen> {
       //_verifyPurchase();
 
       
-      // Listen to new purchases
+      // Listen to new purchases which is activated here when u click BUY and the google play popup
       _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
-        print('NEW PURCHASE');
+        
         _purchases.addAll(data);
-        _verifyPurchase();
+  
+        
       }));
 
     }
@@ -138,33 +139,28 @@ class MarketScreenState extends State<MarketScreen> {
     Set<String> ids = Set.from([testID]);
     print('in get Products...');
     ProductDetailsResponse response = await _iap.queryProductDetails(ids);
-
-
-
     print('in get Products response is ...'+response.productDetails.toString());
-
     setState(() { 
       _products = response.productDetails;
     });
   }
 
   /// Gets past purchases
-  Future<void> _getPastPurchases() async {
-    print('in get Past purchased Products...');
-    QueryPurchaseDetailsResponse response =
-        await _iap.queryPastPurchases();
-        print('in get Past purchased Products response is ...'+response.pastPurchases.toString());
-//this does not return consumed pdt so u should save state of consumed pdt in ur database
-    for (PurchaseDetails purchase in response.pastPurchases) {
-      if (Platform.isIOS){
-        _iap.completePurchase(purchase);
-      }
-    }
-
-    setState(() {
-      _purchases = response.pastPurchases;
-    });
-  }
+//   Future<void> _getPastPurchases() async {
+//     print('in get Past purchased Products...');
+//     QueryPurchaseDetailsResponse response =
+//         await _iap.queryPastPurchases();
+//         print('in get Past purchased Products response is ...'+response.pastPurchases.toString());
+// //this does not return consumed pdt so u should save state of consumed pdt in ur database
+//     for (PurchaseDetails purchase in response.pastPurchases) {
+//       if (Platform.isIOS){
+//         _iap.completePurchase(purchase);
+//       }
+//     }
+//     setState(() {
+//       _purchases = response.pastPurchases;
+//     });
+//   }
 
   /// Returns purchase of specific product ID
   PurchaseDetails _hasPurchased(String productID) {
@@ -195,8 +191,6 @@ class MarketScreenState extends State<MarketScreen> {
       
       authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, credits.toString());
     }
-
-
   }
   
 
@@ -216,9 +210,26 @@ class MarketScreenState extends State<MarketScreen> {
 
               Text(mywords),
               Text(Provider.of<User>(context,listen:false).uid),
+              Text(_products.toString()),
+              Text(_purchases.toString()),
+              for (var p in _purchases)
+                Text(p.transactionDate),
+
+                for (var prod in _products)
+
+              // UI if already purchased
+              if (_hasPurchased(prod.id) != null)
+                ...[
+                  Text('💎 $credits', style: TextStyle(fontSize: 60)),
+               
+                ],
+
+
 
 
             for (var prod in _products)
+            
+            
 
               ...[
                 Text(prod.title, style: Theme.of(context).textTheme.headline),
