@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:easydigitalize/models/collection.dart';
@@ -44,16 +46,487 @@ sendMailAndAttachment() async {
 class ViewProducts extends StatelessWidget {
   static const routeName = '/viewproducts';
 
+  void generateShopifyCSV(var docs) async {
+    List<List<dynamic>> rows = [];
+    rows.add([
+      'Handle',
+      'Title',
+      'Body (HTML)',
+      'Vendor',
+      'Type',
+      'Tags',
+      'Published',
+      'Option1 Name',
+      'Option2 Name',
+      'Option3 Name',
+      'Option4 Name',
+      'Option5 Name',
+      'Option1 Value',
+      'Option2 Value',
+      'Option3 Value',
+      'Option4 Value',
+      'Option5 Value',
+      'Variant Inventory Qty',
+      'Variant Price',
+      'Image Src',
+      'Variant Image',
+    ]);
+
+    for (var doc in docs) {
+      List<dynamic> mainproductimages = doc.data()['mainProductImages'];
+
+      ///ACCOUNT FOR PRODUCT VARIANTS THAT HAVE OWN IMAGE/PRICE
+      if (doc.data()['type'] == 'variable') {
+
+
+        for (var variant in doc.data()['variants']) {
+          if (variant['variantname'].toString().trim().isEmpty) {
+            print("NO MORE VARIANT");
+            print("____________________");
+            break;
+          }
+
+          if (variant != null && variant.toString().isNotEmpty) {
+            //means no other options
+            if (doc.data()['variationputunderwhichattribute'] == 1) {
+              print('variation under 1');
+              List<dynamic> vrow = [];
+              //means product with its own image/price is option1
+              vrow.add(doc.data()['handle']);
+              vrow.add(doc.data()['name']);
+              vrow.add(doc.data()['description']);
+              vrow.add(doc.data()['brand']);
+              vrow.add('');
+              vrow.add(doc.data()['tags']);
+              vrow.add('FALSE');
+              vrow.add(doc.data()['variationlabel']);
+              vrow.add('');
+              vrow.add('');
+              vrow.add('');
+              vrow.add('');
+              vrow.add(variant['variantname']);
+              vrow.add('');
+              vrow.add('');
+              vrow.add('');
+              vrow.add('');
+
+              vrow.add(variant['quantity']);
+              vrow.add(variant['variantprice']);
+              vrow.add(mainproductimages[
+                  0]); //later then add more blank rows with other images in this list if any
+
+              vrow.add(variant['imageUrlfromStorage']);
+
+              rows.add(vrow);
+            } else if (doc.data()['variationputunderwhichattribute'] == 2) {
+              //have normal option 1 , now iterate through each value of option 1 for each variant
+              
+              List<String> optionslist = doc.data()['option1s'].split(",");
+              for (String option in optionslist) {
+                List<dynamic> vrow = [];
+                vrow.add(doc.data()['handle']);
+                vrow.add(doc.data()['name']);
+                vrow.add(doc.data()['description']);
+                vrow.add(doc.data()['brand']);
+                vrow.add('');
+                vrow.add(doc.data()['tags']);
+                vrow.add('FALSE');
+                vrow.add(doc.data()['option1name']);
+                vrow.add(doc.data()['variationlabel']);
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+                vrow.add(option);
+                vrow.add(variant['variantname']);
+
+                vrow.add('');
+                vrow.add('');
+                vrow.add('');
+
+                vrow.add(variant['quantity']);
+                vrow.add(variant['variantprice']);
+                vrow.add(mainproductimages[
+                    0]); //later then add more blank rows with other images in this list if any
+
+                vrow.add(variant['imageUrlfromStorage']);
+
+                rows.add(vrow);
+              }
+            } else if (doc.data()['variationputunderwhichattribute'] == 3) {
+              List<String> optionslistofoption1 =
+                  doc.data()['option1s'].split(",");
+              List<String> optionslistofoption2 =
+                  doc.data()['option2s'].split(",");
+              for (var option in optionslistofoption1) {
+                for (var option2 in optionslistofoption2) {
+                  List<dynamic> vrow = [];
+
+                  vrow.add(doc.data()['handle']);
+                  vrow.add(doc.data()['name']);
+                  vrow.add(doc.data()['description']);
+                  vrow.add(doc.data()['brand']);
+                  vrow.add('');
+                  vrow.add(doc.data()['tags']);
+                  vrow.add('FALSE');
+                  vrow.add(doc.data()['option1name']);
+                  vrow.add(doc.data()['option2name']);
+                  vrow.add(doc.data()['variationlabel']);
+
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add(option);
+                  vrow.add(option2);
+                  vrow.add(variant['variantname']);
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add(variant['quantity']);
+                  vrow.add(variant['variantprice']);
+                  vrow.add(mainproductimages[
+                      0]); //later then add more blank rows with other images in this list if any
+
+                  vrow.add(variant['imageUrlfromStorage']);
+
+                  rows.add(vrow);
+                }
+              }
+            } else if (doc.data()['variationputunderwhichattribute'] == 4) {
+              List<String> optionslistofoption1 =
+                  doc.data()['option1s'].split(",");
+              List<String> optionslistofoption2 =
+                  doc.data()['option2s'].split(",");
+              List<String> optionslistofoption3 =
+                  doc.data()['option3s'].split(",");
+
+              for (var option in optionslistofoption1) {
+                for (var option2 in optionslistofoption2) {
+                  for (var option3 in optionslistofoption3) {
+                    List<dynamic> vrow = [];
+                    vrow.add(doc.data()['handle']);
+                    vrow.add(doc.data()['name']);
+                    vrow.add(doc.data()['description']);
+                    vrow.add(doc.data()['brand']);
+                    vrow.add('');
+                    vrow.add(doc.data()['tags']);
+                    vrow.add('FALSE');
+                    vrow.add(doc.data()['option1name']);
+                    vrow.add(doc.data()['option2name']);
+                    vrow.add(doc.data()['option3name']);
+                    vrow.add(doc.data()['variationlabel']);
+                    vrow.add('');
+                    vrow.add(option);
+                    vrow.add(option2);
+                    vrow.add(option3);
+                    vrow.add(variant['variantname']);
+
+                    vrow.add('');
+                    vrow.add(variant['quantity']);
+                    vrow.add(variant['variantprice']);
+                    vrow.add(mainproductimages[
+                        0]); //later then add more blank rows with other images in this list if any
+
+                    vrow.add(variant['imageUrlfromStorage']);
+
+                    rows.add(vrow);
+                  }
+                }
+              }
+            } else if (doc.data()['variationputunderwhichattribute'] == 5) {
+              List<String> optionslistofoption1 =
+                  doc.data()['option1s'].split(",");
+              List<String> optionslistofoption2 =
+                  doc.data()['option2s'].split(",");
+              List<String> optionslistofoption3 =
+                  doc.data()['option3s'].split(",");
+              List<String> optionslistofoption4 =
+                  doc.data()['option4s'].split(",");
+
+              for (var option in optionslistofoption1) {
+                for (var option2 in optionslistofoption2) {
+                  for (var option3 in optionslistofoption3) {
+                    for (var option4 in optionslistofoption4) {
+                      List<dynamic> vrow = [];
+
+                      vrow.add(doc.data()['handle']);
+                      vrow.add(doc.data()['name']);
+                      vrow.add(doc.data()['description']);
+                      vrow.add(doc.data()['brand']);
+                      vrow.add('');
+                      vrow.add(doc.data()['tags']);
+                      vrow.add('FALSE');
+                      vrow.add(doc.data()['option1name']);
+                      vrow.add(doc.data()['option2name']);
+                      vrow.add(doc.data()['option3name']);
+                      vrow.add(doc.data()['option4name']);
+                      vrow.add(doc.data()['variationlabel']);
+
+                      vrow.add(option);
+                      vrow.add(option2);
+                      vrow.add(option3);
+                      vrow.add(option4);
+                      vrow.add(variant['variantname']);
+
+                      vrow.add(variant['quantity']);
+                      vrow.add(variant['variantprice']);
+                      vrow.add(mainproductimages[
+                          0]); //later then add more blank rows with other images in this list if any
+
+                      vrow.add(variant['imageUrlfromStorage']);
+
+                      rows.add(vrow);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      } else {
+        //NO variants that hav its own price/image etc, so now just do for plain options, which for shopify, require
+        //a row for each option just like variants though this time round u put the BASE price
+
+        //for if have 0 option
+        if (doc.data()['numberofoptions'] == '0') {
+          List<dynamic> vrow = [];
+
+          vrow.add(doc.data()['handle']);
+          vrow.add(doc.data()['name']);
+          vrow.add(doc.data()['description']);
+          vrow.add(doc.data()['brand']);
+          vrow.add('');
+          vrow.add(doc.data()['tags']);
+          vrow.add('FALSE');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+
+          vrow.add(doc.data()['quantity']);
+          vrow.add(doc.data()['price']);
+          vrow.add(mainproductimages[
+              0]); //later then add more blank rows with other images in this list if any
+
+          vrow.add('');
+
+          rows.add(vrow);
+        } else if (doc.data()['numberofoptions'] == '1') {
+          List<String> optionslistofoption1 = doc.data()['option1s'].split(",");
+          for (var option in optionslistofoption1) {
+            List<dynamic> vrow = [];
+            //means product with its own image/price is option1
+            vrow.add(doc.data()['handle']);
+            vrow.add(doc.data()['name']);
+            vrow.add(doc.data()['description']);
+            vrow.add(doc.data()['brand']);
+            vrow.add('');
+            vrow.add(doc.data()['tags']);
+            vrow.add('FALSE');
+            vrow.add(doc.data()['option1name']);
+            vrow.add('');
+            vrow.add('');
+            vrow.add('');
+            vrow.add('');
+            vrow.add(option);
+            vrow.add('');
+            vrow.add('');
+            vrow.add('');
+            vrow.add('');
+
+            vrow.add(doc.data()['quantity']);
+            vrow.add(doc.data()['price']);
+            vrow.add(mainproductimages[
+                0]); //later then add more blank rows with other images in this list if any
+
+            vrow.add('');
+
+            rows.add(vrow);
+          }
+        } else if (doc.data()['numberofoptions'] == '2') {
+          List<String> optionslistofoption1 = doc.data()['option1s'].split(",");
+          List<String> optionslistofoption2 = doc.data()['option2s'].split(",");
+          for (var option in optionslistofoption1) {
+            for (var option2 in optionslistofoption2) {
+              List<dynamic> vrow = [];
+
+              vrow.add(doc.data()['handle']);
+              vrow.add(doc.data()['name']);
+              vrow.add(doc.data()['description']);
+              vrow.add(doc.data()['brand']);
+              vrow.add('');
+              vrow.add(doc.data()['tags']);
+              vrow.add('FALSE');
+              vrow.add(doc.data()['option1name']);
+              vrow.add(doc.data()['option2name']);
+              vrow.add('');
+
+              vrow.add('');
+              vrow.add('');
+              vrow.add(option);
+              vrow.add(option2);
+              vrow.add('');
+              vrow.add('');
+              vrow.add('');
+              vrow.add(doc.data()['quantity']);
+              vrow.add(doc.data()['price']);
+              vrow.add(mainproductimages[
+                  0]); //later then add more blank rows with other images in this list if any
+
+              vrow.add('');
+
+              rows.add(vrow);
+            }
+          }
+        } else if (doc.data()['numberofoptions'] == '3') {
+          List<String> optionslistofoption1 = doc.data()['option1s'].split(",");
+          List<String> optionslistofoption2 = doc.data()['option2s'].split(",");
+          List<String> optionslistofoption3 = doc.data()['option3s'].split(",");
+
+          for (var option in optionslistofoption1) {
+            for (var option2 in optionslistofoption2) {
+              for (var option3 in optionslistofoption3) {
+                List<dynamic> vrow = [];
+                vrow.add(doc.data()['handle']);
+                vrow.add(doc.data()['name']);
+                vrow.add(doc.data()['description']);
+                vrow.add(doc.data()['brand']);
+                vrow.add('');
+                vrow.add(doc.data()['tags']);
+                vrow.add('FALSE');
+                vrow.add(doc.data()['option1name']);
+                vrow.add(doc.data()['option2name']);
+                vrow.add(doc.data()['option3name']);
+
+                vrow.add('');
+                vrow.add('');
+                vrow.add(option);
+                vrow.add(option2);
+                vrow.add(option3);
+                vrow.add('');
+                vrow.add('');
+                vrow.add(doc.data()['quantity']);
+                vrow.add(doc.data()['price']);
+                vrow.add(mainproductimages[
+                    0]); //later then add more blank rows with other images in this list if any
+
+                vrow.add('');
+
+                rows.add(vrow);
+              }
+            }
+          }
+        } else if (doc.data()['numberofoptions'] == '4') {
+          List<String> optionslistofoption1 = doc.data()['option1s'].split(",");
+          List<String> optionslistofoption2 = doc.data()['option2s'].split(",");
+          List<String> optionslistofoption3 = doc.data()['option3s'].split(",");
+          List<String> optionslistofoption4 = doc.data()['option4s'].split(",");
+
+          for (var option in optionslistofoption1) {
+            for (var option2 in optionslistofoption2) {
+              for (var option3 in optionslistofoption3) {
+                for (var option4 in optionslistofoption4) {
+                  List<dynamic> vrow = [];
+                  vrow.add(doc.data()['handle']);
+                  vrow.add(doc.data()['name']);
+                  vrow.add(doc.data()['description']);
+                  vrow.add(doc.data()['brand']);
+                  vrow.add('');
+                  vrow.add(doc.data()['tags']);
+                  vrow.add('FALSE');
+                  vrow.add(doc.data()['option1name']);
+                  vrow.add(doc.data()['option2name']);
+                  vrow.add(doc.data()['option3name']);
+
+                  vrow.add(doc.data()['option4name']);
+                  vrow.add('');
+                  vrow.add(option);
+                  vrow.add(option2);
+                  vrow.add(option3);
+                  vrow.add(option4);
+                  vrow.add('');
+                  vrow.add(doc.data()['quantity']);
+                  vrow.add(doc.data()['price']);
+                  vrow.add(mainproductimages[
+                      0]); //later then add more blank rows with other images in this list if any
+
+                  vrow.add('');
+
+                  rows.add(vrow);
+                }
+              }
+            }
+          }
+        }
+
+     //end of the ELSE (no variants)
+      }
+
+      //now generate new rows for mainimages
+      if (mainproductimages.length>1){
+
+        for (String imageurl in mainproductimages){
+          List<dynamic> vrow = [];
+                  vrow.add(doc.data()['handle']);
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('FALSE');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add('');
+                  vrow.add(imageurl); 
+                  vrow.add('');
+
+                  rows.add(vrow);
+        }
+
+
+
+      }
+
+      
+
+      
+    }
+
+       File f = await _localFile;
+
+        String csv = const ListToCsvConverter().convert(rows);
+        print(csv);
+        f.writeAsString(csv);
+
+        sendMailAndAttachment();
+  }
+
+
+
+
+
   void generateCSV(var docs) async {
     print('saveproductstoprovider');
     print(docs);
-    List<List<dynamic>> rows = List<List<dynamic>>();
+    List<List<dynamic>> rows = [];
     rows.add([
       "ID",
       "Type",
       "SKU",
       "Name",
-      "Brand",
       "Description",
       "Published",
       "images",
@@ -74,12 +547,12 @@ class ViewProducts extends StatelessWidget {
       "Categories"
     ]);
     for (var doc in docs) {
-      List<dynamic> row = List<dynamic>();
+      List<dynamic> row = [];
       row.add(doc.data()['id'] == '' ? '' : doc.data()['id']);
       row.add(doc.data()['type']);
       row.add(doc.data()['sku']);
       row.add(doc.data()['name']);
-      row.add(doc.data()['brand']);
+
       row.add(doc.data()['description']);
       row.add('1');
 
@@ -105,8 +578,7 @@ class ViewProducts extends StatelessWidget {
       rows.add(row);
       if (doc.data()['type'] == 'variable') {
         //iterate through product's variants, make a new row for each
-        print('()()()()()()()()()');
-        print(doc.data()['variants']);
+
         int count = 0;
 
 /////////looping through variants
@@ -138,7 +610,7 @@ class ViewProducts extends StatelessWidget {
               vrow.add(doc.data()['name'].toString() +
                   ' - ' +
                   variant['variantname'].toString());
-              vrow.add(doc.data()['brand']);
+
               vrow.add(doc.data()['description']);
               vrow.add('1');
               vrow.add(variant['imageUrlfromStorage']);
@@ -183,7 +655,7 @@ class ViewProducts extends StatelessWidget {
                 vrow.add(doc.data()['name'].toString() +
                     ' - ' +
                     variant['variantname'].toString());
-                vrow.add(doc.data()['brand']);
+
                 vrow.add(doc.data()['description']);
                 vrow.add('1');
                 vrow.add(variant['imageUrlfromStorage']);
@@ -231,7 +703,7 @@ class ViewProducts extends StatelessWidget {
                   vrow.add(doc.data()['name'].toString() +
                       ' - ' +
                       variant['variantname'].toString());
-                  vrow.add(doc.data()['brand']);
+
                   vrow.add(doc.data()['description']);
                   vrow.add('1');
                   vrow.add(variant['imageUrlfromStorage']);
@@ -284,7 +756,7 @@ class ViewProducts extends StatelessWidget {
                     vrow.add(doc.data()['name'].toString() +
                         ' - ' +
                         variant['variantname'].toString());
-                    vrow.add(doc.data()['brand']);
+
                     vrow.add(doc.data()['description']);
                     vrow.add('1');
                     vrow.add(variant['imageUrlfromStorage']);
@@ -342,7 +814,7 @@ class ViewProducts extends StatelessWidget {
                       vrow.add(doc.data()['name'].toString() +
                           ' - ' +
                           variant['variantname'].toString());
-                      vrow.add(doc.data()['brand']);
+
                       vrow.add(doc.data()['description']);
                       vrow.add('1');
                       vrow.add(variant['imageUrlfromStorage']);
@@ -377,47 +849,55 @@ class ViewProducts extends StatelessWidget {
           }
         }
       }
+
+
+
+
+
+      //end of the iteration of docs
     }
 
     File f = await _localFile;
 
- 
     String csv = const ListToCsvConverter().convert(rows);
     print(csv);
     f.writeAsString(csv);
 
     sendMailAndAttachment();
+
+
+
+
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
+    final width = MediaQuery.of(context).size.width;
     // final scaffold = Scaffold.of(context);
     AuthProvider authprovider = Provider.of<AuthProvider>(context);
     GeneralProvider generalProvider = Provider.of<GeneralProvider>(context);
     return Scaffold(
       appBar: AppBar(
         actions: [
-          
-          IconButton(icon: Icon(
-          Icons.home,
-          color:Colors.white,
-          
-        ),onPressed:(){
-          Navigator.pushNamed(context, Home.routeName);
-        } ,),
-
-
-        
+          IconButton(
+            icon: Icon(
+              Icons.home,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, Home.routeName);
+            },
+          ),
         ],
         title: Text('Products in Collection'),
-        automaticallyImplyLeading: true,),
-      
-        
-      
+        automaticallyImplyLeading: true,
+      ),
       body: SingleChildScrollView(
-        
-        child:  StreamBuilder(
+        child: StreamBuilder(
           stream: authprovider.getCollectionProducts(
               generalProvider.currentCollection, user.uid),
           builder: (ctx, chatSnapshot) {
@@ -430,61 +910,108 @@ class ViewProducts extends StatelessWidget {
             }
             final chatDocs = chatSnapshot.data.docs;
 
-            return  SingleChildScrollView(
-              physics: ScrollPhysics(),
-             
-              child: Column(
-                children: <Widget>[
+            return SingleChildScrollView(
+                physics: ScrollPhysics(),
+                child: Column(
+                  children: <Widget>[
 
-                           TextButton(
-                         child: Text('Generate CSV file for Woocommerce'),
-                         style: TextButton.styleFrom(
-                           primary:Colors.white,
-                           backgroundColor:Colors.teal,
-                           onSurface:Colors.grey
-                         ),
-                         onPressed: (){
-                           generateCSV(chatDocs);
-                         },),
+                    SizedBox(height: 5,),
+
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+              width: width * 0.4,
+              decoration: BoxDecoration(
+                color:Colors.black,
+                borderRadius: BorderRadius.circular(3),
+                border: Border.all(width: 0),
+              ),
+              padding: EdgeInsets.all(10),
+              
+              child: TextButton(
                 
 
-                      SingleChildScrollView(
+                child:
+                    Text('Generate CSV file for Woocommerce', style: TextStyle(color: Colors.white)),
+                onPressed: () {
+                 generateCSV(chatDocs);
+                },
+              ),
+            ),
+            SizedBox(width: 5,),
 
-                        child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: chatDocs.length,
-                    physics: NeverScrollableScrollPhysics(),
-                   
-                    itemBuilder: (ctx, index) => Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero),
-                        elevation: 4,
-                        margin: EdgeInsets.all(4),
-                        child: Card(
-                          child: Column(
-                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                  
-                            children: <Widget>[
+             Container(
+              width: width * 0.4,
+              decoration: BoxDecoration(
+                color:Colors.black,
+                borderRadius: BorderRadius.circular(3),
+                border: Border.all(width: 0),
+              ),
+              padding: EdgeInsets.all(10),
+              
+              child: TextButton(
+                
 
-                              
+                child:
+                    Text('Generate CSV file for Shopify', style: TextStyle(color: Colors.white)),
+                onPressed: () {
+                generateShopifyCSV(chatDocs);
+                },
+              ),
+            ),
 
-                            Row(
-                               mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                              
-                              children: <Widget>[
-                              Text(chatDocs[index].data()['name'],style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-                               IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () async{
-                                    print(chatDocs[index].id);
-                                    await authprovider.deleteProduct(chatDocs[index].id, user.uid, generalProvider.currentCollection,chatDocs[index].data()['mainproductimagesIds'],chatDocs[index].data()['variants']);
-
-                                  },
-                                  color: Theme.of(context).errorColor,
-                                ),
-                                IconButton(
+                      ],
+                    ),
+                    
+                    
+                    SingleChildScrollView(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: chatDocs.length,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (ctx, index) => Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero),
+                              elevation: 4,
+                              margin: EdgeInsets.all(6),
+                              child: Card(
+                                
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          chatDocs[index].data()['name'],
+                                          style: TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.delete),
+                                          onPressed: () async {
+                                            print(chatDocs[index].id);
+                                            await authprovider.deleteProduct(
+                                                chatDocs[index].id,
+                                                user.uid,
+                                                generalProvider
+                                                    .currentCollection,
+                                                chatDocs[index].data()[
+                                                    'mainproductimagesIds'],
+                                                chatDocs[index]
+                                                    .data()['variants']);
+                                          },
+                                          color: Theme.of(context).errorColor,
+                                        ),
+                                        IconButton(
                                           icon: Icon(
                                             Icons.edit,
                                             color: Colors.black,
@@ -496,52 +1023,104 @@ class ViewProducts extends StatelessWidget {
                                           },
                                           color: Theme.of(context).primaryColor,
                                         ),
-
-                            ],),
-                             Text(chatDocs[index].data()['description'],style: TextStyle(fontSize: 20),),
-                              Text("Price/Base Price",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
-                              Text(chatDocs[index].data()['price']),
-                             Text("Category",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
-                             if (chatDocs[index].data()['category'].isEmpty)Text('No Applicable'),
-                             if (chatDocs[index].data()['category'].isNotEmpty)Text(chatDocs[index].data()['category']),
-                             Text("Options",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
-                             if (chatDocs[index].data()['option1name']=='')Text('no options',style: TextStyle(fontStyle: FontStyle.italic),),
-                             Row(children: <Widget>[
-                               if (chatDocs[index].data()['option1name']!=null)Text(chatDocs[index].data()['option1name']+' '),
-                               
-                             if (chatDocs[index].data()['option2name']!=null)Text(chatDocs[index].data()['option2name']+' '),
-                             if (chatDocs[index].data()['option3name']!=null)Text(chatDocs[index].data()['option3name']+' '),
-                             if (chatDocs[index].data()['option4name']!=null)Text(chatDocs[index].data()['option4name']+' '),
-                             if (chatDocs[index].data()['option5name']!=null)Text(chatDocs[index].data()['option5name']+' '),
-                             ]),
-
-                             Text("Variants' names",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
-                             if (chatDocs[index].data()['variants'].length==0)Text('no variants',style: TextStyle(fontStyle: FontStyle.italic),),
-                            
-
-                             Row(children: <Widget>[
-                               
-                               for (var v in chatDocs[index].data()['variants'])Text(v['variantname']+' ')],),
-
-                               
-
-
-
-
-                          ],),
-                        )
-                        
-                       )),),
-
-                         SizedBox(height: 100,)
-              
-              ],
-              )
-            
-            );
+                                      ],
+                                    ),
+                                    Text(
+                                      chatDocs[index].data()['description'],
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    Text("Price/Base Price",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(chatDocs[index].data()['price']),
+                                    Text("Category",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
+                                    if (chatDocs[index]
+                                        .data()['category']
+                                        .isEmpty)
+                                      Text('No Applicable'),
+                                    if (chatDocs[index]
+                                        .data()['category']
+                                        .isNotEmpty)
+                                      Text(chatDocs[index].data()['category']),
+                                    Text("Options",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
+                                    if (chatDocs[index].data()['option1name'] ==
+                                        '')
+                                      Text(
+                                        'no options',
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic),
+                                      ),
+                                    Row(children: <Widget>[
+                                      if (chatDocs[index]
+                                              .data()['option1name'] !=
+                                          null)
+                                        Text(chatDocs[index]
+                                                .data()['option1name'] +
+                                            ' '),
+                                      if (chatDocs[index]
+                                              .data()['option2name'] !=
+                                          null)
+                                        Text(chatDocs[index]
+                                                .data()['option2name'] +
+                                            ' '),
+                                      if (chatDocs[index]
+                                              .data()['option3name'] !=
+                                          null)
+                                        Text(chatDocs[index]
+                                                .data()['option3name'] +
+                                            ' '),
+                                      if (chatDocs[index]
+                                              .data()['option4name'] !=
+                                          null)
+                                        Text(chatDocs[index]
+                                                .data()['option4name'] +
+                                            ' '),
+                                      if (chatDocs[index]
+                                              .data()['option5name'] !=
+                                          null)
+                                        Text(chatDocs[index]
+                                                .data()['option5name'] +
+                                            ' '),
+                                    ]),
+                                    Text("Variants' names",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
+                                    if (chatDocs[index]
+                                            .data()['variants']
+                                            .length ==
+                                        0)
+                                      Text(
+                                        'no variants',
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic),
+                                      ),
+                                    Row(
+                                      children: <Widget>[
+                                        for (var v in chatDocs[index]
+                                            .data()['variants'])
+                                          Text(v['variantname'] + ' ')
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ))),
+                    ),
+                    SizedBox(
+                      height: 100,
+                    )
+                  ],
+                ));
           },
         ),
-      ),);
-    
+      ),
+    );
   }
 }

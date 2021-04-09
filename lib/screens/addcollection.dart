@@ -96,15 +96,9 @@ class _AddCollectionState extends State<AddCollection> {
         child: Column(children: <Widget>[
         Padding(
           padding: EdgeInsets.all(10),
-          child: Text('Select an existing shop to add products to',style: TextStyle(fontSize: 20),)),
+          child: Text('Select your existing shop/collection to add products to',style: TextStyle(fontSize: 20),)),
           
-               Container(
-              child: Text("by provider, You have "+generalProvider.localcountmaxnumberofProductsUploaded.toString()+" available"),
-            ),
-
-               Container(
-              child: Text("by provider, You have uploaded "+generalProvider.localcountnumberOfProductsUploaded.toString()),
-            ),
+            
  canAdd==false?
             Text('You have reached your product count limit'):Text(' '),
 
@@ -170,7 +164,7 @@ class _AddCollectionState extends State<AddCollection> {
 
                     Padding(
           padding: EdgeInsets.all(10),
-          child: Text('OR create a new shop',style: TextStyle(fontSize: 20),)),
+          child: Text('OR create a new shop/collection',style: TextStyle(fontSize: 20),)),
                    Container(
                      padding: EdgeInsets.all(30),
                      child:  Form(

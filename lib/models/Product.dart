@@ -14,7 +14,7 @@ class Product{
   String variationlabel;
   bool hasVariation;
   String imagesStoreLocation;
-  int variationputunderwhichattribute;
+  int variationputunderwhichattribute=0;
   String sku;
   String type;
   String tags;
@@ -28,6 +28,7 @@ class Product{
   String option4s='';
   String option5name='';
   String option5s='';
+  String numberofoptions;
 
 
 
@@ -35,10 +36,10 @@ class Product{
   List<String>mainproductimagesIds;
 
 
-  List<String> options;
+  //List<String> options;
   List<Variant> variants;
 
-  Product({this.id,this.name,this.handle,this.tags,this.variationlabel,this.imagesStoreLocation,this.category,this.variationputunderwhichattribute,this.option1name,this.option1s,this.option2name,this.option2s,this.option3name,this.option3s,this.option4name,this.option4s,this.option5name,this.option5s,this.type,this.sku,this.description,this.quantity,this.price,this.brand,this.hasVariation,this.mainProductImages,this.mainproductimagesIds,this.variants});
+  Product({this.id,this.name,this.handle,this.tags,this.variationlabel,this.numberofoptions,this.imagesStoreLocation,this.category,this.variationputunderwhichattribute,this.option1name,this.option1s,this.option2name,this.option2s,this.option3name,this.option3s,this.option4name,this.option4s,this.option5name,this.option5s,this.type,this.sku,this.description,this.quantity,this.price,this.brand,this.hasVariation,this.mainProductImages,this.mainproductimagesIds,this.variants});
 
    static List<Map> ConvertCustomStepsToMap(List<Variant> customSteps) {
     List<Map> steps = [];
@@ -71,6 +72,7 @@ class Product{
       'brand':brand,
       'handle':handle,
       'tags':tags,
+      'numberofoptions':numberofoptions,
       
       'hasVariation':hasVariation,
       'sku':sku,

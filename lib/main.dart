@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
         StreamProvider<User>.value(value: AuthService().user),
       ],
           child: Consumer<User>(builder: (ctx,auth,_)=>MaterialApp(
+            debugShowCheckedModeBanner: false,
         title: 'EasyDigitalize',
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
           ViewCollections.routeName:(ctx)=>ViewCollections(),
           ViewProducts.routeName:(ctx)=>ViewProducts(),
           MarketScreen.routeName:(ctx)=>MarketScreen(),
-          Home.routeName:(ctx)=>Home(),
+          //Home.routeName:(ctx)=>Home(),
       
         }
       ),

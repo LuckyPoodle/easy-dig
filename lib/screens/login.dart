@@ -47,8 +47,10 @@ AuthService auth = AuthService();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+
+          Text('Login with  ',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
        
           _buildSocialBtn(
                 () async{
@@ -79,6 +81,11 @@ AuthService auth = AuthService();
 
 
       body: Column(children: <Widget>[
+        Container(
+      height: 300,
+      width: 300,
+      child:Image(image: AssetImage("assets/images/Easydigitalize.png")),
+    ),
         _buildSocialBtnRow(),
       ],),
     );

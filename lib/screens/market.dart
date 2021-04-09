@@ -75,8 +75,14 @@ class MarketScreenState extends State<MarketScreen> {
       
       // Listen to new purchases which is activated here when u click BUY and the google play popup
       _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
+
+        setState(() {
+        mywords='yes just now in the subscription!!! gg to verifypurchase';
+      });
         
         _purchases.addAll(data);
+
+        _verifyPurchase();
   
         
       }));
@@ -122,10 +128,10 @@ class MarketScreenState extends State<MarketScreen> {
     _iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: true);
     
       setState(() {
-        mywords='yes just finishing buyProduct, now gg to verifypurchase!!!';
+        mywords='yes just finishing buyProduct!!!!!';
       });
     
-    _verifyPurchase();
+   // _verifyPurchase();
 
 
 
@@ -180,7 +186,7 @@ class MarketScreenState extends State<MarketScreen> {
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
 
       setState(() {
-        mywords='yes verified purchase!!!';
+       mywords='yes verified purchase!!!';
       });
 
       _iap.completePurchase(purchase);
@@ -198,9 +204,11 @@ class MarketScreenState extends State<MarketScreen> {
   @override
   Widget build(BuildContext context) {
 
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(available ? 'Open for Business' : 'Not Available'),
+        title: Text(available ? 'Package Available' : 'Not Available'),
 
       ),
       body: Center(
@@ -208,23 +216,19 @@ class MarketScreenState extends State<MarketScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
 
-              Text(mywords),
-              Text(Provider.of<User>(context,listen:false).uid),
-              Text(_products.toString()),
-              Text(_purchases.toString()),
-              for (var p in _purchases)
-                Text(p.transactionDate),
-
-                for (var prod in _products)
+            
+            
+   for (var prod in _products)
 
               // UI if already purchased
               if (_hasPurchased(prod.id) != null)
                 ...[
-                  Text('💎 $credits', style: TextStyle(fontSize: 60)),
+                  Text('Success!', style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.center,),
+                  Text('You can upload $credits products', style: TextStyle(fontSize: 30)),
                
                 ],
 
-
+    
 
 
             for (var prod in _products)
@@ -232,15 +236,28 @@ class MarketScreenState extends State<MarketScreen> {
             
 
               ...[
-                Text(prod.title, style: Theme.of(context).textTheme.headline),
+                Text(prod.title, style: Theme.of(context).textTheme.headline5, textAlign: TextAlign.center,),
                 Text(prod.description),
                 Text(prod.price,
-                    style: TextStyle(color: Colors.greenAccent, fontSize: 60)),
-                FlatButton(
-                  child: Text('Buy It'),
-                  color: Colors.green,
-                  onPressed: () => _buyProduct(prod),
-                ),
+                    style: TextStyle(color: Colors.blue, fontSize: 60)),
+                  Container(
+              width: width * 0.5,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 0),
+              ),
+              padding: EdgeInsets.all(10),
+              
+              child: TextButton(
+                
+
+                child:
+                    Text('Purchase', style: TextStyle(color: Colors.white,fontSize: 20)),
+                onPressed: ()=>_buyProduct(prod),
+              ),
+            ),
+
             ]
           ],
         ),

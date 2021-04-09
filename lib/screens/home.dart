@@ -11,12 +11,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter/services.dart';
 import '../models/user.dart';
+import 'login.dart';
 
 import 'dart:async';
 
 import '../provider/generalprovider.dart';
 
-import 'package:in_app_purchase/in_app_purchase.dart';
+
 
 
 
@@ -274,7 +275,8 @@ class _HomeState extends State<Home> {
                 border: Border.all(width: 0),
               ),
               child: FlatButton(
-                child: Text('Export Your Products',
+                child: Text('View/Export Your Products',
+                textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white)),
                 onPressed: () {
                   Navigator.pushNamed(context, ViewCollections.routeName);
@@ -318,6 +320,8 @@ class _HomeState extends State<Home> {
                 child: Text('Sign Out', style: TextStyle(color: Colors.white,fontSize: 20), textAlign: TextAlign.center,),
                 onPressed: () {
                   authservice.signOut();
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+
                 },
               ),
             ),
