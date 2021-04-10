@@ -1430,7 +1430,7 @@ class _AddProductState extends State<AddProduct> {
                       ),
 
                       /* PRICE */
-                      Text('Price of Product',
+                      Text('Price of Product (Optional)',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
 
@@ -1683,9 +1683,10 @@ class _AddProductState extends State<AddProduct> {
                             }
                           },
                           child: Container(
+                            width: width*0.4,
                             alignment: Alignment.center,
                             color: Colors.black,
-                            padding: EdgeInsets.all(6),
+                            padding: EdgeInsets.all(10),
                             child: addVariant1 == false
                                 ? Text(
                                     'Add first variant',
@@ -1707,6 +1708,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 1 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -1837,12 +1851,22 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: () => loadAssets(1, 1),
                                 ),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Upload image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: variant1asset != null
                                       ? () async {
                                           variant1.imageUrlfromStorage =
@@ -1866,9 +1890,10 @@ class _AddProductState extends State<AddProduct> {
                                   });
                                 },
                                 child: Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.all(6),
-                                  alignment: Alignment.center,
+                                  width: width*0.4,
+                            alignment: Alignment.center,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(10),
                                   child: addVariant2 == false
                                       ? Text(
                                           'Add another variant',
@@ -1892,6 +1917,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                    Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 2 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant 2 Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -2022,12 +2060,22 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: () => loadAssets(1, 2),
                                 ),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Upload image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: variant2asset != null
                                       ? () async {
                                           variant2.imageUrlfromStorage =
@@ -2051,9 +2099,10 @@ class _AddProductState extends State<AddProduct> {
                                   });
                                 },
                                 child: Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.all(6),
-                                  alignment: Alignment.center,
+                                  width: width*0.4,
+                            alignment: Alignment.center,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(10),
                                   child: addVariant3 == false
                                       ? Text(
                                           'Add another variant',
@@ -2077,6 +2126,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                     Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 3 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant 3 Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -2207,12 +2269,22 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: () => loadAssets(1, 3),
                                 ),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Upload image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: variant3asset != null
                                       ? () async {
                                           variant3.imageUrlfromStorage =
@@ -2236,9 +2308,10 @@ class _AddProductState extends State<AddProduct> {
                                   });
                                 },
                                 child: Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.all(6),
-                                  alignment: Alignment.center,
+                                  width: width*0.4,
+                            alignment: Alignment.center,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(10),
                                   child: addVariant4 == false
                                       ? Text(
                                           'Add another variant',
@@ -2263,6 +2336,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                     Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 4 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant 4 Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -2393,11 +2479,21 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: () => loadAssets(1, 4),
                                 ),
-                                RaisedButton(
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   child: Text("Upload image"),
                                   onPressed: variant4asset != null
                                       ? () async {
@@ -2422,9 +2518,10 @@ class _AddProductState extends State<AddProduct> {
                                   });
                                 },
                                 child: Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.all(6),
-                                  alignment: Alignment.center,
+                                  width: width*0.4,
+                            alignment: Alignment.center,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(10),
                                   child: addVariant5 == false
                                       ? Text(
                                           'Add another variant',
@@ -2448,6 +2545,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                     Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 5 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant 5 Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -2578,12 +2688,23 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
+
                                   onPressed: () => loadAssets(1, 5),
                                 ),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Upload image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: variant5asset != null
                                       ? () async {
                                           variant5.imageUrlfromStorage =
@@ -2607,9 +2728,10 @@ class _AddProductState extends State<AddProduct> {
                                   });
                                 },
                                 child: Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.all(6),
-                                  alignment: Alignment.center,
+                                  width: width*0.4,
+                            alignment: Alignment.center,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(10),
                                   child: addVariant6 == false
                                       ? Text(
                                           'Add another variant',
@@ -2632,6 +2754,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                     Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 6 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant 6 Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -2762,11 +2897,22 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
+                                  
                                   child: Text("Pick image"),
                                   onPressed: () => loadAssets(1, 6),
                                 ),
-                                RaisedButton(
+                                TextButton(
+                                    style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   child: Text("Upload image"),
                                   onPressed: variant6asset != null
                                       ? () async {
@@ -2791,9 +2937,10 @@ class _AddProductState extends State<AddProduct> {
                                   });
                                 },
                                 child: Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.all(6),
-                                  alignment: Alignment.center,
+                                  width: width*0.4,
+                            alignment: Alignment.center,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(10),
                                   child: addVariant7 == false
                                       ? Text(
                                           'Add another variant',
@@ -2817,6 +2964,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                     Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 7 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant 7 Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -2947,12 +3107,22 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: () => loadAssets(1, 7),
                                 ),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Upload image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: variant7asset != null
                                       ? () async {
                                           variant7.imageUrlfromStorage =
@@ -2976,9 +3146,10 @@ class _AddProductState extends State<AddProduct> {
                                   });
                                 },
                                 child: Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.all(6),
-                                  alignment: Alignment.center,
+                                  width: width*0.4,
+                            alignment: Alignment.center,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(10),
                                   child: addVariant8 == false
                                       ? Text(
                                           'Add another variant',
@@ -3002,6 +3173,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                     Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 8 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant 8 Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -3132,12 +3316,22 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: () => loadAssets(1, 8),
                                 ),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Upload image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: variant8asset != null
                                       ? () async {
                                           variant8.imageUrlfromStorage =
@@ -3161,9 +3355,10 @@ class _AddProductState extends State<AddProduct> {
                                   });
                                 },
                                 child: Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.all(6),
-                                  alignment: Alignment.center,
+                                  width: width*0.4,
+                            alignment: Alignment.center,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(10),
                                   child: addVariant9 == false
                                       ? Text(
                                           'Add another variant',
@@ -3187,6 +3382,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                     Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 9 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant 9 Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -3305,12 +3513,22 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: () => loadAssets(1, 9),
                                 ),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Upload image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: variant9asset != null
                                       ? () async {
                                           variant9.imageUrlfromStorage =
@@ -3334,9 +3552,10 @@ class _AddProductState extends State<AddProduct> {
                                   });
                                 },
                                 child: Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.all(6),
-                                  alignment: Alignment.center,
+                                  width: width*0.4,
+                            alignment: Alignment.center,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(10),
                                   child: addVariant10 == false
                                       ? Text(
                                           'Add another variant',
@@ -3360,6 +3579,19 @@ class _AddProductState extends State<AddProduct> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                     Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.lightBlue,
+                              child: Text(
+                                'Variant 10 ' ,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold,color:Colors.white),
+                              ),
+                            ),
+                             Container(
+                              color: Colors.black,
+                              height: 1,
+                            ),
                                 Text('Variant 10 Name',
                                     style: TextStyle(
                                         fontSize: 20,
@@ -3490,12 +3722,22 @@ class _AddProductState extends State<AddProduct> {
                                         : Padding(
                                             padding: EdgeInsets.all(5),
                                             child: Icon(Icons.photo)),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: () => loadAssets(1, 10),
                                 ),
-                                RaisedButton(
+                                TextButton(
                                   child: Text("Upload image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
                                   onPressed: variant10asset != null
                                       ? () async {
                                           variant10.imageUrlfromStorage =

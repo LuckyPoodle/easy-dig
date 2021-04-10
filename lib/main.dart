@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import './screens/login.dart';
 import './screens/market.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import './screens/aboutscreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         title: 'EasyDigitalize',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          canvasColor: Color.fromRGBO(171,216,239,1),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: auth==null?LoginScreen(): Home()
@@ -52,7 +54,9 @@ class MyApp extends StatelessWidget {
           ViewCollections.routeName:(ctx)=>ViewCollections(),
           ViewProducts.routeName:(ctx)=>ViewProducts(),
           MarketScreen.routeName:(ctx)=>MarketScreen(),
-          //Home.routeName:(ctx)=>Home(),
+          Home.routeName:(ctx)=>Home(),
+          AboutScreen.routeName:(ctx)=>AboutScreen()
+
       
         }
       ),

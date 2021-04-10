@@ -86,6 +86,7 @@ class _AddCollectionState extends State<AddCollection> {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
+    final width = MediaQuery.of(context).size.width;
    // final scaffold = Scaffold.of(context);
     AuthProvider authprovider =
         Provider.of<AuthProvider>(context);
@@ -104,6 +105,7 @@ class _AddCollectionState extends State<AddCollection> {
 
         
         Container(
+          width: width*0.8,
           child:  StreamBuilder(
                       stream: authprovider.getUserCollections(user.uid),
                       builder:
@@ -126,7 +128,7 @@ class _AddCollectionState extends State<AddCollection> {
                                     borderRadius: BorderRadius.zero),
                                 elevation: 4,
                                 margin: EdgeInsets.all(4),
-                                child: ListTile(
+                                child:ListTile(
                                   
                                   onTap: canAdd==false?null:(){
 
@@ -137,28 +139,15 @@ class _AddCollectionState extends State<AddCollection> {
                                   title:
                                       Text(chatDocs[index].data()['collectionname']),
                                 
-                                  // trailing: Container(
-                                  //   width: 100,
-                                  //   child: Row(
-                                  //     children: <Widget>[
-                               
-                                  //       IconButton(
-                                  //         icon: Icon(Icons.delete),
-                                  //         onPressed: () async {
-                                  //           try {
-                                  //             print('to delete.....');
-                                  //             print(chatDocs[index].id);
-                                  //             authprovider.deleteCollection(chatDocs[index].data()['collectionname'],user.uid);
-                                  //           } catch (error) {
-                              
-                                  //           }
-                                  //         },
-                                  //         color: Theme.of(context).errorColor,
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                )));
+                                  
+                                ),
+                                
+                                
+                                )
+                                
+                                
+                                
+                                );
                       },
                     ),), 
 
@@ -181,17 +170,39 @@ class _AddCollectionState extends State<AddCollection> {
                     },
                     validator: (value){
                       //null is returned when input is correct, return a text when its wrong
-                      if(value.isEmpty){
-                        return 'Please provide a value';
-                      }
+                      // if(value.length>30){
+                      //   return 'Please enter less than 30 characters';
+                      // }
 
                       return null;
                     },
                   ),
                       ],) ,),),
-                      IconButton(
-            icon: Icon(Icons.save),
-            onPressed: _saveForm,),
+
+                       Container(
+                          width: width * 0.4,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            
+                            
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: TextButton(
+                            child: Text('Add',
+                                style: TextStyle(color: Colors.white)),
+                            onPressed: _saveForm,
+                          ),
+                        ),
+
+
+
+
+
+
+
+                 
+
+            SizedBox(height: 50,)
 
         
 

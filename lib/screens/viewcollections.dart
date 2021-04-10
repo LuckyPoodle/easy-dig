@@ -16,12 +16,15 @@ class ViewCollections extends StatelessWidget {
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
    // final scaffold = Scaffold.of(context);
+   final width = MediaQuery.of(context).size.width;
     AuthProvider authprovider =
         Provider.of<AuthProvider>(context);
     GeneralProvider generalProvider=Provider.of<GeneralProvider>(context);
     return Scaffold(
       appBar:AppBar(title:Text('Your Collections')),
       body:Container(
+        alignment: Alignment.center,
+        
           child:  StreamBuilder(
                       stream: authprovider.getUserCollections(user.uid),
                       builder:
@@ -36,48 +39,43 @@ class ViewCollections extends StatelessWidget {
                         }
                         final  chatDocs = chatSnapshot.data.docs;
                      
-                        return ListView.builder(
+                        return Container(
+                          width: width*0.8,
+                          padding: EdgeInsets.all(8),
+                          child: ListView.builder(
+                          
                             shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
                             itemCount: chatDocs.length,
                             itemBuilder: (ctx, index) => Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero),
+                               
                                 elevation: 4,
-                                margin: EdgeInsets.all(4),
-                                child: ListTile(
-                                  onTap: (){
+                                
+                                margin: EdgeInsets.all(7),
+                                child: Container(
+                                  width: width*0.6,
+                                  child: TextButton(
+                                  
+                                  
+                                  onPressed: (){
                                     generalProvider.setCurrentCollection(chatDocs[index].data()['collectionname']);
                                     Navigator.pushNamed(context, ViewProducts.routeName);
 
                                   },
-                                  title:
+                                  child:
                                       Text(chatDocs[index].data()['collectionname']),
-                                
-                                  // trailing: Container(
-                                  //   width: 100,
-                                  //   child: Row(
-                                  //     children: <Widget>[
-                               
-                                  //       IconButton(
-                                  //         icon: Icon(Icons.delete),
-                                  //         onPressed: () async {
-                                  //           try {
-                                  //             print('to delete.....');
-                                  //             print(chatDocs[index].id);
-                                  //             authprovider.deleteCollection(
-                                                
-                                  //                 chatDocs[index].data()[
-                                  //                     'collectionname'],user.uid);
-                                  //           } catch (error) {
                               
-                                  //           }
-                                  //         },
-                                  //         color: Theme.of(context).errorColor,
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                )));
+                                )
+                                
+                                )
+                                
+                                
+                                ),
+                            
+                                
+                                
+                                ),
+                        );
                       },
                     ),), 
 

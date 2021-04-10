@@ -8,7 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart';
 import '../models/user.dart';
 import 'package:crypto/crypto.dart';
-import 'package:convert/convert.dart';
+
 import 'dart:convert';
 
 class AuthService {
@@ -122,6 +122,13 @@ Future<bool> deleteUser(){
 
           },SetOptions(merge: true));
   }
+
+  Stream<DocumentSnapshot> getUserDataStream(String id) {
+  Stream<DocumentSnapshot> q= _db.collection('users').doc(id).snapshots();
+  print(q);
+  print('==============in getbranddeal=====================');
+  return q;
+}
 
 
 Future<AppUser> getUserData(String id) async{

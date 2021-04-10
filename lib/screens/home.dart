@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easydigitalize/helper/authservice.dart';
 import 'package:easydigitalize/screens/addcollection.dart';
 import 'package:easydigitalize/screens/viewcollections.dart';
@@ -11,13 +12,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter/services.dart';
 import '../models/user.dart';
+import 'aboutscreen.dart';
 import 'login.dart';
 
 import 'dart:async';
 
 import '../provider/generalprovider.dart';
-
-
 
 
 
@@ -28,11 +28,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   AppUser thiscurrentuserdata;
-  AuthService authservice;
+  final AuthService auth = AuthService();
 
-  String credits='0';
+  String credits = '0';
 
   //  /// Is the API available on the device
   // bool available = true;
@@ -51,31 +50,27 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-
-
     // TODO: implement initState
     super.initState();
     //initPlatformState();
-    User user = Provider.of<User>(context,listen: false);
-    AuthService authservice=AuthService();
-    authservice.getUserData(user.uid).then((value){
+    User user = Provider.of<User>(context, listen: false);
+    AuthService authservice = AuthService();
+    authservice.getUserData(user.uid).then((value) {
       print('in init state');
       print(value);
-      thiscurrentuserdata=value;
-      Provider.of<GeneralProvider>(context,listen:false).setNumberOfProductsUploaded(int.parse(thiscurrentuserdata.numberOfProductsUploaded));
-      Provider.of<GeneralProvider>(context,listen:false).setlocalcountmaxnumberofProductsUploaded(int.parse(thiscurrentuserdata.maxNumberOfProductsUserCanCreate));
-      setState(
-        (){
-          credits=thiscurrentuserdata.maxNumberOfProductsUserCanCreate;
-        }
-      );
+      thiscurrentuserdata = value;
+      Provider.of<GeneralProvider>(context, listen: false)
+          .setNumberOfProductsUploaded(
+              int.parse(thiscurrentuserdata.numberOfProductsUploaded));
+      Provider.of<GeneralProvider>(context, listen: false)
+          .setlocalcountmaxnumberofProductsUploaded(
+              int.parse(thiscurrentuserdata.maxNumberOfProductsUserCanCreate));
+      setState(() {
+        credits = thiscurrentuserdata.maxNumberOfProductsUserCanCreate;
+      });
     });
 
-  
-
     //save the user's numberofprdtsuploaded and maxuploadcount to provider
-    
-
   }
 
 //     void _initialize() async {
@@ -93,7 +88,6 @@ class _HomeState extends State<Home> {
 //       // Verify and deliver a purchase with your own business logic
 //       //_verifyPurchase();
 
-      
 //       // Listen to new purchases
 //       _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
 //         print('NEW PURCHASE');
@@ -106,19 +100,15 @@ class _HomeState extends State<Home> {
 //     }
 //   }
 
-
-
   // /// Get all products available for sale
   // Future<void> _getProducts() async {
   //   Set<String> ids = Set.from([testID]);
   //   print('in get Products...');
   //   ProductDetailsResponse response = await _iap.queryProductDetails(ids);
 
-
-
   //   print('in get Products response is ...'+response.productDetails.toString());
 
-  //   setState(() { 
+  //   setState(() {
   //     _products = response.productDetails;
   //   });
   // }
@@ -158,178 +148,248 @@ class _HomeState extends State<Home> {
   //     // authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, credits.toString());
   //   }
   // }
-  
-
-
 
   Future<void> initPlatformState() async {
-  appData.isPro = false;
-  
-  await Purchases.setDebugLogsEnabled(true);
-  await Purchases.setup("BzLmRGiMygeskSFnQiJJqVwXuXblrhgl");
+    appData.isPro = false;
 
-  PurchaserInfo purchaserInfo;
-  try {
-    purchaserInfo = await Purchases.getPurchaserInfo();
-    print('__________________________________PURCHASER INFO______________________________--');
-    print(purchaserInfo.toString());
-    if (purchaserInfo.entitlements.all['all_features'] != null) {
-      appData.isPro = purchaserInfo.entitlements.all['all_features'].isActive;
-    } else {
-      appData.isPro = false;
+    await Purchases.setDebugLogsEnabled(true);
+    await Purchases.setup("BzLmRGiMygeskSFnQiJJqVwXuXblrhgl");
+
+    PurchaserInfo purchaserInfo;
+    try {
+      purchaserInfo = await Purchases.getPurchaserInfo();
+      print(
+          '__________________________________PURCHASER INFO______________________________--');
+      print(purchaserInfo.toString());
+      if (purchaserInfo.entitlements.all['all_features'] != null) {
+        appData.isPro = purchaserInfo.entitlements.all['all_features'].isActive;
+      } else {
+        appData.isPro = false;
+      }
+    } on PlatformException catch (e) {
+      print(e);
     }
-  } on PlatformException catch (e) {
-    print(e);
-  }
 
-  print('#### is user pro? ${appData.isPro}');
-}
+    print('#### is user pro? ${appData.isPro}');
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     User user = Provider.of<User>(context);
-    GeneralProvider generalProvider=Provider.of<GeneralProvider>(context);
+    GeneralProvider generalProvider = Provider.of<GeneralProvider>(context);
 
-    AuthService authservice=AuthService();
+    AuthService authservice = AuthService();
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+          automaticallyImplyLeading: false,
           flexibleSpace: Container(
-        alignment: Alignment.center,
-        color: Colors.black,
-        child: Text(
-          'EasyDigitalize',
-          style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 2.0,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold),
-        ),
-      )),
+            alignment: Alignment.center,
+            color: Theme.of(context).canvasColor,
+            child: Text(
+              'EasyDigitalize',
+              style: TextStyle(
+                  color: Colors.white,
+                  letterSpacing: 2.0,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold),
+            ),
+          )),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(height: 80,),
-
-            Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                    Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-
-              Text('Credits',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
-              Text(generalProvider.localcountmaxnumberofProductsUploaded.toString(),style: TextStyle(fontSize: 30))
-
-            ],),
-
-                Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-
-              Text('Upload Count',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
-              Text(generalProvider.localcountnumberOfProductsUploaded.toString(),style: TextStyle(fontSize: 30))
-
-            ],),
-            ]),
-
-            SizedBox(height: 20,),
-
-      
-            Container(
-              width: width * 0.5,
-              decoration: BoxDecoration(
-                color:generalProvider.localcountnumberOfProductsUploaded>=generalProvider.localcountmaxnumberofProductsUploaded? Colors.red:Colors.black,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 0),
-              ),
-              padding: EdgeInsets.all(10),
-              
-              child: TextButton(
-                
-
-                child:
-                    Text('Add Product', style: TextStyle(color: Colors.white)),
-                onPressed: generalProvider.localcountnumberOfProductsUploaded>=generalProvider.localcountmaxnumberofProductsUploaded?null:() {
-                  Navigator.pushNamed(context, AddCollection.routeName);
-                },
-              ),
-            ),
-            generalProvider.localcountnumberOfProductsUploaded>=generalProvider.localcountmaxnumberofProductsUploaded?
-            Text('You have reached your product count limit, purchase another package to upload more ', textAlign: TextAlign.center, style:TextStyle(color: Colors.redAccent,fontSize: 20, fontStyle: FontStyle.italic),):Text(' '),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              width: width * 0.5,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.black,
-                border: Border.all(width: 0),
-              ),
-              child: FlatButton(
-                child: Text('View/Export Your Products',
-                textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white)),
-                onPressed: () {
-                  Navigator.pushNamed(context, ViewCollections.routeName);
-                },
-              ),
-            ),
-
-             SizedBox(
-              height: 20,
-            ),
-
-             Container(
-              width: width * 0.5,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 0),
-              ),
-              padding: EdgeInsets.all(10),
-              
-              child: TextButton(
-                child: Text('Purchase Package!', style: TextStyle(color: Colors.white,fontSize: 20), textAlign: TextAlign.center,),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MarketScreen()));
-                },
-              ),
-            ),
-
-            SizedBox(height: 20,),
-
-             Container(
-              width: width * 0.5,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 0),
-              ),
-              padding: EdgeInsets.all(10),
-              
-              child: TextButton(
-                child: Text('Sign Out', style: TextStyle(color: Colors.white,fontSize: 20), textAlign: TextAlign.center,),
-                onPressed: () {
-                  authservice.signOut();
-                  //Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-
-                },
-              ),
-            ),
-
-
-
-           
-          ],
+        child: SingleChildScrollView(
+          child: StreamBuilder<DocumentSnapshot>(
+              stream: auth.getUserDataStream(user.uid),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'Credits',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30),
+                                  ),
+                                  Text(
+                                      snapshot.data[
+                                          'maxNumberOfProductsUserCanCreate'],
+                                      style: TextStyle(fontSize: 30))
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Upload Count',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30),
+                                  ),
+                                  Text(
+                                      snapshot.data['numberOfProductsUploaded'],
+                                      style: TextStyle(fontSize: 30))
+                                ],
+                              ),
+                            ]),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: width * 0.5,
+                          decoration: BoxDecoration(
+                            color: int.parse(snapshot
+                                        .data['numberOfProductsUploaded']) >=
+                                    int.parse(snapshot.data[
+                                        'maxNumberOfProductsUserCanCreate'])
+                                ? Colors.red
+                                : Colors.black,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(width: 0),
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: TextButton(
+                            child: Text('Add Product',
+                                style: TextStyle(color: Colors.white)),
+                            onPressed: int.parse(snapshot
+                                        .data['numberOfProductsUploaded']) >=
+                                    int.parse(snapshot.data[
+                                        'maxNumberOfProductsUserCanCreate'])
+                                ? null
+                                : () {
+                                    Navigator.pushNamed(
+                                        context, AddCollection.routeName);
+                                  },
+                          ),
+                        ),
+                        int.parse(snapshot.data['numberOfProductsUploaded']) >=
+                                int.parse(snapshot
+                                    .data['maxNumberOfProductsUserCanCreate'])
+                            ? Text(
+                                'You have reached your product count limit, purchase another package to upload more ',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 20,
+                                    fontStyle: FontStyle.italic),
+                              )
+                            : Text(' '),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: width * 0.5,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black,
+                            border: Border.all(width: 0),
+                          ),
+                          child: FlatButton(
+                            child: Text('View/Export Your Products',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white)),
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, ViewCollections.routeName);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: width * 0.5,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(width: 0),
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: TextButton(
+                            child: Text(
+                              'Purchase Package!',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MarketScreen()));
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: width * 0.5,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(width: 0),
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: TextButton(
+                            child: Text(
+                              'Help',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => AboutScreen()));
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: width * 0.5,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(width: 0),
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: TextButton(
+                            child: Text(
+                              'Sign Out',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              authservice.signOut();
+                              //Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                            },
+                          ),
+                        ),
+                         SizedBox(
+                          height: 20,
+                        ),
+                      ]);
+                }
+                return CircularProgressIndicator();
+              }),
         ),
       ),
     );

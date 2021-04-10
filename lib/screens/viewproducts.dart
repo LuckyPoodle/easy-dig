@@ -77,8 +77,6 @@ class ViewProducts extends StatelessWidget {
 
       ///ACCOUNT FOR PRODUCT VARIANTS THAT HAVE OWN IMAGE/PRICE
       if (doc.data()['type'] == 'variable') {
-
-
         for (var variant in doc.data()['variants']) {
           if (variant['variantname'].toString().trim().isEmpty) {
             print("NO MORE VARIANT");
@@ -120,7 +118,7 @@ class ViewProducts extends StatelessWidget {
               rows.add(vrow);
             } else if (doc.data()['variationputunderwhichattribute'] == 2) {
               //have normal option 1 , now iterate through each value of option 1 for each variant
-              
+
               List<String> optionslist = doc.data()['option1s'].split(",");
               for (String option in optionslist) {
                 List<dynamic> vrow = [];
@@ -462,68 +460,55 @@ class ViewProducts extends StatelessWidget {
           }
         }
 
-     //end of the ELSE (no variants)
+        //end of the ELSE (no variants)
       }
 
       //now generate new rows for mainimages
-      if (mainproductimages.length>1){
-
-        for (String imageurl in mainproductimages){
+      if (mainproductimages.length > 1) {
+        for (String imageurl in mainproductimages) {
           List<dynamic> vrow = [];
-                  vrow.add(doc.data()['handle']);
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('FALSE');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
+          vrow.add(doc.data()['handle']);
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('FALSE');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
 
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add('');
-                  vrow.add(imageurl); 
-                  vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add('');
+          vrow.add(imageurl);
+          vrow.add('');
 
-                  rows.add(vrow);
+          rows.add(vrow);
         }
-
-
-
       }
-
-      
-
-      
     }
 
-       File f = await _localFile;
+    File f = await _localFile;
 
-        String csv = const ListToCsvConverter().convert(rows);
-        print(csv);
-        f.writeAsString(csv);
+    String csv = const ListToCsvConverter().convert(rows);
+    print(csv);
+    f.writeAsString(csv);
 
-        sendMailAndAttachment();
+    sendMailAndAttachment();
   }
-
-
-
-
 
   void generateCSV(var docs) async {
     print('saveproductstoprovider');
     print(docs);
     List<List<dynamic>> rows = [];
     rows.add([
-      "ID",
       "Type",
       "SKU",
       "Name",
@@ -548,7 +533,7 @@ class ViewProducts extends StatelessWidget {
     ]);
     for (var doc in docs) {
       List<dynamic> row = [];
-      row.add(doc.data()['id'] == '' ? '' : doc.data()['id']);
+
       row.add(doc.data()['type']);
       row.add(doc.data()['sku']);
       row.add(doc.data()['name']);
@@ -600,11 +585,7 @@ class ViewProducts extends StatelessWidget {
             if (doc.data()['variationputunderwhichattribute'] == 1) {
               print('variation under 1');
               List<dynamic> vrow = List<dynamic>();
-              if (doc.data()['id'].toString().isNotEmpty) {
-                vrow.add(doc.data()['id'] + count.toString());
-              } else {
-                vrow.add('');
-              }
+
               vrow.add('variation');
               vrow.add(''); //sku
               vrow.add(doc.data()['name'].toString() +
@@ -645,11 +626,7 @@ class ViewProducts extends StatelessWidget {
               for (var option in optionslist) {
                 count += 1;
                 List<dynamic> vrow = List<dynamic>();
-                if (doc.data()['id'].toString().isNotEmpty) {
-                  vrow.add(doc.data()['id'] + count.toString());
-                } else {
-                  vrow.add('');
-                }
+
                 vrow.add('variation');
                 vrow.add(''); //sku
                 vrow.add(doc.data()['name'].toString() +
@@ -693,11 +670,7 @@ class ViewProducts extends StatelessWidget {
                 for (var option2 in optionslistofoption2) {
                   count += 1;
                   List<dynamic> vrow = List<dynamic>();
-                  if (doc.data()['id'].toString().isNotEmpty) {
-                    vrow.add(doc.data()['id'] + count.toString());
-                  } else {
-                    vrow.add('');
-                  }
+
                   vrow.add('variation');
                   vrow.add(''); //sku
                   vrow.add(doc.data()['name'].toString() +
@@ -746,11 +719,7 @@ class ViewProducts extends StatelessWidget {
                   for (var option3 in optionslistofoption3) {
                     count += 1;
                     List<dynamic> vrow = List<dynamic>();
-                    if (doc.data()['id'].toString().isNotEmpty) {
-                      vrow.add(doc.data()['id'] + count.toString());
-                    } else {
-                      vrow.add('');
-                    }
+
                     vrow.add('variation');
                     vrow.add(''); //sku
                     vrow.add(doc.data()['name'].toString() +
@@ -804,11 +773,7 @@ class ViewProducts extends StatelessWidget {
                     for (var option4 in optionslistofoption4) {
                       count += 1;
                       List<dynamic> vrow = List<dynamic>();
-                      if (doc.data()['id'].toString().isNotEmpty) {
-                        vrow.add(doc.data()['id'] + count.toString());
-                      } else {
-                        vrow.add('');
-                      }
+
                       vrow.add('variation');
                       vrow.add(''); //sku
                       vrow.add(doc.data()['name'].toString() +
@@ -850,10 +815,6 @@ class ViewProducts extends StatelessWidget {
         }
       }
 
-
-
-
-
       //end of the iteration of docs
     }
 
@@ -864,14 +825,7 @@ class ViewProducts extends StatelessWidget {
     f.writeAsString(csv);
 
     sendMailAndAttachment();
-
-
-
-
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -892,8 +846,18 @@ class ViewProducts extends StatelessWidget {
               Navigator.pushNamed(context, Home.routeName);
             },
           ),
+
+           IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, AddProduct.routeName);
+            },
+          ),
         ],
-        title: Text('Products in Collection'),
+        title: Text('Products in '+generalProvider.currentCollection),
         automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
@@ -914,59 +878,50 @@ class ViewProducts extends StatelessWidget {
                 physics: ScrollPhysics(),
                 child: Column(
                   children: <Widget>[
-
-                    SizedBox(height: 5,),
-
-
+                    SizedBox(
+                      height: 5,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-              width: width * 0.4,
-              decoration: BoxDecoration(
-                color:Colors.black,
-                borderRadius: BorderRadius.circular(3),
-                border: Border.all(width: 0),
-              ),
-              padding: EdgeInsets.all(10),
-              
-              child: TextButton(
-                
-
-                child:
-                    Text('Generate CSV file for Woocommerce', style: TextStyle(color: Colors.white)),
-                onPressed: () {
-                 generateCSV(chatDocs);
-                },
-              ),
-            ),
-            SizedBox(width: 5,),
-
-             Container(
-              width: width * 0.4,
-              decoration: BoxDecoration(
-                color:Colors.black,
-                borderRadius: BorderRadius.circular(3),
-                border: Border.all(width: 0),
-              ),
-              padding: EdgeInsets.all(10),
-              
-              child: TextButton(
-                
-
-                child:
-                    Text('Generate CSV file for Shopify', style: TextStyle(color: Colors.white)),
-                onPressed: () {
-                generateShopifyCSV(chatDocs);
-                },
-              ),
-            ),
-
+                          width: width * 0.4,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(3),
+                            border: Border.all(width: 0),
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: TextButton(
+                            child: Text('Generate CSV file for Woocommerce',
+                                style: TextStyle(color: Colors.white)),
+                            onPressed: () {
+                              generateCSV(chatDocs);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          width: width * 0.4,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(3),
+                            border: Border.all(width: 0),
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: TextButton(
+                            child: Text('Generate CSV file for Shopify',
+                                style: TextStyle(color: Colors.white)),
+                            onPressed: () {
+                              generateShopifyCSV(chatDocs);
+                            },
+                          ),
+                        ),
                       ],
                     ),
-                    
-                    
                     SingleChildScrollView(
                       child: ListView.builder(
                           shrinkWrap: true,
@@ -978,11 +933,17 @@ class ViewProducts extends StatelessWidget {
                               elevation: 4,
                               margin: EdgeInsets.all(6),
                               child: Card(
-                                
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.black, width: 1.0)),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
+                                    Text("Product",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -1025,9 +986,16 @@ class ViewProducts extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    Text(
-                                      chatDocs[index].data()['description'],
-                                      style: TextStyle(fontSize: 20),
+                                    Text("Description",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      child: Text(
+                                        chatDocs[index].data()['description'],
+                                        style: TextStyle(fontSize: 20),
+                                      ),
                                     ),
                                     Text("Price/Base Price",
                                         style: TextStyle(
@@ -1057,38 +1025,48 @@ class ViewProducts extends StatelessWidget {
                                         style: TextStyle(
                                             fontStyle: FontStyle.italic),
                                       ),
-                                    Row(children: <Widget>[
-                                      if (chatDocs[index]
-                                              .data()['option1name'] !=
-                                          null)
-                                        Text(chatDocs[index]
-                                                .data()['option1name'] +
-                                            ' '),
-                                      if (chatDocs[index]
-                                              .data()['option2name'] !=
-                                          null)
-                                        Text(chatDocs[index]
-                                                .data()['option2name'] +
-                                            ' '),
-                                      if (chatDocs[index]
-                                              .data()['option3name'] !=
-                                          null)
-                                        Text(chatDocs[index]
-                                                .data()['option3name'] +
-                                            ' '),
-                                      if (chatDocs[index]
-                                              .data()['option4name'] !=
-                                          null)
-                                        Text(chatDocs[index]
-                                                .data()['option4name'] +
-                                            ' '),
-                                      if (chatDocs[index]
-                                              .data()['option5name'] !=
-                                          null)
-                                        Text(chatDocs[index]
-                                                .data()['option5name'] +
-                                            ' '),
-                                    ]),
+                                    Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          if (chatDocs[index]
+                                              .data()['option1name']
+                                              .toString()
+                                              .trim()
+                                              .isNotEmpty)
+                                            Text(chatDocs[index]
+                                                .data()['option1name']),
+                                          if (chatDocs[index]
+                                              .data()['option2name']
+                                              .toString()
+                                              .trim()
+                                              .isNotEmpty)
+                                            Text(chatDocs[index]
+                                                .data()['option2name']),
+                                          if (chatDocs[index]
+                                              .data()['option3name']
+                                              .toString()
+                                              .trim()
+                                              .isNotEmpty)
+                                            Text(chatDocs[index]
+                                                .data()['option3name']),
+                                          if (chatDocs[index]
+                                              .data()['option4name']
+                                              .toString()
+                                              .trim()
+                                              .isNotEmpty)
+                                            Text(chatDocs[index]
+                                                .data()['option4name']),
+                                          if (chatDocs[index]
+                                              .data()['option5name']
+                                              .toString()
+                                              .trim()
+                                              .isNotEmpty)
+                                            Text(chatDocs[index]
+                                                .data()['option5name']),
+                                        ]),
                                     Text("Variants' names",
                                         style: TextStyle(
                                             fontSize: 14,
@@ -1102,19 +1080,30 @@ class ViewProducts extends StatelessWidget {
                                         style: TextStyle(
                                             fontStyle: FontStyle.italic),
                                       ),
-                                    Row(
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: <Widget>[
                                         for (var v in chatDocs[index]
                                             .data()['variants'])
-                                          Text(v['variantname'] + ' ')
+                                          if (v['variantname']
+                                              .toString()
+                                              .trim()
+                                              .isNotEmpty)
+                                            Text(v['variantname'])
                                       ],
                                     ),
+                                    SizedBox(
+                                      height: 10,
+                                    )
                                   ],
                                 ),
                               ))),
                     ),
                     SizedBox(
-                      height: 100,
+                      height: 50,
                     )
                   ],
                 ));

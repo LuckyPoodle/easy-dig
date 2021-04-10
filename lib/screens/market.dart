@@ -223,8 +223,8 @@ class MarketScreenState extends State<MarketScreen> {
               // UI if already purchased
               if (_hasPurchased(prod.id) != null)
                 ...[
-                  Text('Success!', style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.center,),
-                  Text('You can upload $credits products', style: TextStyle(fontSize: 30)),
+                  Text('Success!', style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center,),
+                  Text('You can upload $credits products', style: TextStyle(fontSize: 20)),
                
                 ],
 
