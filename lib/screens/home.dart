@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easydigitalize/helper/authservice.dart';
-import 'package:easydigitalize/screens/addcollection.dart';
-import 'package:easydigitalize/screens/viewcollections.dart';
+import 'package:EasyDigitalize/helper/authservice.dart';
+import 'package:EasyDigitalize/screens/addcollection.dart';
+import 'package:EasyDigitalize/screens/viewcollections.dart';
 import 'package:flutter/material.dart';
 import '../helper/components.dart';
 import './market.dart';
-import 'package:easydigitalize/provider/generalprovider.dart';
+import 'package:EasyDigitalize/provider/generalprovider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -184,17 +184,19 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
           automaticallyImplyLeading: false,
           flexibleSpace: Container(
-            alignment: Alignment.center,
-            color: Theme.of(context).canvasColor,
+            alignment: Alignment.bottomCenter,
+            color: Color.fromRGBO(171,216,239,1),
             child: Text(
               'EasyDigitalize',
               style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   letterSpacing: 2.0,
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold),
             ),
-          )),
+          )
+          
+          ),
       body: Center(
         child: SingleChildScrollView(
           child: StreamBuilder<DocumentSnapshot>(
@@ -259,7 +261,7 @@ class _HomeState extends State<Home> {
                                 ? Colors.red
                                 : Colors.black,
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(width: 0),
+                            
                           ),
                           padding: EdgeInsets.all(10),
                           child: TextButton(
@@ -297,7 +299,7 @@ class _HomeState extends State<Home> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.black,
-                            border: Border.all(width: 0),
+                           
                           ),
                           child: FlatButton(
                             child: Text('View/Export Your Products',
@@ -310,14 +312,16 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 30,
                         ),
                         Container(
                           width: width * 0.5,
+                          
                           decoration: BoxDecoration(
                             color: Colors.green,
+                            
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(width: 0),
+                            
                           ),
                           padding: EdgeInsets.all(10),
                           child: TextButton(
@@ -336,14 +340,14 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 30,
                         ),
                         Container(
                           width: width * 0.5,
                           decoration: BoxDecoration(
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(width: 0),
+                            
                           ),
                           padding: EdgeInsets.all(10),
                           child: TextButton(
@@ -360,14 +364,14 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 30,
                         ),
                         Container(
                           width: width * 0.5,
                           decoration: BoxDecoration(
                             color: Colors.grey,
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(width: 0),
+                            
                           ),
                           padding: EdgeInsets.all(10),
                           child: TextButton(

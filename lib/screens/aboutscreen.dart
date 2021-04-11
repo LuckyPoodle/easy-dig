@@ -22,7 +22,29 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(appBar: AppBar(automaticallyImplyLeading: true,title: Text('Help'),),
+    return Scaffold(
+      appBar: 
+    
+    AppBar(
+      automaticallyImplyLeading: true,
+    iconTheme: IconThemeData(
+    color: Colors.black, 
+  ),
+    
+    flexibleSpace: Container(
+            alignment: Alignment.bottomCenter,
+
+            color: Color.fromRGBO(171,216,239,1),
+            child: Text(
+              'About App',
+              style: TextStyle(
+                  color: Colors.black,
+                  letterSpacing: 1.0,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+          ,),
     body: SingleChildScrollView(child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,

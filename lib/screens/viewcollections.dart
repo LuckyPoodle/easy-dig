@@ -1,8 +1,8 @@
-import 'package:easydigitalize/screens/viewproducts.dart';
+import 'package:EasyDigitalize/screens/viewproducts.dart';
 import 'package:flutter/material.dart';
-import 'package:easydigitalize/models/collection.dart';
-import 'package:easydigitalize/provider/generalprovider.dart';
-import 'package:easydigitalize/screens/addproduct.dart';
+import 'package:EasyDigitalize/models/collection.dart';
+import 'package:EasyDigitalize/provider/generalprovider.dart';
+import 'package:EasyDigitalize/screens/addproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,31 @@ class ViewCollections extends StatelessWidget {
         Provider.of<AuthProvider>(context);
     GeneralProvider generalProvider=Provider.of<GeneralProvider>(context);
     return Scaffold(
-      appBar:AppBar(title:Text('Your Collections')),
+      appBar:AppBar(
+
+        iconTheme: IconThemeData(
+    color: Colors.black, 
+  ),
+    
+    flexibleSpace: Container(
+            alignment: Alignment.bottomCenter,
+
+            color: Color.fromRGBO(171,216,239,1),
+            child: Text(
+              'Your Collections',
+              style: TextStyle(
+                  color: Colors.black,
+                  letterSpacing: 1.0,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+
+
+
+
+
+      ),
       body:Container(
         alignment: Alignment.center,
         

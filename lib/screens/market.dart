@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:easydigitalize/helper/authservice.dart';
+import 'package:EasyDigitalize/helper/authservice.dart';
 import 'package:flutter/material.dart';
 import '../provider/generalprovider.dart';
 import 'package:provider/provider.dart';
@@ -208,7 +208,30 @@ class MarketScreenState extends State<MarketScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(available ? 'Package Available' : 'Not Available'),
+
+         iconTheme: IconThemeData(
+    color: Colors.black, 
+  ),
+    
+    flexibleSpace: Container(
+            alignment: Alignment.bottomCenter,
+
+            color: Color.fromRGBO(171,216,239,1),
+            child: Text(
+              available ? 'Package Available' : 'Not Available',
+              style: TextStyle(
+                  color: Colors.black,
+                  letterSpacing: 1.0,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+
+
+
+
+
+
 
       ),
       body: Center(

@@ -1,4 +1,4 @@
-name: easydigitalize
+name: EasyDigitalize
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -89,7 +89,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "dev_assets/easydigitalize_launcher.png"
+  image_path: "dev_assets/easydigitalize.png"
   adaptive_icon_background: "#ABD8EF"
   adaptive_icon_foreground: "dev_assets/easydigitalize.png"
 

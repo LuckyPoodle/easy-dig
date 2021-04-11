@@ -45,7 +45,7 @@ AuthService auth = AuthService();
 
   Widget _buildSocialBtnRow() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30.0),
+      padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -80,14 +80,24 @@ AuthService auth = AuthService();
       
 
 
-      body: Column(children: <Widget>[
+      body: SingleChildScrollView(
+        child: Column(children: <Widget>[
         Container(
       height: 300,
       width: 300,
       child:Image(image: AssetImage("assets/images/Easydigitalize.png")),
     ),
         _buildSocialBtnRow(),
+
+         Container(
+      height: 300,
+      width: 600,
+      child:Image(image: AssetImage("assets/images/productivity.png")),
+    ),
+
+    SizedBox(height: 50,)
       ],),
+      )
     );
   }
 }

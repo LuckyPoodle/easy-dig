@@ -1,9 +1,9 @@
-import 'package:easydigitalize/provider/generalprovider.dart';
-import 'package:easydigitalize/screens/viewcollections.dart';
-import 'package:easydigitalize/screens/viewproducts.dart';
+import 'package:EasyDigitalize/provider/generalprovider.dart';
+import 'package:EasyDigitalize/screens/viewcollections.dart';
+import 'package:EasyDigitalize/screens/viewproducts.dart';
 import './provider/authprovider.dart';
-import 'package:easydigitalize/screens/addcollection.dart';
-import 'package:easydigitalize/screens/addproduct.dart';
+import 'package:EasyDigitalize/screens/addcollection.dart';
+import 'package:EasyDigitalize/screens/addproduct.dart';
 import 'package:flutter/material.dart';
 import './screens/home.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +42,8 @@ class MyApp extends StatelessWidget {
         title: 'EasyDigitalize',
         theme: ThemeData(
           primarySwatch: Colors.blue,
-          canvasColor: Color.fromRGBO(171,216,239,1),
+          
+          canvasColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: auth==null?LoginScreen(): Home()

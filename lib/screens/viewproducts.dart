@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:easydigitalize/models/collection.dart';
-import 'package:easydigitalize/provider/generalprovider.dart';
-import 'package:easydigitalize/screens/addproduct.dart';
+import 'package:EasyDigitalize/models/collection.dart';
+import 'package:EasyDigitalize/provider/generalprovider.dart';
+import 'package:EasyDigitalize/screens/addproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
@@ -857,7 +857,31 @@ class ViewProducts extends StatelessWidget {
             },
           ),
         ],
-        title: Text('Products in '+generalProvider.currentCollection),
+
+        iconTheme: IconThemeData(
+    color: Colors.black, 
+  ),
+    
+    flexibleSpace: Container(
+            alignment: Alignment.bottomCenter,
+
+            color: Color.fromRGBO(171,216,239,1),
+            child: Text(
+              'Products in '+generalProvider.currentCollection,
+              style: TextStyle(
+                  color: Colors.black,
+                  letterSpacing: 1.0,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+
+
+
+
+
+
+
         automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(

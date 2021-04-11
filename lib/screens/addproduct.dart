@@ -1,6 +1,6 @@
-import 'package:easydigitalize/provider/authprovider.dart';
-import 'package:easydigitalize/provider/generalprovider.dart';
-import 'package:easydigitalize/screens/viewproducts.dart';
+import 'package:EasyDigitalize/provider/authprovider.dart';
+import 'package:EasyDigitalize/provider/generalprovider.dart';
+import 'package:EasyDigitalize/screens/viewproducts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:material_design_icons_flutter/icon_map.dart';
 import 'package:provider/provider.dart';
@@ -971,9 +971,29 @@ class _AddProductState extends State<AddProduct> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: isUpdateProduct
-            ? Text('Updating product')
-            : Text('Add Product to ' + generalprovider.currentCollection),
+        iconTheme: IconThemeData(
+    color: Colors.black, 
+  ),
+    
+    flexibleSpace: Container(
+            alignment: Alignment.bottomCenter,
+
+            color: Color.fromRGBO(171,216,239,1),
+            child: Text(
+              isUpdateProduct? 'Updating product'
+            : 'Add Product to ' + generalprovider.currentCollection,
+              style: TextStyle(
+                  color: Colors.black,
+                  letterSpacing: 1.0,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+
+
+
+
+      
       ),
       body: Padding(
         padding: EdgeInsets.only(left: 20, right: 20),
