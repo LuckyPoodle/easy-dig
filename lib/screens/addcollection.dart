@@ -187,9 +187,9 @@ class _AddCollectionState extends State<AddCollection> {
                     },
                     validator: (value){
                       //null is returned when input is correct, return a text when its wrong
-                      // if(value.length>30){
-                      //   return 'Please enter less than 30 characters';
-                      // }
+                      if(value.trim().length==0){
+                         return 'Please enter a name';
+                      }
 
                       return null;
                     },

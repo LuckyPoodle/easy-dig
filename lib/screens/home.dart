@@ -47,6 +47,11 @@ class _HomeState extends State<Home> {
 
   // /// Updates to purchases
   // StreamSubscription<List<PurchaseDetails>> _subscription;
+  // 
+  // 
+  // 
+
+
 
   @override
   void initState() {
@@ -251,6 +256,20 @@ class _HomeState extends State<Home> {
                         SizedBox(
                           height: 20,
                         ),
+
+                            int.parse(snapshot.data['numberOfProductsUploaded']) >=
+                                int.parse(snapshot
+                                    .data['maxNumberOfProductsUserCanCreate'])
+                            ? Text(
+                                'You have reached your product count limit, purchase another package to upload more ',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 20,
+                                    fontStyle: FontStyle.italic),
+                              )
+                            : Text(' '),
+                            SizedBox(height: 3,),
                         Container(
                           width: width * 0.5,
                           decoration: BoxDecoration(
@@ -278,30 +297,19 @@ class _HomeState extends State<Home> {
                                   },
                           ),
                         ),
-                        int.parse(snapshot.data['numberOfProductsUploaded']) >=
-                                int.parse(snapshot
-                                    .data['maxNumberOfProductsUserCanCreate'])
-                            ? Text(
-                                'You have reached your product count limit, purchase another package to upload more ',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.redAccent,
-                                    fontSize: 20,
-                                    fontStyle: FontStyle.italic),
-                              )
-                            : Text(' '),
+                    
                         SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Container(
                           width: width * 0.5,
-                          padding: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.black,
                            
                           ),
-                          child: FlatButton(
+                          child: TextButton(
                             child: Text('View/Export Your Products',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(color: Colors.white)),
@@ -312,7 +320,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 10,
                         ),
                         Container(
                           width: width * 0.5,
@@ -340,7 +348,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 10,
                         ),
                         Container(
                           width: width * 0.5,
@@ -364,7 +372,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 10,
                         ),
                         Container(
                           width: width * 0.5,

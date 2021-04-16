@@ -15,11 +15,10 @@ class MarketScreen extends StatefulWidget {
 }
 
 class MarketScreenState extends State<MarketScreen> {
-
   /// Is the API available on the device
   bool available = true;
 
-  String mywords='going to buy!!!!!!!!!!!!!1';
+  String mywords = 'going to buy!!!!!!!!!!!!!1';
 
   /// The In App Purchase plugin
   InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
@@ -36,7 +35,7 @@ class MarketScreenState extends State<MarketScreen> {
   /// Consumable credits the user can buy
   int credits = 0;
 
-  AuthService authservice=AuthService();
+  AuthService authservice = AuthService();
 
   @override
   void initState() {
@@ -46,65 +45,58 @@ class MarketScreenState extends State<MarketScreen> {
 
     // authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, '10000');
     super.initState();
-    credits=Provider.of<GeneralProvider>(context,listen:false).localcountmaxnumberofProductsUploaded;
+    credits = Provider.of<GeneralProvider>(context, listen: false)
+        .localcountmaxnumberofProductsUploaded;
   }
 
   @override
-    void dispose() {
-      _subscription.cancel();
-      super.dispose();
-   }
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
 
   /// Initialize data
-  /// Initialize data 
+  /// Initialize data
   void _initialize() async {
-
     // Check availability of In App Purchases
     available = await _iap.isAvailable();
 
     if (available) {
 //retrieve
       await _getProducts();
-     // await _getPastPurchases();
+      // await _getPastPurchases();
 
 //we can use future.wait if u want
 
       // Verify and deliver a purchase with your own business logic
       //_verifyPurchase();
 
-      
       // Listen to new purchases which is activated here when u click BUY and the google play popup
       _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
+            setState(() {
+              mywords =
+                  'yes just now in the subscription!!! gg to verifypurchase';
+            });
 
-        setState(() {
-        mywords='yes just now in the subscription!!! gg to verifypurchase';
-      });
-        
-        _purchases.addAll(data);
+            _purchases.addAll(data);
 
-        _verifyPurchase();
-  
-        
-      }));
-
+            _verifyPurchase();
+          }));
     }
   }
 
   /// Spend credits and consume purchase when they run pit
   // void _spendCredits(PurchaseDetails purchase) async {
-    
+
   //   /// Decrement credits
   //   setState(() { credits--; });
 
-     
   //     Provider.of<GeneralProvider>(context,listen:false).setNumberOfProductsUploaded(int.parse(credits.toString()));
-      
+
   //     int creditcountnow=Provider.of<GeneralProvider>(context,listen:false).localcountmaxnumberofProductsUploaded-1;
 
-      
-
   //     String newcount=creditcountnow.toString();
-      
+
   //     authservice.updateCreditsInAccount(Provider.of<User>(context,listen:false).uid,newcount);
 
   //   /// TODO update the state of the consumable to a backend database
@@ -118,35 +110,29 @@ class MarketScreenState extends State<MarketScreen> {
 
   // }
 
-
-   /// Purchase a product
+  /// Purchase a product
   void _buyProduct(ProductDetails prod) {
     final PurchaseParam purchaseParam = PurchaseParam(productDetails: prod);
     //for one time purchase is nonconsumable
-     //_iap.buyNonConsumable(purchaseParam: purchaseParam);
+    //_iap.buyNonConsumable(purchaseParam: purchaseParam);
     //autoconsume is false means user can't purchase again until they have consumed
     _iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: true);
-    
-      setState(() {
-        mywords='yes just finishing buyProduct!!!!!';
-      });
-    
-   // _verifyPurchase();
 
+    setState(() {
+      mywords = 'yes just finishing buyProduct!!!!!';
+    });
 
-
-
+    // _verifyPurchase();
   }
-
-
 
   /// Get all products available for sale
   Future<void> _getProducts() async {
     Set<String> ids = Set.from([testID]);
     print('in get Products...');
     ProductDetailsResponse response = await _iap.queryProductDetails(ids);
-    print('in get Products response is ...'+response.productDetails.toString());
-    setState(() { 
+    print(
+        'in get Products response is ...' + response.productDetails.toString());
+    setState(() {
       _products = response.productDetails;
     });
   }
@@ -170,7 +156,8 @@ class MarketScreenState extends State<MarketScreen> {
 
   /// Returns purchase of specific product ID
   PurchaseDetails _hasPurchased(String productID) {
-    return _purchases.firstWhere( (purchase) => purchase.productID == productID, orElse: () => null);
+    return _purchases.firstWhere((purchase) => purchase.productID == productID,
+        orElse: () => null);
   }
 
   /// Your own business logic to setup a consumable
@@ -178,45 +165,42 @@ class MarketScreenState extends State<MarketScreen> {
     PurchaseDetails purchase = _hasPurchased(testID);
 
     // TODO serverside verification & record consumable in the database
-    // 
-      setState(() {
-        mywords='gg to check if it is purchased!!! '+purchase.toString()+purchase.status.toString();
-      });
+    //
+    setState(() {
+      mywords = 'gg to check if it is purchased!!! ' +
+          purchase.toString() +
+          purchase.status.toString();
+    });
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-
       setState(() {
-       mywords='yes verified purchase!!!';
+        mywords = 'yes verified purchase!!!';
       });
 
       _iap.completePurchase(purchase);
-      credits += 5;
-    
-      
-      Provider.of<GeneralProvider>(context,listen:false).setlocalcountmaxnumberofProductsUploaded(int.parse(credits.toString()));
-      
-      authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, credits.toString());
+      credits += 100;
+
+      Provider.of<GeneralProvider>(context, listen: false)
+          .setlocalcountmaxnumberofProductsUploaded(
+              int.parse(credits.toString()));
+
+      authservice.addCreditsToAccount(
+          Provider.of<User>(context, listen: false).uid, credits.toString());
     }
   }
-  
-
 
   @override
   Widget build(BuildContext context) {
-
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
-
-         iconTheme: IconThemeData(
-    color: Colors.black, 
-  ),
-    
-    flexibleSpace: Container(
+          iconTheme: IconThemeData(
+            color: Colors.black,
+          ),
+          flexibleSpace: Container(
             alignment: Alignment.bottomCenter,
-
-            color: Color.fromRGBO(171,216,239,1),
+            color: Color.fromRGBO(171, 216, 239, 1),
             child: Text(
               available ? 'Package Available' : 'Not Available',
               style: TextStyle(
@@ -225,69 +209,77 @@ class MarketScreenState extends State<MarketScreen> {
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold),
             ),
-          )
+          )),
+      body: Stack(children: <Widget>[
+        Center(
+          child: Container(
+            width: width * 0.8,
+            height: 500,
+            decoration: new BoxDecoration(
+              color: Color.fromRGBO(171, 216, 239, 0.3),
+              
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var prod in _products)
 
-
-
-
-
-
-
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-
-            
-            
-   for (var prod in _products)
-
-              // UI if already purchased
-              if (_hasPurchased(prod.id) != null)
-                ...[
-                  Text('Success!', style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center,),
-                  Text('You can upload $credits products', style: TextStyle(fontSize: 20)),
-               
+                // UI if already purchased
+                if (_hasPurchased(prod.id) != null) ...[
+                  Text(
+                    'Success!',
+                    style: Theme.of(context).textTheme.headline6,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text('You can upload $credits products',
+                      style: TextStyle(fontSize: 20)),
                 ],
-
-    
-
-
-            for (var prod in _products)
-            
-            
-
-              ...[
-                Text(prod.title, style: Theme.of(context).textTheme.headline5, textAlign: TextAlign.center,),
-                Text(prod.description),
+                SizedBox(height: 20,),
+              for (var prod in _products) ...[
+                Text(
+                  prod.title,
+                  style: Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 40, right: 40),
+                  child: Text(
+                    prod.description,
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 Text(prod.price,
                     style: TextStyle(color: Colors.blue, fontSize: 60)),
-                  Container(
-              width: width * 0.5,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 0),
-              ),
-              padding: EdgeInsets.all(10),
-              
-              child: TextButton(
-                
-
-                child:
-                    Text('Purchase', style: TextStyle(color: Colors.white,fontSize: 20)),
-                onPressed: ()=>_buyProduct(prod),
-              ),
-            ),
-
-            ]
-          ],
+                Container(
+                  width: width * 0.5,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.all(10),
+                  child: TextButton(
+                    child: Text('Purchase\nNow!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    onPressed: () => _buyProduct(prod),
+                  ),
+                ),
+              ]
+            ],
+          ),
         ),
-      ),
+      ]),
     );
   }
-
-
-
 }

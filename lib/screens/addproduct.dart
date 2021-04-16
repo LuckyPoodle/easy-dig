@@ -112,6 +112,16 @@ class _AddProductState extends State<AddProduct> {
   //for mini loading
   bool inmidstofuploadingmainimages = false;
   bool stillshowloadinginsubmitbutton = false;
+  bool inmidstofuploadingvariant1image=false;
+  bool inmidstofuploadingvariant2image=false;
+  bool inmidstofuploadingvariant3image=false;
+  bool inmidstofuploadingvariant4image=false;
+  bool inmidstofuploadingvariant5image=false;
+  bool inmidstofuploadingvariant6image=false;
+  bool inmidstofuploadingvariant7image=false;
+  bool inmidstofuploadingvariant8image=false;
+  bool inmidstofuploadingvariant9image=false;
+  bool inmidstofuploadingvariant10image=false;
 
   var _isInit = true;
 
@@ -636,29 +646,67 @@ class _AddProductState extends State<AddProduct> {
   }
 
   Future<String> uploadVariantGetImageUrl(int index) async {
-    setState(() {
-      stillshowloadinginsubmitbutton = true;
-    });
+
     Asset asset;
     if (index == 1) {
+      setState((){
+         stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant1image=true;
+      });
       asset = variant1asset;
     } else if (index == 2) {
+      setState((){
+         stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant2image=true;
+      });
       asset = variant2asset;
     } else if (index == 3) {
+        setState((){
+           stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant3image=true;
+      });
       asset = variant3asset;
     } else if (index == 4) {
+        setState((){
+           stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant4image=true;
+      });
       asset = variant4asset;
     } else if (index == 5) {
+        setState((){
+           stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant5image=true;
+      });
       asset = variant5asset;
     } else if (index == 6) {
+      setState((){
+         stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant6image=true;
+      });
       asset = variant6asset;
     } else if (index == 7) {
+      setState((){
+         stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant7image=true;
+      });
       asset = variant7asset;
     } else if (index == 8) {
+      setState((){
+         stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant8image=true;
+      });
       asset = variant8asset;
     } else if (index == 9) {
+      setState((){
+         stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant9image=true;
+      });
       asset = variant9asset;
     } else if (index == 10) {
+      setState((){
+         stillshowloadinginsubmitbutton = true;
+        inmidstofuploadingvariant10image=true;
+      });
       asset = variant10asset;
     }
 
@@ -691,60 +739,71 @@ class _AddProductState extends State<AddProduct> {
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant1imageuploaded = true;
+            inmidstofuploadingvariant1image=false;
+           
           });
         } else if (index == 2) {
           variant2.imageUrlfromStorage = url;
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant2imageuploaded = true;
+            inmidstofuploadingvariant2image=false;
           });
         } else if (index == 3) {
           variant3.imageUrlfromStorage = url;
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant3imageuploaded = true;
+            inmidstofuploadingvariant3image=false;
           });
         } else if (index == 4) {
           variant4.imageUrlfromStorage = url;
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant4imageuploaded = true;
+            inmidstofuploadingvariant4image=false;
           });
         } else if (index == 5) {
           variant5.imageUrlfromStorage = url;
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant5imageuploaded = true;
+            inmidstofuploadingvariant5image=false;
           });
         } else if (index == 6) {
           variant6.imageUrlfromStorage = url;
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant6imageuploaded = true;
+            inmidstofuploadingvariant6image=false;
           });
         } else if (index == 7) {
           variant7.imageUrlfromStorage = url;
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant7imageuploaded = true;
+            inmidstofuploadingvariant7image=false;
           });
         } else if (index == 8) {
           variant8.imageUrlfromStorage = url;
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant8imageuploaded = true;
+            inmidstofuploadingvariant8image=false;
           });
         } else if (index == 9) {
           variant9.imageUrlfromStorage = url;
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant9imageuploaded = true;
+            inmidstofuploadingvariant9image=false;
           });
         } else if (index == 10) {
           variant10.imageUrlfromStorage = url;
           theproductwearemaking.mainProductImages.add(url);
           setState(() {
             variant10imageuploaded = true;
+            inmidstofuploadingvariant10image=false;
           });
         }
       });
@@ -755,6 +814,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant1imageuploaded = true;
+          inmidstofuploadingvariant1image=false;
         });
       } else if (index == 2) {
         variant2.imageUrlfromStorage = response["url_preview"];
@@ -762,6 +822,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant2imageuploaded = true;
+          inmidstofuploadingvariant2image=false;
         });
       } else if (index == 3) {
         variant3.imageUrlfromStorage = response["url_preview"];
@@ -769,6 +830,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant3imageuploaded = true;
+          inmidstofuploadingvariant3image=false;
         });
       } else if (index == 4) {
         variant4.imageUrlfromStorage = response["url_preview"];
@@ -776,6 +838,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant4imageuploaded = true;
+          inmidstofuploadingvariant4image=false;
         });
       } else if (index == 5) {
         variant5.imageUrlfromStorage = response["url_preview"];
@@ -783,6 +846,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant5imageuploaded = true;
+          inmidstofuploadingvariant5image=false;
         });
       } else if (index == 6) {
         variant6.imageUrlfromStorage = response["url_preview"];
@@ -790,6 +854,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant6imageuploaded = true;
+          inmidstofuploadingvariant6image=false;
         });
       } else if (index == 7) {
         variant7.imageUrlfromStorage = response["url_preview"];
@@ -797,6 +862,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant7imageuploaded = true;
+          inmidstofuploadingvariant7image=false;
         });
       } else if (index == 8) {
         variant8.imageUrlfromStorage = response["url_preview"];
@@ -804,6 +870,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant8imageuploaded = true;
+          inmidstofuploadingvariant8image=false;
         });
       } else if (index == 9) {
         variant9.imageUrlfromStorage = response["url_preview"];
@@ -811,6 +878,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant9imageuploaded = true;
+          inmidstofuploadingvariant9image=false;
         });
       } else if (index == 10) {
         variant10.imageUrlfromStorage = response["url_preview"];
@@ -818,6 +886,7 @@ class _AddProductState extends State<AddProduct> {
         theproductwearemaking.mainProductImages.add(response["url_preview"]);
         setState(() {
           variant10imageuploaded = true;
+          inmidstofuploadingvariant10image=false;
         });
       }
     }
@@ -974,19 +1043,27 @@ class _AddProductState extends State<AddProduct> {
         iconTheme: IconThemeData(
     color: Colors.black, 
   ),
+    centerTitle: true,
     
     flexibleSpace: Container(
             alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.all(5),
 
             color: Color.fromRGBO(171,216,239,1),
-            child: Text(
+            child: FittedBox(
+              fit: BoxFit.fitWidth,
+
+              child: Text(
+                
               isUpdateProduct? 'Updating product'
-            : 'Add Product to ' + generalprovider.currentCollection,
+            : 'Add Product to \n' + generalprovider.currentCollection,
               style: TextStyle(
                   color: Colors.black,
-                  letterSpacing: 1.0,
-                  fontSize: 20.0,
+                  
+                  fontSize: 18.0,
                   fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+            ),
             ),
           )
 
@@ -1065,7 +1142,7 @@ class _AddProductState extends State<AddProduct> {
                         width: width * 0.7,
                         child: TextFormField(
                           initialValue: theproductwearemaking.sku,
-                          decoration: InputDecoration(hintText: 'SKU'),
+                          decoration: InputDecoration(),
                           onSaved: (value) {
                             theproductwearemaking.sku = value;
                           },
@@ -1097,7 +1174,7 @@ class _AddProductState extends State<AddProduct> {
                         child: TextFormField(
                           initialValue: theproductwearemaking.handle,
                           decoration:
-                              InputDecoration(hintText: 'handle - for Shopify'),
+                              InputDecoration(hintText: 'E.g blue-shoes'),
                           onSaved: (value) {
                             theproductwearemaking.handle = value;
                           },
@@ -1227,29 +1304,54 @@ class _AddProductState extends State<AddProduct> {
                                       child: Icon(Icons.photo)),
                                 ),
 
-                      Text(pickedMainImages
-                          ? 'Please upload image'
+                      pickedMainImages
+                          ? Text('Please upload image',style:TextStyle(color: Colors.red))
                           : uploadedMainImagesSuccessfully
-                              ? 'Upload Successful'
-                              : ''),
+                              ? Text('Upload Successful',style:TextStyle(color: Colors.blue))
+                              : Text('')
+
+                              ,
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          RaisedButton(
-                            child: Text("Pick images"),
-                            onPressed: () => loadAssets(5, 0),
-                          ),
-                          RaisedButton(
-                            child: inmidstofuploadingmainimages
+
+                         
+
+                                   TextButton(
+                                  child: Text("Pick image"),
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
+                                  onPressed: () => loadAssets(5, 0),
+                                ),
+
+                                 TextButton(
+                                  child: inmidstofuploadingmainimages
                                 ? Text("......")
                                 : Text("Upload images"),
-                            onPressed: images.isNotEmpty
+                                  style: TextButton.styleFrom(
+                                    primary:Colors.white,
+                                    backgroundColor:Colors.grey,
+                                    onSurface:Colors.black
+                                  ),
+                                  onPressed:  images.isNotEmpty
                                 ? () {
                                     uploadImages();
                                   }
                                 : null,
-                          ),
+                                ),
+
+
+
+
+
+
+
+                          
+                  
                         ],
                       ),
 
@@ -1881,7 +1983,8 @@ class _AddProductState extends State<AddProduct> {
                                   onPressed: () => loadAssets(1, 1),
                                 ),
                                 TextButton(
-                                  child: Text("Upload image"),
+                                  child: 
+                                  inmidstofuploadingvariant1image==true?Text("...."):Text("Upload image"),
                                   style: TextButton.styleFrom(
                                     primary:Colors.white,
                                     backgroundColor:Colors.grey,
@@ -1895,8 +1998,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant1imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                    ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                             TextButton(
@@ -2090,7 +2193,8 @@ class _AddProductState extends State<AddProduct> {
                                   onPressed: () => loadAssets(1, 2),
                                 ),
                                 TextButton(
-                                  child: Text("Upload image"),
+                                  child: inmidstofuploadingvariant2image?Text("...."):Text("Upload image"),
+                                
                                   style: TextButton.styleFrom(
                                     primary:Colors.white,
                                     backgroundColor:Colors.grey,
@@ -2104,8 +2208,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant2imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                       ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                             TextButton(
@@ -2299,7 +2403,7 @@ class _AddProductState extends State<AddProduct> {
                                   onPressed: () => loadAssets(1, 3),
                                 ),
                                 TextButton(
-                                  child: Text("Upload image"),
+                                   child: inmidstofuploadingvariant3image?Text("...."):Text("Upload image"),
                                   style: TextButton.styleFrom(
                                     primary:Colors.white,
                                     backgroundColor:Colors.grey,
@@ -2313,8 +2417,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant3imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                      ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                             TextButton(
@@ -2514,7 +2618,7 @@ class _AddProductState extends State<AddProduct> {
                                     backgroundColor:Colors.grey,
                                     onSurface:Colors.black
                                   ),
-                                  child: Text("Upload image"),
+                                   child: inmidstofuploadingvariant4image?Text("...."):Text("Upload image"),
                                   onPressed: variant4asset != null
                                       ? () async {
                                           variant4.imageUrlfromStorage =
@@ -2523,8 +2627,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant4imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                    ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                             TextButton(
@@ -2719,7 +2823,7 @@ class _AddProductState extends State<AddProduct> {
                                   onPressed: () => loadAssets(1, 5),
                                 ),
                                 TextButton(
-                                  child: Text("Upload image"),
+                                   child: inmidstofuploadingvariant5image?Text("...."):Text("Upload image"),
                                   style: TextButton.styleFrom(
                                     primary:Colors.white,
                                     backgroundColor:Colors.grey,
@@ -2733,8 +2837,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant5imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                      ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                             TextButton(
@@ -2933,7 +3037,7 @@ class _AddProductState extends State<AddProduct> {
                                     backgroundColor:Colors.grey,
                                     onSurface:Colors.black
                                   ),
-                                  child: Text("Upload image"),
+                                   child: inmidstofuploadingvariant6image?Text("...."):Text("Upload image"),
                                   onPressed: variant6asset != null
                                       ? () async {
                                           variant6.imageUrlfromStorage =
@@ -2942,8 +3046,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant6imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                       ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                             TextButton(
@@ -3137,7 +3241,7 @@ class _AddProductState extends State<AddProduct> {
                                   onPressed: () => loadAssets(1, 7),
                                 ),
                                 TextButton(
-                                  child: Text("Upload image"),
+                                   child: inmidstofuploadingvariant7image?Text("...."):Text("Upload image"),
                                   style: TextButton.styleFrom(
                                     primary:Colors.white,
                                     backgroundColor:Colors.grey,
@@ -3151,8 +3255,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant7imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                     ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                             TextButton(
@@ -3346,7 +3450,7 @@ class _AddProductState extends State<AddProduct> {
                                   onPressed: () => loadAssets(1, 8),
                                 ),
                                 TextButton(
-                                  child: Text("Upload image"),
+                                   child: inmidstofuploadingvariant8image?Text("...."):Text("Upload image"),
                                   style: TextButton.styleFrom(
                                     primary:Colors.white,
                                     backgroundColor:Colors.grey,
@@ -3360,8 +3464,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant8imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                     ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                             TextButton(
@@ -3543,7 +3647,7 @@ class _AddProductState extends State<AddProduct> {
                                   onPressed: () => loadAssets(1, 9),
                                 ),
                                 TextButton(
-                                  child: Text("Upload image"),
+                                   child: inmidstofuploadingvariant9image?Text("...."):Text("Upload image"),
                                   style: TextButton.styleFrom(
                                     primary:Colors.white,
                                     backgroundColor:Colors.grey,
@@ -3557,8 +3661,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant9imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                 ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                             TextButton(
@@ -3752,7 +3856,7 @@ class _AddProductState extends State<AddProduct> {
                                   onPressed: () => loadAssets(1, 10),
                                 ),
                                 TextButton(
-                                  child: Text("Upload image"),
+                                   child: inmidstofuploadingvariant10image?Text("...."):Text("Upload image"),
                                   style: TextButton.styleFrom(
                                     primary:Colors.white,
                                     backgroundColor:Colors.grey,
@@ -3767,8 +3871,8 @@ class _AddProductState extends State<AddProduct> {
                                       : null,
                                 ),
                                 variant10imageuploaded == true
-                                    ? Text('Uploaded')
-                                    : Text('Please upload image')
+                                     ? Text('Uploaded',style:TextStyle(color: Colors.blue))
+                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
                               ],
                             ),
                           ],

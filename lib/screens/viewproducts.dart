@@ -1,22 +1,28 @@
-import 'dart:convert';
+
 
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:EasyDigitalize/models/collection.dart';
+
 import 'package:EasyDigitalize/provider/generalprovider.dart';
 import 'package:EasyDigitalize/screens/addproduct.dart';
-import 'package:flutter/material.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import '../helper/authservice.dart';
+
 import '../screens/home.dart';
 import '../provider/authprovider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
+
+class ViewProducts extends StatelessWidget {
+  static const routeName = '/viewproducts';
+
 String filePath;
+String collectionname;
+
 Future<String> get _localPath async {
   final directory = await getApplicationSupportDirectory();
   return directory.absolute.path;
@@ -25,16 +31,20 @@ Future<String> get _localPath async {
 Future<File> get _localFile async {
   final path = await _localPath;
   print('in get localfile');
+  print(collectionname);
+  
 
-  filePath = '$path/data.csv';
+  filePath = '$path/$collectionname-data.csv';
 
-  return File('$path/data.csv').create();
+  return File('$path/$collectionname-data.csv').create();
 }
 
-sendMailAndAttachment() async {
+sendMailAndAttachment(String collection,String platform) async {
+  
+  
   final Email email = Email(
-    body: 'Hey, the CSV made it!',
-    subject: 'Datum Entry for ${DateTime.now().toString()}',
+    body: 'Hi, \n Please find the attached product CSV file. ',
+    subject: '${platform} Product CSV ${DateTime.now().toString()} for ${collection}',
     recipients: [''],
     isHTML: true,
     attachmentPaths: [filePath],
@@ -43,10 +53,9 @@ sendMailAndAttachment() async {
   await FlutterEmailSender.send(email);
 }
 
-class ViewProducts extends StatelessWidget {
-  static const routeName = '/viewproducts';
 
-  void generateShopifyCSV(var docs) async {
+  void generateShopifyCSV(var docs,String collection) async {
+    collectionname=collection;
     List<List<dynamic>> rows = [];
     rows.add([
       'Handle',
@@ -66,6 +75,7 @@ class ViewProducts extends StatelessWidget {
       'Option3 Value',
       'Option4 Value',
       'Option5 Value',
+      'Variant Inventory Tracker',
       'Variant Inventory Qty',
       'Variant Price',
       'Image Src',
@@ -107,6 +117,13 @@ class ViewProducts extends StatelessWidget {
               vrow.add('');
               vrow.add('');
               vrow.add('');
+              if (variant['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
 
               vrow.add(variant['quantity']);
               vrow.add(variant['variantprice']);
@@ -140,6 +157,14 @@ class ViewProducts extends StatelessWidget {
                 vrow.add('');
                 vrow.add('');
                 vrow.add('');
+                    if (variant['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
+
 
                 vrow.add(variant['quantity']);
                 vrow.add(variant['variantprice']);
@@ -177,6 +202,14 @@ class ViewProducts extends StatelessWidget {
                   vrow.add(variant['variantname']);
                   vrow.add('');
                   vrow.add('');
+                      if (variant['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
+
                   vrow.add(variant['quantity']);
                   vrow.add(variant['variantprice']);
                   vrow.add(mainproductimages[
@@ -217,6 +250,14 @@ class ViewProducts extends StatelessWidget {
                     vrow.add(variant['variantname']);
 
                     vrow.add('');
+                        if (variant['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
+
                     vrow.add(variant['quantity']);
                     vrow.add(variant['variantprice']);
                     vrow.add(mainproductimages[
@@ -262,6 +303,14 @@ class ViewProducts extends StatelessWidget {
                       vrow.add(option3);
                       vrow.add(option4);
                       vrow.add(variant['variantname']);
+                          if (variant['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
+
 
                       vrow.add(variant['quantity']);
                       vrow.add(variant['variantprice']);
@@ -303,6 +352,14 @@ class ViewProducts extends StatelessWidget {
           vrow.add('');
           vrow.add('');
           vrow.add('');
+              if (doc.data()['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
+
 
           vrow.add(doc.data()['quantity']);
           vrow.add(doc.data()['price']);
@@ -334,6 +391,14 @@ class ViewProducts extends StatelessWidget {
             vrow.add('');
             vrow.add('');
             vrow.add('');
+               if (doc.data()['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
+
 
             vrow.add(doc.data()['quantity']);
             vrow.add(doc.data()['price']);
@@ -369,6 +434,14 @@ class ViewProducts extends StatelessWidget {
               vrow.add('');
               vrow.add('');
               vrow.add('');
+                 if (doc.data()['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
+
               vrow.add(doc.data()['quantity']);
               vrow.add(doc.data()['price']);
               vrow.add(mainproductimages[
@@ -406,6 +479,14 @@ class ViewProducts extends StatelessWidget {
                 vrow.add(option3);
                 vrow.add('');
                 vrow.add('');
+                   if (doc.data()['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
+
                 vrow.add(doc.data()['quantity']);
                 vrow.add(doc.data()['price']);
                 vrow.add(mainproductimages[
@@ -446,6 +527,14 @@ class ViewProducts extends StatelessWidget {
                   vrow.add(option3);
                   vrow.add(option4);
                   vrow.add('');
+                     if (doc.data()['quantity']!=''){
+                vrow.add('shopify');
+
+              }else{
+                vrow.add('');
+
+              }
+
                   vrow.add(doc.data()['quantity']);
                   vrow.add(doc.data()['price']);
                   vrow.add(mainproductimages[
@@ -487,6 +576,7 @@ class ViewProducts extends StatelessWidget {
           vrow.add('');
           vrow.add('');
           vrow.add('');
+          vrow.add('');
           vrow.add(imageurl);
           vrow.add('');
 
@@ -501,10 +591,11 @@ class ViewProducts extends StatelessWidget {
     print(csv);
     f.writeAsString(csv);
 
-    sendMailAndAttachment();
+    sendMailAndAttachment(collection,'Shopify');
   }
 
-  void generateCSV(var docs) async {
+  void generateCSV(var docs,String collection) async {
+    collectionname=collection;
     print('saveproductstoprovider');
     print(docs);
     List<List<dynamic>> rows = [];
@@ -539,7 +630,7 @@ class ViewProducts extends StatelessWidget {
       row.add(doc.data()['name']);
 
       row.add(doc.data()['description']);
-      row.add('1');
+      row.add('FALSE');
 
       String images = doc.data()['mainProductImages'].join(',');
       row.add(images);
@@ -593,7 +684,7 @@ class ViewProducts extends StatelessWidget {
                   variant['variantname'].toString());
 
               vrow.add(doc.data()['description']);
-              vrow.add('1');
+              vrow.add('FALSE');
               vrow.add(variant['imageUrlfromStorage']);
               vrow.add(variant['variantprice']);
               print('*************************');
@@ -634,7 +725,7 @@ class ViewProducts extends StatelessWidget {
                     variant['variantname'].toString());
 
                 vrow.add(doc.data()['description']);
-                vrow.add('1');
+                vrow.add('FALSE');
                 vrow.add(variant['imageUrlfromStorage']);
                 vrow.add(variant['variantprice']);
                 print('*************************');
@@ -678,7 +769,7 @@ class ViewProducts extends StatelessWidget {
                       variant['variantname'].toString());
 
                   vrow.add(doc.data()['description']);
-                  vrow.add('1');
+                  vrow.add('FALSE');
                   vrow.add(variant['imageUrlfromStorage']);
                   vrow.add(variant['variantprice']);
 
@@ -727,7 +818,7 @@ class ViewProducts extends StatelessWidget {
                         variant['variantname'].toString());
 
                     vrow.add(doc.data()['description']);
-                    vrow.add('1');
+                    vrow.add('FALSE');
                     vrow.add(variant['imageUrlfromStorage']);
                     vrow.add(variant['variantprice']);
 
@@ -781,7 +872,7 @@ class ViewProducts extends StatelessWidget {
                           variant['variantname'].toString());
 
                       vrow.add(doc.data()['description']);
-                      vrow.add('1');
+                      vrow.add('FALSE');
                       vrow.add(variant['imageUrlfromStorage']);
                       vrow.add(variant['price']);
                       vrow.add(doc.data()['option1name']);
@@ -824,7 +915,7 @@ class ViewProducts extends StatelessWidget {
     print(csv);
     f.writeAsString(csv);
 
-    sendMailAndAttachment();
+    sendMailAndAttachment(collection,'Woocommerce');
   }
 
   @override
@@ -864,16 +955,20 @@ class ViewProducts extends StatelessWidget {
     
     flexibleSpace: Container(
             alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.all(5),
 
             color: Color.fromRGBO(171,216,239,1),
-            child: Text(
-              'Products in '+generalProvider.currentCollection,
+            child: FittedBox(
+              child: Text(
+              'Products in \n'+generalProvider.currentCollection,
+              textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.black,
-                  letterSpacing: 1.0,
-                  fontSize: 20.0,
+                  
+                  fontSize: 15.0,
                   fontWeight: FontWeight.bold),
             ),
+            )
           ),
 
 
@@ -921,7 +1016,7 @@ class ViewProducts extends StatelessWidget {
                             child: Text('Generate CSV file for Woocommerce',
                                 style: TextStyle(color: Colors.white)),
                             onPressed: () {
-                              generateCSV(chatDocs);
+                              generateCSV(chatDocs,generalProvider.currentCollection);
                             },
                           ),
                         ),
@@ -940,7 +1035,7 @@ class ViewProducts extends StatelessWidget {
                             child: Text('Generate CSV file for Shopify',
                                 style: TextStyle(color: Colors.white)),
                             onPressed: () {
-                              generateShopifyCSV(chatDocs);
+                              generateShopifyCSV(chatDocs,generalProvider.currentCollection);
                             },
                           ),
                         ),
