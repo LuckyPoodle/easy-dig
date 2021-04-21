@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:EasyDigitalize/helper/authservice.dart';
 import 'package:flutter/material.dart';
 import '../provider/generalprovider.dart';
@@ -42,11 +42,14 @@ class MarketScreenState extends State<MarketScreen> {
     //fetch prdts and purchases
     _initialize();
     // AuthService authservice=AuthService();
+    DocumentSnapshot doc = Provider.of<DocumentSnapshot>(context,listen: false);
+    setState(() {
+      credits=int.parse(doc['maxNumberOfProductsUserCanCreate']);
+    });
 
     // authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, '10000');
     super.initState();
-    credits = Provider.of<GeneralProvider>(context, listen: false)
-        .localcountmaxnumberofProductsUploaded;
+    
   }
 
   @override
@@ -175,10 +178,10 @@ class MarketScreenState extends State<MarketScreen> {
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
       setState(() {
         mywords = 'yes verified purchase!!!';
+        credits += 100;
       });
 
       _iap.completePurchase(purchase);
-      credits += 100;
 
       Provider.of<GeneralProvider>(context, listen: false)
           .setlocalcountmaxnumberofProductsUploaded(
@@ -222,6 +225,7 @@ class MarketScreenState extends State<MarketScreen> {
             ),
           ),
         ),
+        
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

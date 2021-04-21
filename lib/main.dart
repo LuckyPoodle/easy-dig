@@ -1,3 +1,4 @@
+import 'package:EasyDigitalize/helper/components.dart';
 import 'package:EasyDigitalize/provider/generalprovider.dart';
 import 'package:EasyDigitalize/screens/viewcollections.dart';
 import 'package:EasyDigitalize/screens/viewproducts.dart';
@@ -14,6 +15,8 @@ import './screens/login.dart';
 import './screens/market.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import './screens/aboutscreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import './models/user.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -36,13 +39,20 @@ class MyApp extends StatelessWidget {
               create:(ctx)=>AuthProvider()
           ),
         StreamProvider<User>.value(value: AuthService().user),
+
+         
+    
+        StreamProvider<DocumentSnapshot>(
+          create: (context)=>AuthService().getUserDataStream(),
+          updateShouldNotify: (previous,current)=>(current!=previous),)
+
+        
       ],
           child: Consumer<User>(builder: (ctx,auth,_)=>MaterialApp(
             debugShowCheckedModeBanner: false,
         title: 'EasyDigitalize',
         theme: ThemeData(
           primarySwatch: Colors.blue,
-          
           canvasColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),

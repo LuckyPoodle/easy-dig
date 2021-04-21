@@ -134,7 +134,8 @@ class _AddProductState extends State<AddProduct> {
       price: ' ',
       brand: ' ',
       handle: ' ',
-      type: ' ',
+      type: 'simple',
+      sku:' ',
       hasVariation: false,
       variationlabel: ' ',
       quantity: '',
@@ -193,6 +194,8 @@ class _AddProductState extends State<AddProduct> {
     super.initState();
 
     configurePublitio();
+
+    
   }
 
   @override
@@ -207,21 +210,7 @@ class _AddProductState extends State<AddProduct> {
       List<Variant> obtainedVariants = [];
 
       if (chatDocsIndex != null) {
-        print(
-            '-----------------------mainProductImages-----------------------------');
-
-        print(
-          chatDocsIndex.data()['mainProductImages'],
-        );
-        print('-----------------------Options-----------------------------');
-
-        print('-----------------------Variants-----------------------------');
-        print(chatDocsIndex.data()['variants']);
-        print(
-            '-----------------------IS UPDATING PRODUCT-----------------------------');
-        print(chatDocsIndex.data());
-        print('id is');
-        print(chatDocsIndex.id);
+       
         for (var url in chatDocsIndex.data()['mainProductImages']) {
           obtainedMainImagesUrls.add(url);
         }
@@ -231,8 +220,7 @@ class _AddProductState extends State<AddProduct> {
         print('obtainedMainImagesUrls');
         print(obtainedMainImagesUrls);
         for (var v in chatDocsIndex.data()['variants']) {
-          print('the variants existing...');
-          print(v['variantname']);
+        
           Variant aVariant = Variant(
               imageUrlfromStorage: v['imageUrlfromStorage'],
               name: v['variantname'],
@@ -254,6 +242,7 @@ class _AddProductState extends State<AddProduct> {
             brand: chatDocsIndex.data()['brand'],
             category: chatDocsIndex.data()['category'],
             tags: chatDocsIndex.data()['tags'],
+            sku: chatDocsIndex.data()['sku'],
             handle: chatDocsIndex.data()['handle'],
             type: chatDocsIndex.data()['type'],
             numberofoptions: chatDocsIndex.data()['numberofoptions'],
@@ -276,10 +265,7 @@ class _AddProductState extends State<AddProduct> {
 
         //remove variant from options if there is , to prevent duplicates
         if (chatDocsIndex.data()['hasVariation'] == true) {
-          print(
-              '_________________The product we are updating is a variable________________________');
-          print(
-              '___________________________________________________________________________________');
+        
           if ((chatDocsIndex.data()['numberofoptions'] == '0')) {
             //we have to remove option2name and option2value
 
@@ -422,6 +408,7 @@ class _AddProductState extends State<AddProduct> {
     _formKey.currentState.save();
     print('in SAVE FORM..');
     print(theproductwearemaking);
+  
     //save the variant names into a string in the first empty Attribute column
     if (theproductwearemaking.option1s.trim().isEmpty) {
       print(
@@ -586,7 +573,8 @@ class _AddProductState extends State<AddProduct> {
       final uploadOptions = {
         "privacy": "1", // Marks file as publicly accessible
         "option_download": "1", // Can be downloaded by anyone
-        "option_transform": "1" // Url transforms enabled
+        "option_transform": "1"
+         // Url transforms enabled
       };
       final response = await FlutterPublitio.uploadFile(path, uploadOptions);
       print('--------------RESPONSE---------------------');
@@ -1435,7 +1423,7 @@ class _AddProductState extends State<AddProduct> {
                           children: <TextSpan>[
                             new TextSpan(
                                 text:
-                                    '( Woocommerce) if product category is under a parent category, please enter with this format '),
+                                    '( Woocommerce) If product category is under a parent category, please enter with this format '),
                             new TextSpan(
                                 text: 'parentcategory>categoryname',
                                 style: new TextStyle(
@@ -1523,11 +1511,12 @@ class _AddProductState extends State<AddProduct> {
                       Text('Total Available Stock (Optional)',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
+              
                       Container(
                         color: Colors.black,
                         height: 5,
                       ),
-                      SizedBox(height: 2),
+                    
 
                       TextFormField(
                         initialValue: theproductwearemaking.quantity,
@@ -1683,9 +1672,12 @@ class _AddProductState extends State<AddProduct> {
                                                       .option5name
                                                   : '',
                               keyboardType: TextInputType.multiline,
-                              onFieldSubmitted: (valueinputtofield) {},
+                              onFieldSubmitted: (valueinputtofield) {
+                           
+                              },
                               onSaved: (value) {
                                 if (i == 0) {
+                                  
                                   theproductwearemaking.option1name = value;
                                 } else if (i == 1) {
                                   theproductwearemaking.option2name = value;
@@ -1752,6 +1744,7 @@ class _AddProductState extends State<AddProduct> {
                                 } else if (i == 4) {
                                   theproductwearemaking.option5s = value;
                                 }
+
                               },
                             )
                           ],
@@ -1905,10 +1898,11 @@ class _AddProductState extends State<AddProduct> {
                                 ),
 
                                 /* STOCK */
-                                Text('Variant 1 Available Stock (OPTIONAL)',
+                                Text('Variant 1 Available Stock (Optional)',
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
+                                  
                                 TextFormField(
                                     initialValue: variant1.quantity,
                                     onSaved: (value) {
@@ -1999,7 +1993,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant1imageuploaded == true
                                     ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text('')
                               ],
                             ),
                             TextButton(
@@ -2115,10 +2109,11 @@ class _AddProductState extends State<AddProduct> {
                                 ),
 
                                 /* STOCK */
-                                Text('Variant 2 Available Stock (OPTIONAL)',
+                                Text('Variant 2 Available Stock (Optional)',
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
+                                  
                                 TextFormField(
                                     initialValue: variant2.quantity,
                                     onSaved: (value) {
@@ -2209,7 +2204,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant2imageuploaded == true
                                        ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text(' ')
                               ],
                             ),
                             TextButton(
@@ -2325,10 +2320,11 @@ class _AddProductState extends State<AddProduct> {
                                 ),
 
                                 /* STOCK */
-                                Text('Variant 3 Available Stock (OPTIONAL)',
+                                Text('Variant 3 Available Stock (Optional)',
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
+                                 
                                 TextFormField(
                                     initialValue: variant3.quantity,
                                     onSaved: (value) {
@@ -2418,7 +2414,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant3imageuploaded == true
                                       ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text(' ')
                               ],
                             ),
                             TextButton(
@@ -2535,10 +2531,11 @@ class _AddProductState extends State<AddProduct> {
                                 ),
 
                                 /* STOCK */
-                                Text('Variant 4 Available Stock (OPTIONAL)',
+                                Text('Variant 4 Available Stock (Optional)',
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
+                                  
                                 TextFormField(
                                     initialValue: variant4.quantity,
                                     onSaved: (value) {
@@ -2628,7 +2625,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant4imageuploaded == true
                                     ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text(' ')
                               ],
                             ),
                             TextButton(
@@ -2744,10 +2741,11 @@ class _AddProductState extends State<AddProduct> {
                                 ),
 
                                 /* STOCK */
-                                Text('Variant 5 Available Stock (OPTIONAL)',
+                                Text('Variant 5 Available Stock (Optional)',
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
+                                      
                                 TextFormField(
                                     initialValue: variant5.quantity,
                                     onSaved: (value) {
@@ -2838,7 +2836,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant5imageuploaded == true
                                       ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text(' ')
                               ],
                             ),
                             TextButton(
@@ -2953,10 +2951,11 @@ class _AddProductState extends State<AddProduct> {
                                 ),
 
                                 /* STOCK */
-                                Text('Variant 6 Available Stock (OPTIONAL)',
+                                Text('Variant 6 Available Stock (Optional)',
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
+                           
                                 TextFormField(
                                     initialValue: variant6.quantity,
                                     onSaved: (value) {
@@ -3047,7 +3046,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant6imageuploaded == true
                                        ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text(' ')
                               ],
                             ),
                             TextButton(
@@ -3163,7 +3162,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
 
                                 /* STOCK */
-                                Text('Variant 7 Available Stock (OPTIONAL)',
+                                Text('Variant 7 Available Stock (Optional)',
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
@@ -3256,7 +3255,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant7imageuploaded == true
                                      ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text(' ')
                               ],
                             ),
                             TextButton(
@@ -3465,7 +3464,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant8imageuploaded == true
                                      ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text(' ')
                               ],
                             ),
                             TextButton(
@@ -3662,7 +3661,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant9imageuploaded == true
                                  ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text(' ')
                               ],
                             ),
                             TextButton(
@@ -3872,7 +3871,7 @@ class _AddProductState extends State<AddProduct> {
                                 ),
                                 variant10imageuploaded == true
                                      ? Text('Uploaded',style:TextStyle(color: Colors.blue))
-                                    : Text('Please upload image',style:TextStyle(color: Colors.red))
+                                    : Text(' ')
                               ],
                             ),
                           ],

@@ -13,7 +13,6 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter/services.dart';
 import '../models/user.dart';
 import 'aboutscreen.dart';
-import 'login.dart';
 
 import 'dart:async';
 
@@ -59,100 +58,30 @@ class _HomeState extends State<Home> {
     super.initState();
     //initPlatformState();
     User user = Provider.of<User>(context, listen: false);
-    AuthService authservice = AuthService();
-    authservice.getUserData(user.uid).then((value) {
-      print('in init state');
-      print(value);
-      thiscurrentuserdata = value;
-      Provider.of<GeneralProvider>(context, listen: false)
-          .setNumberOfProductsUploaded(
-              int.parse(thiscurrentuserdata.numberOfProductsUploaded));
-      Provider.of<GeneralProvider>(context, listen: false)
-          .setlocalcountmaxnumberofProductsUploaded(
-              int.parse(thiscurrentuserdata.maxNumberOfProductsUserCanCreate));
-      setState(() {
-        credits = thiscurrentuserdata.maxNumberOfProductsUserCanCreate;
-      });
-    });
+
+    DocumentSnapshot doc=Provider.of<DocumentSnapshot>(context,listen: false);
+    print('in home init......');
+    print(doc);
+    // AuthService authservice = AuthService();
+    // authservice.getUserData(user.uid).then((value) {
+    //   print('in init state');
+    //   print(value);
+    //   thiscurrentuserdata = value;
+    //   Provider.of<GeneralProvider>(context, listen: false)
+    //       .setNumberOfProductsUploaded(
+    //           int.parse(thiscurrentuserdata.numberOfProductsUploaded));
+    //   Provider.of<GeneralProvider>(context, listen: false)
+    //       .setlocalcountmaxnumberofProductsUploaded(
+    //           int.parse(thiscurrentuserdata.maxNumberOfProductsUserCanCreate));
+    //   setState(() {
+    //     credits = thiscurrentuserdata.maxNumberOfProductsUserCanCreate;
+    //   });
+    // });
 
     //save the user's numberofprdtsuploaded and maxuploadcount to provider
   }
 
-//     void _initialize() async {
 
-//     // Check availability of In App Purchases
-//     available = await _iap.isAvailable();
-
-//     if (available) {
-// //retrieve
-//       await _getProducts();
-//       await _getPastPurchases();
-
-// //we can use future.wait if u want
-
-//       // Verify and deliver a purchase with your own business logic
-//       //_verifyPurchase();
-
-//       // Listen to new purchases
-//       _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
-//         print('NEW PURCHASE');
-//         _purchases.addAll(data);
-//         print('_purchases...');
-//         print(_purchases);
-//         //_verifyPurchase();
-//       }));
-
-//     }
-//   }
-
-  // /// Get all products available for sale
-  // Future<void> _getProducts() async {
-  //   Set<String> ids = Set.from([testID]);
-  //   print('in get Products...');
-  //   ProductDetailsResponse response = await _iap.queryProductDetails(ids);
-
-  //   print('in get Products response is ...'+response.productDetails.toString());
-
-  //   setState(() {
-  //     _products = response.productDetails;
-  //   });
-  // }
-
-//   /// Gets past purchases
-//   Future<void> _getPastPurchases() async {
-//     print('in get Past purchased Products...');
-//     QueryPurchaseDetailsResponse response =
-//         await _iap.queryPastPurchases();
-//         print('in get Past purchased Products response is ...'+response.pastPurchases.toString());
-// //this does not return consumed pdt so u should save state of consumed pdt in ur database
-//     for (PurchaseDetails purchase in response.pastPurchases) {
-//       // if (Platform.isIOS){
-//       //   _iap.completePurchase(purchase);
-//       // }
-//     }
-
-//     setState(() {
-//       _purchases = response.pastPurchases;
-//     });
-//   }
-
-  // /// Returns purchase of specific product ID
-  // PurchaseDetails _hasPurchased(String productID) {
-  //   return _purchases.firstWhere( (purchase) => purchase.productID == productID, orElse: () => null);
-  // }
-
-  // /// Your own business logic to setup a consumable
-  // void _verifyPurchase() {
-  //   PurchaseDetails purchase = _hasPurchased(testID);
-
-  //   // TODO serverside verification & record consumable in the database
-
-  //   if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-  //     // credits += 5;
-  //     // Provider.of<GeneralProvider>(context,listen:false).setlocalcountmaxnumberofProductsUploaded(int.parse(credits.toString()));
-  //     // authservice.addCreditsToAccount(Provider.of<User>(context,listen:false).uid, credits.toString());
-  //   }
-  // }
 
   Future<void> initPlatformState() async {
     appData.isPro = false;
@@ -163,9 +92,7 @@ class _HomeState extends State<Home> {
     PurchaserInfo purchaserInfo;
     try {
       purchaserInfo = await Purchases.getPurchaserInfo();
-      print(
-          '__________________________________PURCHASER INFO______________________________--');
-      print(purchaserInfo.toString());
+
       if (purchaserInfo.entitlements.all['all_features'] != null) {
         appData.isPro = purchaserInfo.entitlements.all['all_features'].isActive;
       } else {
@@ -175,13 +102,14 @@ class _HomeState extends State<Home> {
       print(e);
     }
 
-    print('#### is user pro? ${appData.isPro}');
+    
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     User user = Provider.of<User>(context);
+    
     GeneralProvider generalProvider = Provider.of<GeneralProvider>(context);
 
     AuthService authservice = AuthService();
@@ -202,10 +130,17 @@ class _HomeState extends State<Home> {
           )
           
           ),
-      body: Center(
+      body: 
+      
+      
+      
+      
+      
+      
+      Center(
         child: SingleChildScrollView(
           child: StreamBuilder<DocumentSnapshot>(
-              stream: auth.getUserDataStream(user.uid),
+              stream: auth.getUserDataStream(),
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.hasData) {

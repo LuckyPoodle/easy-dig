@@ -1,8 +1,6 @@
-
-
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:EasyDigitalize/provider/generalprovider.dart';
 import 'package:EasyDigitalize/screens/addproduct.dart';
 
@@ -16,46 +14,46 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
-
 class ViewProducts extends StatelessWidget {
   static const routeName = '/viewproducts';
 
-String filePath;
-String collectionname;
+  String filePath;
+  String collectionname;
 
-Future<String> get _localPath async {
-  final directory = await getApplicationSupportDirectory();
-  return directory.absolute.path;
-}
+  Future<String> get _localPath async {
+    final directory = await getApplicationSupportDirectory();
+    return directory.absolute.path;
+  }
 
-Future<File> get _localFile async {
-  final path = await _localPath;
-  print('in get localfile');
-  print(collectionname);
-  
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    print('in get localfile');
+    print(collectionname);
+    collectionname = collectionname.trim();
+    collectionname = collectionname.replaceAll(' ', '');
+    print('collection name ');
+    print(collectionname);
 
-  filePath = '$path/$collectionname-data.csv';
+    filePath = '$path/$collectionname-data.csv';
 
-  return File('$path/$collectionname-data.csv').create();
-}
+    return File('$path/$collectionname-data.csv').create();
+  }
 
-sendMailAndAttachment(String collection,String platform) async {
-  
-  
-  final Email email = Email(
-    body: 'Hi, \n Please find the attached product CSV file. ',
-    subject: '${platform} Product CSV ${DateTime.now().toString()} for ${collection}',
-    recipients: [''],
-    isHTML: true,
-    attachmentPaths: [filePath],
-  );
+  sendMailAndAttachment(String collection, String platform) async {
+    final Email email = Email(
+      body: 'Hi, \n Please find the attached product CSV file. ',
+      subject:
+          '${platform} Product CSV ${DateTime.now().toString()} for ${collection}',
+      recipients: [''],
+      isHTML: true,
+      attachmentPaths: [filePath],
+    );
 
-  await FlutterEmailSender.send(email);
-}
+    await FlutterEmailSender.send(email);
+  }
 
-
-  void generateShopifyCSV(var docs,String collection) async {
-    collectionname=collection;
+  void generateShopifyCSV(var docs, String collection) async {
+    collectionname = collection;
     List<List<dynamic>> rows = [];
     rows.add([
       'Handle',
@@ -84,6 +82,8 @@ sendMailAndAttachment(String collection,String platform) async {
 
     for (var doc in docs) {
       List<dynamic> mainproductimages = doc.data()['mainProductImages'];
+      print('mainproductimages..');
+      print(mainproductimages);
 
       ///ACCOUNT FOR PRODUCT VARIANTS THAT HAVE OWN IMAGE/PRICE
       if (doc.data()['type'] == 'variable') {
@@ -117,18 +117,18 @@ sendMailAndAttachment(String collection,String platform) async {
               vrow.add('');
               vrow.add('');
               vrow.add('');
-              if (variant['quantity']!=''){
+              if (variant['quantity'] != '') {
                 vrow.add('shopify');
-
-              }else{
+              } else {
                 vrow.add('');
-
               }
 
               vrow.add(variant['quantity']);
               vrow.add(variant['variantprice']);
-              vrow.add(mainproductimages[
-                  0]); //later then add more blank rows with other images in this list if any
+              if (mainproductimages.length > 0) {
+                vrow.add(mainproductimages[
+                    0]); //later then add more blank rows with other images in this list if any
+              }
 
               vrow.add(variant['imageUrlfromStorage']);
 
@@ -157,19 +157,18 @@ sendMailAndAttachment(String collection,String platform) async {
                 vrow.add('');
                 vrow.add('');
                 vrow.add('');
-                    if (variant['quantity']!=''){
-                vrow.add('shopify');
-
-              }else{
-                vrow.add('');
-
-              }
-
+                if (variant['quantity'] != '') {
+                  vrow.add('shopify');
+                } else {
+                  vrow.add('');
+                }
 
                 vrow.add(variant['quantity']);
                 vrow.add(variant['variantprice']);
-                vrow.add(mainproductimages[
-                    0]); //later then add more blank rows with other images in this list if any
+                if (mainproductimages.length > 0) {
+                  vrow.add(mainproductimages[
+                      0]); //later then add more blank rows with other images in this list if any
+                }
 
                 vrow.add(variant['imageUrlfromStorage']);
 
@@ -202,18 +201,18 @@ sendMailAndAttachment(String collection,String platform) async {
                   vrow.add(variant['variantname']);
                   vrow.add('');
                   vrow.add('');
-                      if (variant['quantity']!=''){
-                vrow.add('shopify');
-
-              }else{
-                vrow.add('');
-
-              }
+                  if (variant['quantity'] != '') {
+                    vrow.add('shopify');
+                  } else {
+                    vrow.add('');
+                  }
 
                   vrow.add(variant['quantity']);
                   vrow.add(variant['variantprice']);
-                  vrow.add(mainproductimages[
-                      0]); //later then add more blank rows with other images in this list if any
+                  if (mainproductimages.length > 0) {
+                    vrow.add(mainproductimages[
+                        0]); //later then add more blank rows with other images in this list if any
+                  }
 
                   vrow.add(variant['imageUrlfromStorage']);
 
@@ -250,18 +249,18 @@ sendMailAndAttachment(String collection,String platform) async {
                     vrow.add(variant['variantname']);
 
                     vrow.add('');
-                        if (variant['quantity']!=''){
-                vrow.add('shopify');
-
-              }else{
-                vrow.add('');
-
-              }
+                    if (variant['quantity'] != '') {
+                      vrow.add('shopify');
+                    } else {
+                      vrow.add('');
+                    }
 
                     vrow.add(variant['quantity']);
                     vrow.add(variant['variantprice']);
-                    vrow.add(mainproductimages[
-                        0]); //later then add more blank rows with other images in this list if any
+                    if (mainproductimages.length > 0) {
+                      vrow.add(mainproductimages[
+                          0]); //later then add more blank rows with other images in this list if any
+                    }
 
                     vrow.add(variant['imageUrlfromStorage']);
 
@@ -297,25 +296,23 @@ sendMailAndAttachment(String collection,String platform) async {
                       vrow.add(doc.data()['option3name']);
                       vrow.add(doc.data()['option4name']);
                       vrow.add(doc.data()['variationlabel']);
-
                       vrow.add(option);
                       vrow.add(option2);
                       vrow.add(option3);
                       vrow.add(option4);
                       vrow.add(variant['variantname']);
-                          if (variant['quantity']!=''){
-                vrow.add('shopify');
-
-              }else{
-                vrow.add('');
-
-              }
-
+                      if (variant['quantity'] != '') {
+                        vrow.add('shopify');
+                      } else {
+                        vrow.add('');
+                      }
 
                       vrow.add(variant['quantity']);
                       vrow.add(variant['variantprice']);
-                      vrow.add(mainproductimages[
-                          0]); //later then add more blank rows with other images in this list if any
+                      if (mainproductimages.length > 0) {
+                        vrow.add(mainproductimages[
+                            0]); //later then add more blank rows with other images in this list if any
+                      }
 
                       vrow.add(variant['imageUrlfromStorage']);
 
@@ -352,19 +349,18 @@ sendMailAndAttachment(String collection,String platform) async {
           vrow.add('');
           vrow.add('');
           vrow.add('');
-              if (doc.data()['quantity']!=''){
-                vrow.add('shopify');
-
-              }else{
-                vrow.add('');
-
-              }
-
+          if (doc.data()['quantity'] != '') {
+            vrow.add('shopify');
+          } else {
+            vrow.add('');
+          }
 
           vrow.add(doc.data()['quantity']);
           vrow.add(doc.data()['price']);
-          vrow.add(mainproductimages[
-              0]); //later then add more blank rows with other images in this list if any
+          if (mainproductimages.length > 0) {
+            vrow.add(mainproductimages[
+                0]); //later then add more blank rows with other images in this list if any
+          }
 
           vrow.add('');
 
@@ -391,19 +387,18 @@ sendMailAndAttachment(String collection,String platform) async {
             vrow.add('');
             vrow.add('');
             vrow.add('');
-               if (doc.data()['quantity']!=''){
-                vrow.add('shopify');
-
-              }else{
-                vrow.add('');
-
-              }
-
+            if (doc.data()['quantity'] != '') {
+              vrow.add('shopify');
+            } else {
+              vrow.add('');
+            }
 
             vrow.add(doc.data()['quantity']);
             vrow.add(doc.data()['price']);
-            vrow.add(mainproductimages[
-                0]); //later then add more blank rows with other images in this list if any
+            if (mainproductimages.length > 0) {
+              vrow.add(mainproductimages[
+                  0]); //later then add more blank rows with other images in this list if any
+            }
 
             vrow.add('');
 
@@ -434,18 +429,18 @@ sendMailAndAttachment(String collection,String platform) async {
               vrow.add('');
               vrow.add('');
               vrow.add('');
-                 if (doc.data()['quantity']!=''){
+              if (doc.data()['quantity'] != '') {
                 vrow.add('shopify');
-
-              }else{
+              } else {
                 vrow.add('');
-
               }
 
               vrow.add(doc.data()['quantity']);
               vrow.add(doc.data()['price']);
-              vrow.add(mainproductimages[
-                  0]); //later then add more blank rows with other images in this list if any
+              if (mainproductimages.length > 0) {
+                vrow.add(mainproductimages[
+                    0]); //later then add more blank rows with other images in this list if any
+              }
 
               vrow.add('');
 
@@ -479,18 +474,18 @@ sendMailAndAttachment(String collection,String platform) async {
                 vrow.add(option3);
                 vrow.add('');
                 vrow.add('');
-                   if (doc.data()['quantity']!=''){
-                vrow.add('shopify');
-
-              }else{
-                vrow.add('');
-
-              }
+                if (doc.data()['quantity'] != '') {
+                  vrow.add('shopify');
+                } else {
+                  vrow.add('');
+                }
 
                 vrow.add(doc.data()['quantity']);
                 vrow.add(doc.data()['price']);
-                vrow.add(mainproductimages[
-                    0]); //later then add more blank rows with other images in this list if any
+                if (mainproductimages.length > 0) {
+                  vrow.add(mainproductimages[
+                      0]); //later then add more blank rows with other images in this list if any
+                }
 
                 vrow.add('');
 
@@ -527,18 +522,18 @@ sendMailAndAttachment(String collection,String platform) async {
                   vrow.add(option3);
                   vrow.add(option4);
                   vrow.add('');
-                     if (doc.data()['quantity']!=''){
-                vrow.add('shopify');
-
-              }else{
-                vrow.add('');
-
-              }
+                  if (doc.data()['quantity'] != '') {
+                    vrow.add('shopify');
+                  } else {
+                    vrow.add('');
+                  }
 
                   vrow.add(doc.data()['quantity']);
                   vrow.add(doc.data()['price']);
-                  vrow.add(mainproductimages[
-                      0]); //later then add more blank rows with other images in this list if any
+                  if (mainproductimages.length > 0) {
+                    vrow.add(mainproductimages[
+                        0]); //later then add more blank rows with other images in this list if any
+                  }
 
                   vrow.add('');
 
@@ -566,7 +561,6 @@ sendMailAndAttachment(String collection,String platform) async {
           vrow.add('');
           vrow.add('');
           vrow.add('');
-
           vrow.add('');
           vrow.add('');
           vrow.add('');
@@ -591,11 +585,11 @@ sendMailAndAttachment(String collection,String platform) async {
     print(csv);
     f.writeAsString(csv);
 
-    sendMailAndAttachment(collection,'Shopify');
+    sendMailAndAttachment(collection, 'Shopify');
   }
 
-  void generateCSV(var docs,String collection) async {
-    collectionname=collection;
+  void generateCSV(var docs, String collection) async {
+    collectionname = collection;
     print('saveproductstoprovider');
     print(docs);
     List<List<dynamic>> rows = [];
@@ -607,6 +601,7 @@ sendMailAndAttachment(String collection,String platform) async {
       "Published",
       "images",
       "Price",
+      "Tags",
       "Attribute 1 name",
       "Attribute 1 value(s)",
       "Attribute 2 name",
@@ -619,13 +614,17 @@ sendMailAndAttachment(String collection,String platform) async {
       "Attribute 5 value(s)",
       "Parent",
       "Stock",
-      "In Stock",
+      "In Stock?",
       "Categories"
     ]);
     for (var doc in docs) {
       List<dynamic> row = [];
 
-      row.add(doc.data()['type']);
+      if (doc.data()['numberofoptions'] != '0') {
+        row.add('variable');
+      } else {
+        row.add(doc.data()['type']);
+      }
       row.add(doc.data()['sku']);
       row.add(doc.data()['name']);
 
@@ -635,6 +634,7 @@ sendMailAndAttachment(String collection,String platform) async {
       String images = doc.data()['mainProductImages'].join(',');
       row.add(images);
       row.add(doc.data()['price']);
+      row.add(doc.data()['tags']);
       row.add(doc.data()['option1name']);
       row.add(doc.data()['option1s']);
       row.add(doc.data()['option2name']);
@@ -660,6 +660,9 @@ sendMailAndAttachment(String collection,String platform) async {
 /////////looping through variants
         ////nested loop to present each option
         for (var variant in doc.data()['variants']) {
+          print(variant);
+          print('__________variantprice____________');
+          print((variant['variantprice']));
           count += 1;
 
           if (variant['variantname'].toString().trim().isEmpty) {
@@ -687,10 +690,8 @@ sendMailAndAttachment(String collection,String platform) async {
               vrow.add('FALSE');
               vrow.add(variant['imageUrlfromStorage']);
               vrow.add(variant['variantprice']);
-              print('*************************');
-              print('attribute 1');
-              print(doc.data()['variationlabel']);
-              print(variant['variantname']);
+              vrow.add(doc.data()['tags']);
+
               vrow.add(doc.data()['variationlabel']);
               vrow.add(variant['variantname']);
               vrow.add('');
@@ -728,10 +729,8 @@ sendMailAndAttachment(String collection,String platform) async {
                 vrow.add('FALSE');
                 vrow.add(variant['imageUrlfromStorage']);
                 vrow.add(variant['variantprice']);
-                print('*************************');
-                print('attribute 2');
-                print(doc.data()['variationlabel']);
-                print(variant['variantname']);
+                vrow.add(doc.data()['tags']);
+
                 vrow.add(doc.data()['option1name']);
                 vrow.add(option);
                 vrow.add(doc.data()['variationlabel']);
@@ -772,6 +771,7 @@ sendMailAndAttachment(String collection,String platform) async {
                   vrow.add('FALSE');
                   vrow.add(variant['imageUrlfromStorage']);
                   vrow.add(variant['variantprice']);
+                  vrow.add(doc.data()['tags']);
 
                   vrow.add(doc.data()['option1name']);
                   vrow.add(option);
@@ -821,6 +821,7 @@ sendMailAndAttachment(String collection,String platform) async {
                     vrow.add('FALSE');
                     vrow.add(variant['imageUrlfromStorage']);
                     vrow.add(variant['variantprice']);
+                    vrow.add(doc.data()['tags']);
 
                     vrow.add(doc.data()['option1name']);
                     vrow.add(option);
@@ -874,7 +875,8 @@ sendMailAndAttachment(String collection,String platform) async {
                       vrow.add(doc.data()['description']);
                       vrow.add('FALSE');
                       vrow.add(variant['imageUrlfromStorage']);
-                      vrow.add(variant['price']);
+                      vrow.add(variant['variantprice']);
+                      vrow.add(doc.data()['tags']);
                       vrow.add(doc.data()['option1name']);
                       vrow.add(option);
 
@@ -904,6 +906,174 @@ sendMailAndAttachment(String collection,String platform) async {
             }
           }
         }
+      } else {
+        //no variants, so now check if have options instead
+        if (doc.data()['numberofoptions'] == '1') {
+          List<String> optionslistofoption1 = doc.data()['option1s'].split(",");
+          for (var option in optionslistofoption1) {
+            List<dynamic> vrow = List<dynamic>();
+
+            vrow.add('variation');
+            vrow.add(''); //sku
+            vrow.add(doc.data()['name']);
+
+            vrow.add(doc.data()['description']);
+            vrow.add('FALSE');
+            vrow.add('');
+            vrow.add(doc.data()['price']);
+            vrow.add(doc.data()['tags']);
+            vrow.add(doc.data()['option1name']);
+            vrow.add(option);
+
+            vrow.add('');
+            vrow.add('');
+
+            vrow.add('');
+            vrow.add('');
+
+            vrow.add('');
+            vrow.add('');
+
+            //option 5
+            vrow.add('');
+            vrow.add('');
+
+            //parent
+            vrow.add(doc.data()['sku']);
+            vrow.add(doc.data()['quantity']);
+            vrow.add('1');
+            vrow.add('');
+            rows.add(vrow);
+          }
+        } else if (doc.data()['numberofoptions'] == '2') {
+          List<String> optionslistofoption1 = doc.data()['option1s'].split(",");
+          List<String> optionslistofoption2 = doc.data()['option2s'].split(",");
+          for (var option in optionslistofoption1) {
+            for (var option2 in optionslistofoption2) {
+              List<dynamic> vrow = [];
+
+              vrow.add('variation');
+              vrow.add(''); //sku
+              vrow.add(doc.data()['name']);
+
+              vrow.add(doc.data()['description']);
+              vrow.add('FALSE');
+              vrow.add('');
+              vrow.add(doc.data()['price']);
+              vrow.add(doc.data()['tags']);
+              vrow.add(doc.data()['option1name']);
+              vrow.add(option);
+
+              vrow.add(doc.data()['option2name']);
+              vrow.add(option2);
+
+              vrow.add('');
+              vrow.add('');
+
+              vrow.add('');
+              vrow.add('');
+
+              //option 5
+              vrow.add('');
+              vrow.add('');
+
+              //parent
+              vrow.add(doc.data()['sku']);
+              vrow.add(doc.data()['quantity']);
+              vrow.add('1');
+              vrow.add('');
+              rows.add(vrow);
+            }
+          }
+        } else if (doc.data()['numberofoptions'] == '3') {
+          List<String> optionslistofoption1 = doc.data()['option1s'].split(",");
+          List<String> optionslistofoption2 = doc.data()['option2s'].split(",");
+          List<String> optionslistofoption3 = doc.data()['option3s'].split(",");
+
+          for (var option in optionslistofoption1) {
+            for (var option2 in optionslistofoption2) {
+              for (var option3 in optionslistofoption3) {
+                List<dynamic> vrow = [];
+                vrow.add('variation');
+                vrow.add(''); //sku
+                vrow.add(doc.data()['name']);
+
+                vrow.add(doc.data()['description']);
+                vrow.add('FALSE');
+                vrow.add('');
+                vrow.add(doc.data()['price']);
+                vrow.add(doc.data()['tags']);
+                vrow.add(doc.data()['option1name']);
+                vrow.add(option);
+
+                vrow.add(doc.data()['option2name']);
+                vrow.add(option2);
+
+                vrow.add(doc.data()['option3name']);
+                vrow.add(option3);
+
+                vrow.add('');
+                vrow.add('');
+
+                vrow.add('');
+                vrow.add('');
+
+                //parent
+                vrow.add(doc.data()['sku']);
+                vrow.add(doc.data()['quantity']);
+                vrow.add('1');
+                vrow.add('');
+                rows.add(vrow);
+              }
+            }
+          }
+        } else if (doc.data()['numberofoptions'] == '4') {
+          List<String> optionslistofoption1 = doc.data()['option1s'].split(",");
+          List<String> optionslistofoption2 = doc.data()['option2s'].split(",");
+          List<String> optionslistofoption3 = doc.data()['option3s'].split(",");
+          List<String> optionslistofoption4 = doc.data()['option4s'].split(",");
+
+          for (var option in optionslistofoption1) {
+            for (var option2 in optionslistofoption2) {
+              for (var option3 in optionslistofoption3) {
+                for (var option4 in optionslistofoption4) {
+                  List<dynamic> vrow = [];
+                               vrow.add('variation');
+                vrow.add(''); //sku
+                vrow.add(doc.data()['name']);
+
+                vrow.add(doc.data()['description']);
+                vrow.add('FALSE');
+                vrow.add('');
+                vrow.add(doc.data()['price']);
+                vrow.add(doc.data()['tags']);
+                vrow.add(doc.data()['option1name']);
+                vrow.add(option);
+
+                vrow.add(doc.data()['option2name']);
+                vrow.add(option2);
+
+                vrow.add(doc.data()['option3name']);
+                vrow.add(option3);
+
+                  vrow.add(doc.data()['option4name']);
+                vrow.add(option4);
+
+                vrow.add('');
+                vrow.add('');
+
+                //parent
+                vrow.add(doc.data()['sku']);
+                vrow.add(doc.data()['quantity']);
+                vrow.add('1');
+                vrow.add('');
+                rows.add(vrow);
+
+                }
+              }
+            }
+          }
+        }
       }
 
       //end of the iteration of docs
@@ -915,12 +1085,33 @@ sendMailAndAttachment(String collection,String platform) async {
     print(csv);
     f.writeAsString(csv);
 
-    sendMailAndAttachment(collection,'Woocommerce');
+    sendMailAndAttachment(collection, 'Woocommerce');
+  }
+
+  void displayExceedCountBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        builder: (ctx) {
+          return Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Uploaded Product Count exceeds Available Credits',
+                  style: TextStyle(fontSize: 16, color: Colors.red),
+                ),
+              ));
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
+    DocumentSnapshot doc = Provider.of<DocumentSnapshot>(context);
+
     final width = MediaQuery.of(context).size.width;
     // final scaffold = Scaffold.of(context);
     AuthProvider authprovider = Provider.of<AuthProvider>(context);
@@ -937,46 +1128,43 @@ sendMailAndAttachment(String collection,String platform) async {
               Navigator.pushNamed(context, Home.routeName);
             },
           ),
-
-           IconButton(
+          IconButton(
             icon: Icon(
               Icons.add,
               color: Colors.white,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, AddProduct.routeName);
+              print('DOC');
+              print(doc);
+              print(doc['maxNumberOfProductsUserCanCreate']);
+              print(doc['numberOfProductsUploaded']);
+              if (int.parse(doc['numberOfProductsUploaded']) <
+                  int.parse(doc['maxNumberOfProductsUserCanCreate'])) {
+                Navigator.pushNamed(context, AddProduct.routeName);
+              } else {
+                displayExceedCountBottomSheet(context);
+                return null;
+              }
             },
           ),
         ],
-
         iconTheme: IconThemeData(
-    color: Colors.black, 
-  ),
-    
-    flexibleSpace: Container(
+          color: Colors.black,
+        ),
+        flexibleSpace: Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(5),
-
-            color: Color.fromRGBO(171,216,239,1),
+            color: Color.fromRGBO(171, 216, 239, 1),
             child: FittedBox(
               child: Text(
-              'Products in \n'+generalProvider.currentCollection,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.black,
-                  
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            )
-          ),
-
-
-
-
-
-
-
+                'Products in \n' + generalProvider.currentCollection,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            )),
         automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
@@ -1016,7 +1204,8 @@ sendMailAndAttachment(String collection,String platform) async {
                             child: Text('Generate CSV file for Woocommerce',
                                 style: TextStyle(color: Colors.white)),
                             onPressed: () {
-                              generateCSV(chatDocs,generalProvider.currentCollection);
+                              generateCSV(
+                                  chatDocs, generalProvider.currentCollection);
                             },
                           ),
                         ),
@@ -1035,7 +1224,8 @@ sendMailAndAttachment(String collection,String platform) async {
                             child: Text('Generate CSV file for Shopify',
                                 style: TextStyle(color: Colors.white)),
                             onPressed: () {
-                              generateShopifyCSV(chatDocs,generalProvider.currentCollection);
+                              generateShopifyCSV(
+                                  chatDocs, generalProvider.currentCollection);
                             },
                           ),
                         ),

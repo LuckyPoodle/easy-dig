@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:http/http.dart';
 import '../models/user.dart';
 import 'package:crypto/crypto.dart';
@@ -13,7 +13,7 @@ import 'dart:convert';
 
 class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
  
 
@@ -51,7 +51,7 @@ Stream<User> get user => FirebaseAuth.instance.authStateChanges();
             accessToken: googleAuth.accessToken,
             idToken: googleAuth.idToken,
           );
-        UserCredential result = await _auth.signInWithCredential(credential);
+        UserCredential result = await auth.signInWithCredential(credential);
 
 
 
@@ -70,7 +70,7 @@ Stream<User> get user => FirebaseAuth.instance.authStateChanges();
 
 Future<bool> deleteUser(){
 
-  _auth.currentUser.delete().then((_) {
+  auth.currentUser.delete().then((_) {
     print('deleted user');
   }).catchError((error){
     print(error);
@@ -123,11 +123,13 @@ Future<bool> deleteUser(){
           },SetOptions(merge: true));
   }
 
-  Stream<DocumentSnapshot> getUserDataStream(String id) {
-  Stream<DocumentSnapshot> q= _db.collection('users').doc(id).snapshots();
-  print(q);
-  print('==============in getbranddeal=====================');
-  return q;
+  Stream<DocumentSnapshot> getUserDataStream() {
+    if (auth.currentUser!=null){
+      Stream<DocumentSnapshot> q= _db.collection('users').doc(auth.currentUser.uid).snapshots();
+    print(q);
+    print('==============in getbranddeal=====================');
+    return q;
+    }
 }
 
 
@@ -161,7 +163,7 @@ Future<AppUser> getUserData(String id) async{
 
   // Sign out
   Future<void> signOut() {
-    return _auth.signOut();
+    return auth.signOut();
   }
 
    Future deleteImagePublito(String id) async {
